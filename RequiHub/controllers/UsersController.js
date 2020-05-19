@@ -145,6 +145,20 @@ exports.updatePassword = (req, res) => {
 	})
 }
 
+exports.readAll = (req, res) => {
+
+	User.findAll({})
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).send({
+			message:
+				err.message || "There was an error while retrieving"
+		})
+	})
+}
+
 exports.updateUser = (req, res) => {
 
 }

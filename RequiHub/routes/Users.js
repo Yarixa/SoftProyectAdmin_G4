@@ -9,7 +9,10 @@ const cors = require("cors")
 users.use(cors())
 
 //Permite registrar al usuario. Hasta el momento no se ha tomado en cuenta el apartado de roles.
-users.post('/register', userController.create)
+users.post('/create', userController.create)
+
+//Permite listar todos los usuarios en la base de datos.
+users.get('/readAll', userController.readAll)
 
 //Funcion que permite al usuario logear. Hasta el momento no he visto como hacer que el token expire.
 users.post('/login', userController.login)
