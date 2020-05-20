@@ -14,6 +14,9 @@ users.post('/create', userController.create)
 //Permite listar todos los usuarios en la base de datos.
 users.get('/readAll', userController.readAll)
 
+//Permite listar un usuario
+users.get('/readUser/:email', userController.readUser)
+
 //Funcion que permite al usuario logear. Hasta el momento no he visto como hacer que el token expire.
 users.post('/login', userController.login)
 

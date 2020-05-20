@@ -16,7 +16,6 @@ exports.create = (req, res) => {
 		password: req.body.password,
 		created: today
 	}
-
 	User.findOne({
 		where: {
 			email: req.body.email
@@ -159,6 +158,22 @@ exports.readAll = (req, res) => {
 	})
 }
 
-exports.updateUser = (req, res) => {
-
+exports.readUser = (req, res) => {
+	User.findOne({
+		where: {email: req.params.email}
+	})
+	.then(data => {
+		if(data){
+			res.send(data)
+		}
+		else{
+			res.status(400).end()
+		}
+	})
+	.catch(err => {
+		res.status(500).send({
+			message:
+				err.message || "There was an error while retrieving"
+		})
+	})
 }
