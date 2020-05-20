@@ -1,3 +1,4 @@
+--Script MYSQL para crear la BD de prueba
 drop database if exists test;
 
 create database test;
