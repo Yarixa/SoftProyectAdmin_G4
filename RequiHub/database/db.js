@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize")
 const db = {}
-const sequelize = new Sequelize("test", "administrador",
-	"abnormalize", {
+const sequelize = new Sequelize("test", "root", //bd,usuario,contraseña
+	"", {
 	host: 'localhost',
 	dialect: 'mysql',
 	operatorAliases: false,

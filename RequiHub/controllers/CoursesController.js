@@ -7,27 +7,27 @@ process.env.SECRET_KEY = 'secret'
 
 //Funcion para crear un curso
 exports.create = (req, res) => {
+
 	const courseData = {
         id : req.id,
-		subjet_id: req.body.subject_id,
+		subject_id: req.body.subject_id,
 		anio: req.body.anio,
 		semestre: req.body.semestre,
-    }
+	}
+
     Course.findOne({
         where : {
             id : req.id
         }
-    }).then(course=>{
+    }).then(course =>{
         if(!course){
-            course.create(courseData).then(
-                course=>{
-                    res.json({
-                        status : course.id + ' registred'
-                    })
-                }
-            ).catch(err =>{
-                res.send('error '+err)
-            })
+			Course.create(courseData)
+			.then(course => {
+				res.json({status: 'registered'})
+			})
+			.catch(err => {
+				res.send('error' + err)
+			})
         }else{
             res.json({error:"El curso ya existe"})
         }

@@ -1,15 +1,15 @@
 const Sequelize = require('sequelize')
 const db = require("../database/db.js")
 module.exports = db.sequelize.define(
-	'course',
+	'courses',
 	{
-		id: {
+		id:{
 			type: Sequelize.INTEGER,
 			primaryKey: true,
 			autoIncrement: true
 		},
 		subject_id: {
-			type: Sequelize.STRING
+			type: Sequelize.STRING(40)
 		},
 		anio:{
 			type: Sequelize.INTEGER
