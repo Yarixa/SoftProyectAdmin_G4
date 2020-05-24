@@ -6,22 +6,7 @@ const cors = require("cors")
 const Modulo = require("../models/Modulo")
 
 modulos.use(cors())
-/*
-modulos.post('/resgister', (req,res)=>{
-    const moduloData = {
-        id : req.id,
-        nombre : req.nombre,
-        degree : req.degree
-    }
-    Modulo.create({
-        id : req.id,
-        nombre : req.nombre,
-        degree : req.degree
-    }).then(modulo=>{
-        console.log("Modulo creado: ", modulo.id);
-    })
-});
-*/
+
 modulos.post('/register', (req,res)=>{
     const moduloData = {
         id : req.id,
@@ -37,11 +22,11 @@ modulos.post('/register', (req,res)=>{
             Modulo.create(moduloData).then(
                 modulo=>{
                     res.json({
-                        status : modulo.id + ' registred'
+                        status : modulo.id + ' registrado'
                     })
                 }
             ).catch(err =>{
-                res.send('error '+err)
+                res.send('error en crear '+err)
             })
         }else{
             res.json({error:"modulo ya existe!"})
@@ -51,7 +36,7 @@ modulos.post('/register', (req,res)=>{
     })
 });
 
-modulos.post('/show', (req,res)=>{
+modulos.get('/show', (req,res)=>{
     Modulo.findAll().then(modulos=>{
         res.json({
             modulos : modulos 

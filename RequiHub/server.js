@@ -10,6 +10,11 @@ app.use(bodyParser.urlencoded({extended:false}))
 
 var Modulos = require("./routes/Modulo")
 
+app.get("/", (req,res)=>{
+    res.json({
+        message: "Bienvenido a la gestion de modulos"
+    })
+})
 app.use("/modulos", Modulos)
 
 app.listen(port,()=>{
