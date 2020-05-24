@@ -49,10 +49,13 @@ modulos.get('/show', (req,res)=>{
     })
 })
 
+/**
+ * Se usa el metodo post, se usa el cuerpo(body) para para usar la id del modulo a eliminar.
+ */
 modulos.post('/delete', (req,res)=>{
     Modulo.findOne({
         where : {
-            id : req.query.id
+            id : req.body.id
         }
     }).then(modulo =>{
         if(modulo){
