@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import RAppBar from "./components/RAppBar/RAppBar.jsx";
-import RDrawer from "./components/RDrawer/RDrawer.jsx";
+import RAppBar from "./components/common/RAppBar/RAppBar.jsx";
+import RDrawer from "./components/common/RDrawer/RDrawer.jsx";
 
 function App() {
   return (
