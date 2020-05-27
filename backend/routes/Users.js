@@ -31,4 +31,10 @@ users.delete('/delete/:email', userController.delete)
 //Es necesario pasar email como req.params
 users.put('/updatePassword/:email', userController.updatePassword)
 
+users.put('/updateUser/:email', userController.updateUser)
+
+//users.post('/sendPasswordEmail', userController.recoverPassword)
+
+
+
 module.exports = users

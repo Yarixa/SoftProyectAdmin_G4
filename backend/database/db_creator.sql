@@ -10,11 +10,17 @@ create table users(
 	first_name varchar(40) default '' not null,
 	last_name varchar(40) default '' not null,
 	email varchar(40) default '' not null,
+	role varchar(20) default '' not null,
 	password text not null,
 	created date
 );
 
 alter table users auto_increment = 1;
 
-GRANT ALL PRIVILEGES ON firstApp.* TO 'administrador'@'%' IDENTIFIED BY 'abnormalize';
+-- Separado el crear un usuario de la asignacion de privilegios, para evitar problemas.
+DROP USER 'administrador'@'%';
+
+CREATE USER 'administrador'@'%' IDENTIFIED BY 'abnormalize';
+
+GRANT ALL PRIVILEGES ON firstApp.* TO 'administrador'@'%';
 FLUSH PRIVILEGES;

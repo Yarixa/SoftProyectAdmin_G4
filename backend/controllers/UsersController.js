@@ -3,17 +3,23 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const User = require("../models/User")
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
+
 process.env.SECRET_KEY = 'secret'
 
 //Declaramos la funcion create. Esta funcion esta encargada de crear un usuario si y solo si no existe un usuario con el mismo email.
 //Es recomendable cambiar findOne por findByPk, dado a que esto es lo que Sequelize recomienda.
 exports.create = (req, res) => {
 	const today = new Date()
+	const dPassword =  Math.random().toString(36).substr(2, 5)
 	const userData = {
 		first_name: req.body.first_name,
 		last_name: req.body.last_name,
 		email: req.body.email,
-		password: req.body.password,
+		password: dPassword,
 		created: today
 	}
 	User.findOne({
@@ -23,10 +29,15 @@ exports.create = (req, res) => {
 	})
 	.then(user =>{
 		if(!user){
-			const hash = bcrypt.hash(req.body.password, 10, (err, hash) => {
+			const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
 				userData.password = hash
 				User.create(userData)
 				.then(user => {
+					/*Llama a la funcino encargada de enviar el correo con la nueva contraseña
+					*No se esta haciendo tratamiento para los correos enviados con email invalido,
+					*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
+					*/
+					sendPasswordEmail(dPassword, userData.email, userData.first_name);
 					res.json({status: user.email + ' registered'})
 				})
 				.catch(err => {
@@ -140,7 +151,39 @@ exports.updatePassword = (req, res) => {
 		}
 	})
 	.catch(err => {
+		res.status(400).json({error: 'User' + req.params.email + 'does not exist'})
+		res.end()
+	})
+}
 
+exports.updateUser = (req, res) => {
+	User.findOne({
+		where: {
+			email: req.params.email
+		}
+	})
+	.then(user => {
+		if(user){
+				User.update(
+					{first_name: req.params.first_name},
+					{last_name: req.params.last_name},
+					{where: { email: req.params.email } }
+				).then(result =>{
+							res.json({status: req.params.email + ' updated'})
+							res.send()
+				})
+				.catch(err =>{
+						res.json({error: err})
+				})
+			}
+			else{
+				res.json({error: 'Wrong password'})
+				res.end()
+			}
+		})
+	.catch(err => {
+		res.status(400).json({error: 'User' + req.params.email + 'does not exist'})
+		res.end()
 	})
 }
 
@@ -177,3 +220,26 @@ exports.readUser = (req, res) => {
 		})
 	})
 }
+
+//Funcion encargada de enviar el correo con la nueva contraseña al usuario
+var sendPasswordEmail = (password, email, first_name) =>{
+	msg = {
+	  to: email,
+	  from: 'gsoftware.4.test@gmail.com',
+	  templateId: 'd-6ae879da344446c8b62ca5b2584f8e2e',
+
+	  dynamic_template_data: {
+	  	name: first_name,
+	  	password: password
+	  }
+
+	};
+	sgMail
+	.send(msg)
+	.then(() => {}, error => {
+	  console.error(error);
+	  if (error.response) {
+	    console.error(error.response.body)
+	  }
+	  });
+  }
