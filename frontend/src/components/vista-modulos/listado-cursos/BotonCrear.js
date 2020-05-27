@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Table, Header, Icon, Divider, Container, Button } from 'semantic-ui-react';
 
-class BotonCrear extends Component {
+class BotonCrear extends Button {
   render() {
     return (
       <Button color= "green" animated="fade">

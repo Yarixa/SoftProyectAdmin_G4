@@ -4,7 +4,7 @@ import { Table, Segment, Loader, Image, Dimmer } from 'semantic-ui-react';
 
 import ListaCursos from './ListaCursos';
 
-import cursos from './api/cursos';
+import cursos from '../../api/cursos';
 
 class TablaCursos extends Component {
   constructor(){
