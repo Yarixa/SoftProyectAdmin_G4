@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         backgroundColor: "#ffffff",
+        position: 'fixed',
+        display: 'block',
     },
     grow: {
         flexGrow: 1,
@@ -52,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     sectionDesktop: {
         display: 'none',
         [theme.breakpoints.up('md')]: {
-            display: 'flex',
+            display: 'block',
         },
     },
     sectionMobile: {
@@ -67,6 +69,7 @@ export default function RAppBar() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [currentSection] = React.useState("Fix");
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -142,7 +145,7 @@ export default function RAppBar() {
             <AppBar position="absolute" className={classes.appBar}>
                 <Toolbar>
                     <Typography component="h1" className={classes.title} variant="h6" noWrap>
-                        Material-UI
+                        {currentSection}
                     </Typography>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>

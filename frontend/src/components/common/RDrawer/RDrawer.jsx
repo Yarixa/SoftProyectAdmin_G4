@@ -13,7 +13,8 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
+        display: 'inline-block',
+        float: 'left',
         justifyContent: 'space-between',
         height: '100vh',
     },
@@ -42,10 +43,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
     drawerPaper: {
-        position: 'relative',
         whiteSpace: 'nowrap',
         width: drawerWidth,
-        height: "100%",
         justifyContent: 'space-between',
         backgroundColor: "#19212A",
         transition: theme.transitions.create('width', {
@@ -76,9 +75,11 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         padding: theme.spacing(2),
-        display: 'flex',
+        display: 'inline-block',
         overflow: 'auto',
         flexDirection: 'column',
+        float: 'left',
+        width: '241px',
     },
     fixedHeight: {
         height: 240,

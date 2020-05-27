@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Collapse from "@material-ui/core/Collapse";
 import List from "@material-ui/core/List";
+import {Link} from "react-router-dom";
 
 //*** Icons ***
 import BookIcon from '@material-ui/icons/Book';
@@ -16,6 +17,9 @@ import {ExpandLess, ExpandMore} from "@material-ui/icons";
 
 
 const useStyles = makeStyles((theme) => ({
+    active: {
+        backgroundColor: 'yellow',
+    },
     root: {},
     nested: {
         paddingLeft: theme.spacing(10),
@@ -38,12 +42,14 @@ export default function RListItems() {
 
     return (
         <div className={classes.root}>
-            <ListItem button>
-                <ListItemIcon>
-                    <DashboardIcon style={{ color: '#FFFFFF' }} />
-                </ListItemIcon >
-                <ListItemText primary={buildLabel('Dashboard')} />
-            </ListItem>
+
+
+                <ListItem button component={Link} to="/">
+                    <ListItemIcon>
+                        <DashboardIcon style={{ color: '#FFFFFF' }} />
+                    </ListItemIcon >
+                    <ListItemText primary={buildLabel('Dashboard')} />
+                </ListItem>
 
             <ListItem button onClick={handleClick}>
                 <ListItemIcon>
@@ -54,27 +60,29 @@ export default function RListItems() {
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary={buildLabel("Todos los módulos")} />
-                    </ListItem>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary={buildLabel("Agregar módulo")} />
-                    </ListItem>
+                        <ListItem button className={classes.nested} component={Link} to="/modulos">
+                            <ListItemText primary={buildLabel("Todos los módulos")} />
+                        </ListItem>
+
+                        <ListItem button className={classes.nested} component={Link} to="/modulos/nuevo-modulo">
+                            <ListItemText primary={buildLabel("Agregar módulo")} />
+                        </ListItem>
                 </List>
             </Collapse>
 
-            <ListItem button>
-                <ListItemIcon>
-                    <PeopleIcon style={{ color: '#FFFFFF' }}/>
-                </ListItemIcon>
-                <ListItemText primary={buildLabel('Cursos')} />
-            </ListItem>
-            <ListItem button>
-                <ListItemIcon>
-                    <WorkIcon style={{ color: '#FFFFFF' }}/>
-                </ListItemIcon>
-                <ListItemText primary={buildLabel('Proyectos')} />
-            </ListItem>
+                <ListItem button component={Link} to="/cursos">
+                    <ListItemIcon>
+                        <PeopleIcon style={{ color: '#FFFFFF' }}/>
+                    </ListItemIcon>
+                    <ListItemText primary={buildLabel('Cursos')} />
+                </ListItem>
+
+            <ListItem button component={Link} to="/proyectos">
+                    <ListItemIcon>
+                        <WorkIcon style={{ color: '#FFFFFF' }}/>
+                    </ListItemIcon>
+                    <ListItemText primary={buildLabel('Proyectos')} />
+                </ListItem>
         </div>
         );
 }
