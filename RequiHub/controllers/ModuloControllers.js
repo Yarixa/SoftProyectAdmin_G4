@@ -31,20 +31,20 @@ exports.create = (req,res)=>{
         res.send(`error al crear: ${err}`)
     })
 }
-//funcion para eliminar modulo
+//funcion para eliminar modulo 
 exports.delete = (req,res)=>{
     Modulo.findOne({
         where : {
-            id : req.body.id
+            id : req.params.id
         }
     }).then(modulo =>{
         if(modulo){
             Modulo.destroy({
                 where : {
-                    id : req.body.id
+                    id : req.params.id
                 }
             }).then(modulo=>{
-                res.json({status : req.body.id  + ' eliminado'})
+                res.json({status : req.params.id  + ' eliminado'})
             }).catch(modulo=>{
                 res.json({error: "No se puede eliminar modulo"})
             })
@@ -69,7 +69,7 @@ exports.readAll = (req,res)=>{
 exports.update = (req, res)=>{
     Modulo.findOne({
         where : {
-            id: req.body.id
+            id: req.params.id
         }
     }).then(modulo=>{
         if(modulo){
@@ -78,17 +78,17 @@ exports.update = (req, res)=>{
                degree : req.body.degree
            },{
                where: {
-                   id : req.body.id
+                   id : req.params.id
                }
            }).then(result =>{
                res.json({status : modulo.id + " Actualizado "})
            }).catch(err=>{
-               res.json({error:req.body.id+" no se puede actualizar error "+err})
+               res.json({error:req.params.id+" no se puede actualizar error "+err})
            })
         }else{
-            res.json({erro:"no se encuntra "+req.id})
+            res.json({erro:"no se encuntra "+req.params.id})
         }
     }).catch(err=>{
-        res.status(400).json({error:"No se encuentro ID: "+req.body.id+ " "+ err})
+        res.status(400).json({error:"No se encuentro ID: "+req.params.id+ " "+ err})
     })
 }

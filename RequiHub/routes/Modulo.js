@@ -8,10 +8,11 @@ modulos.use(cors())
 
 modulos.post('/create', moduloController.create)
 
-modulos.delete('/delete/', moduloController.delete)
+//funcion modulo
+modulos.delete('/delete/:id', moduloController.delete)
 
 modulos.get('/readAll', moduloController.readAll)
 
-modulos.post('/update', moduloController.update)
+modulos.put('/update/:id', moduloController.update)
 
 module.exports = modulos;
