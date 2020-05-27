@@ -51,7 +51,7 @@ exports.delete = (req, res) => {
 				}
 			})
 			.then(course => {
-				res.json({status: req.params.id + ' deleted'})
+				res.json({status: req.params.id + ' eliminado'})
 			})
 			.catch(course => {
 				res.json({error: "No se puede eliminar el curso."})
@@ -66,9 +66,36 @@ exports.delete = (req, res) => {
 	})
 }
 
-//Retorna todos los cursos registrados
-exports.readAll = (req, res) => {
+//Funcion para actualizar una tupla de curso recibiendo como parámetro su ID para identificarla
+exports.update = (req, res)=>{
+    Course.findOne({
+        where : {
+            id: req.params.id
+        }
+    }).then(course=>{
+        if(course){
+           Course.update({
+               anio : req.body.anio,
+               semestre : req.body.semestre
+           },{
+               where: {
+                   id : req.params.id
+               }
+           }).then(result =>{
+               res.json({status : course.id + "tupla actualizada "})
+           }).catch(err=>{
+               res.json({error:req.params.id+" no se puede actualizar error "+err})
+           })
+        }else{
+            res.json({erro:"No se encuntra el ID: "+req.id})
+        }
+    }).catch(err=>{
+        res.status(400).json({error:"No se encuentra ID: "+req.params.id+" "+ err})
+    })
+}
 
+//Funcion que retorna todos los cursos registrados
+exports.readAll = (req, res) => {
 	Course.findAll({})
 	.then(data => {
 		res.send(data)
@@ -76,7 +103,7 @@ exports.readAll = (req, res) => {
 	.catch(err => {
 		res.status(500).send({
 			message:
-				err.message || "There was an error while retrieving"
+				err.message || "Error"
 		})
 	})
 }

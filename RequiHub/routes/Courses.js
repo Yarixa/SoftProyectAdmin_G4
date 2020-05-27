@@ -10,8 +10,11 @@ courses.use(cors())
 //Crear curso
 courses.post('/create', courseController.create)
 
-//Borrar curso
+//Borrar curso, se recibe el id para borrar la tupla
 courses.delete('/delete/:id', courseController.delete)
+
+//Editar curso, se recibe el id para editar el curso
+courses.post('/update/:id', courseController.update)
 
 //Listar cursos existentes de la BD
 courses.get('/readAll', courseController.readAll)
