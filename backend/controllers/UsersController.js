@@ -156,6 +156,11 @@ exports.updatePassword = (req, res) => {
 	})
 }
 
+
+//Funcion usada para poder actualizar un usuario, es necesario el tener el email
+//y el objeto usuario para poder efectuar esta operacion.
+//Solo se puede modificar el nombre y el apellido con esta funcion
+//para modificar la contraseña es necesario usar updatePassword.
 exports.updateUser = (req, res) => {
 	User.findOne({
 		where: {
@@ -187,6 +192,8 @@ exports.updateUser = (req, res) => {
 	})
 }
 
+
+//Funcion que permite listar todos los usuarios.
 exports.readAll = (req, res) => {
 
 	User.findAll({})
@@ -201,6 +208,8 @@ exports.readAll = (req, res) => {
 	})
 }
 
+
+//Funcion que, dado el email de un usuario, permite buscar a dicho usuario.
 exports.readUser = (req, res) => {
 	User.findOne({
 		where: {email: req.params.email}
@@ -221,7 +230,99 @@ exports.readUser = (req, res) => {
 	})
 }
 
-//Funcion encargada de enviar el correo con la nueva contraseña al usuario
+
+//Funcion obtenida para subir un archivo.
+//Deberia de mover este metodo para otro controlador, dado a que se puede usar para otras cosas.
+//Aunque si lo usamos para las imagenes, debería de ser personal para cada proyecto.
+exports.uploadFile = async (req, res) => {
+	try {
+        if(!req.files) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let file = req.files.file;
+
+            //Use the mv() method to place the file in upload directory (i.e. "upload")
+            file.mv('./upload/' + file.name);
+
+            //send response
+            res.send({
+                status: true,
+                message: 'File is uploaded',
+                data: {
+                		//nombre necesario para llamar a la funcion de cargar los usuarios.
+                    name: file.name
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+
+
+//Funcion que carga un archivo .xlsx para luego crear una cantidad n de usuario
+//donde n es la cantidad de usuarios no repetidos.
+exports.massiveCreate = async (req, res) => {
+	var XLSX = require('xlsx');
+		try{
+			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
+			var sheetNames = workbook.SheetNames;
+
+			var sheetIndex = 1;
+
+			var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+
+			for(var i = 0; i < userArray.length; i++){
+				const today = new Date()
+				const dPassword =  Math.random().toString(36).substr(2, 5)
+				const userData = {
+					first_name: userArray[i].Nombre,
+					last_name: userArray[i]["Apellido(s)"],
+					email: userArray[i]["Dirección de correo"],
+					password: dPassword,
+					created: today
+				}
+				User.findOne({
+					where: {
+						email: req.body.email
+					}
+				})
+				.then(user =>{
+					if(!user){
+						const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
+							userData.password = hash
+							User.create(userData)
+							.then(user => {
+								/*Llama a la funcino encargada de enviar el correo con la nueva contraseña
+								*No se esta haciendo tratamiento para los correos enviados con email invalido,
+								*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
+								*/
+								sendPasswordEmail(dPassword, userData.email, userData.first_name);
+							})
+							.catch(err => {
+								res.send('error' + err)
+							})
+						})
+					}else{
+						console.log("User already exist")
+					}
+				})
+				.catch(err => {
+					res.send('error: ' + err)
+				})
+			}
+		res.json("All Users registered")
+	}
+	catch(e){
+		res.json("There was an error on the file.")
+	}
+}
+
+//Funcion privada encargada de enviar el correo con la nueva contraseña al usuario
 var sendPasswordEmail = (password, email, first_name) =>{
 	msg = {
 	  to: email,

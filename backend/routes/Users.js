@@ -33,6 +33,14 @@ users.put('/updatePassword/:email', userController.updatePassword)
 
 users.put('/updateUser/:email', userController.updateUser)
 
+//Funcion usada para cargar el archivo ubicado en ./upload.
+//Para dejar el archivo en dicha direccion se debe usar /uploadFile.
+users.post('/massiveCreate/:xlsx_name', userController.massiveCreate)
+
+//FileUploader para poder meter los archivos .xlsx dentro de una carpeta especifica (./upload)
+//Puede ser usado para subir otro tipo de archivos. No he restringido esto.
+users.post('/uploadFile', userController.uploadFile)
+
 //users.post('/sendPasswordEmail', userController.recoverPassword)
 
 
