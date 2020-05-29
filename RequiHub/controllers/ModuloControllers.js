@@ -56,14 +56,73 @@ exports.delete = (req,res)=>{
         res.status(400).json({error:err})
     })
 }
+exports.deshabilitar = (req,res)=>{
+    Modulo.findOne({
+        where : {
+            id : req.params.id
+        }
+    }).then(modulo =>{
+        if(modulo){
+            console.log(modulo.disponible)
+            Modulo.update({
+                disponible : 0
+            },{
+                where: {
+                    id : req.params.id
+                }
+            }).then(result=>{
+                res.json({status: req.params.id + ' eliminado'})
+            }).catch(err=>{
+                res.json({error : " No se peude eliminar"})
+            })
+        }else{
+            res.status(400).json({error:"Modulo no existe"})
+            res.end()
+        }
+    }).catch(err=>{
+        res.status(400).json({error:err})
+    })    
+}
+exports.habilitar  = (req,res)=>{
+    Modulo.findOne({
+        where : {
+            id : req.params.id
+        }
+    }).then(modulo=>{
+        if(modulo){
+            Modulo.update({
+                disponible : 1
+            },{
+                where: {
+                    id : req.params.id
+                }
+            }).then(result=>{
+                res.json({status : req.params.id + ' habilitado'})
+            }).catch(err=>{
+                res.json({error : " No se puede habilitar"})
+            })
+        }else{
+            res.status(400).json({error:"Modulo no existe"})
+            res.end()
+        }
+    }).catch(err =>{
+        res.status(400).json({error:err})
+    })
+}
+
 //Funcion para visualizar todos los modulos
 exports.readAll = (req,res)=>{
-    Modulo.findAll().then(modulos=>{
+    Modulo.findAll({
+        where:{
+            disponible : 1
+        }
+    }).then(modulos=>{
         res.json({
             modulos : modulos 
         })
     })
 }
+
 
 //Funcion para actualizar datos de modulos
 exports.update = (req, res)=>{

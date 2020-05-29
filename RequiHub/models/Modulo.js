@@ -14,7 +14,11 @@ module.exports = db.sequelize.define(
         },
         degree:{
             type: Sequelize.TEXT
+        },
+        disponible:{
+            type: Sequelize.INTEGER
         }
+
 
 
     },

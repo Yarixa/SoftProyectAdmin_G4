@@ -15,4 +15,7 @@ modulos.get('/readAll', moduloController.readAll)
 
 modulos.put('/update/:id', moduloController.update)
 
+modulos.put('/deshabilitar/:id', moduloController.deshabilitar)
+
+modulos.put('/habilitar/:id', moduloController.habilitar)
 module.exports = modulos;
