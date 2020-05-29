@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 var Courses = require("./routes/Courses")
 
-app.use("/courses", Courses) //ruta principal de navegación
+app.use("/courses", Courses) //ruta de cursos
 
 app.listen(port, () => {
 	console.log("El servidor está corriendo en el puerto: " + port)

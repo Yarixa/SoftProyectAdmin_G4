@@ -16,6 +16,9 @@ module.exports = db.sequelize.define(
 		},
 		semestre: {
 			type: Sequelize.INTEGER
+		},
+		disponible: {
+			type: Sequelize.BOOLEAN
 		}
 	},
 	{
