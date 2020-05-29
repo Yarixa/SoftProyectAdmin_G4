@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {Provider} from 'react-redux';
 
 import './App.css';
+import generateStore from "./components/navigation/navigationStore";
 
 // *** Components ***
-import RAppBar from "./components/common/RAppBar/RAppBar.jsx";
-import RDrawer from "./components/common/RDrawer/RDrawer.jsx";
+import RAppBar from "./components/navigation/RAppBar/RAppBar.jsx";
+import RDrawer from "./components/navigation/RDrawer/RDrawer.jsx";
 
 
 class App extends Component {
@@ -17,8 +19,9 @@ class App extends Component {
     }
 
     render(){
+        const store = generateStore();
         return (
-            <div>
+            <Provider store={store}>
                 <Router>
                     <RAppBar/>
                     <Switch>
@@ -55,7 +58,7 @@ class App extends Component {
                     </Switch>
                     <RDrawer/>
                 </Router>
-            </div>
+            </Provider>
         );
     }
 }
@@ -66,8 +69,7 @@ class Container extends Component{
             <div className="container">
                 {this.props.children}
             </div>
-        )
-            ;
+        );
     }
 }
 

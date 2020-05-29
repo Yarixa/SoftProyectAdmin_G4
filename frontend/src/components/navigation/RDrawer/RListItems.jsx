@@ -8,7 +8,10 @@ import Collapse from "@material-ui/core/Collapse";
 import List from "@material-ui/core/List";
 import {Link} from "react-router-dom";
 
-//*** Icons ***
+import {useDispatch} from 'react-redux';
+import {updateTitleAction} from '../appBarDuck';
+
+// *** Icons ***
 import BookIcon from '@material-ui/icons/Book';
 import WorkIcon from '@material-ui/icons/Work';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -40,11 +43,12 @@ export default function RListItems() {
         setOpen(!open);
     };
 
+    const dispatch = useDispatch();
+
     return (
         <div className={classes.root}>
 
-
-                <ListItem button component={Link} to="/">
+                <ListItem button component={Link} to="/" onClick={() => dispatch(updateTitleAction('Dashboard'))}>
                     <ListItemIcon>
                         <DashboardIcon style={{ color: '#FFFFFF' }} />
                     </ListItemIcon >
@@ -58,26 +62,29 @@ export default function RListItems() {
                 <ListItemText primary={buildLabel('Módulos')} />
                 {open ? <ExpandLess style={{ color: '#FFFFFF' }} /> : <ExpandMore style={{ color: '#FFFFFF' }}/>}
             </ListItem>
+
             <Collapse in={open} timeout="auto" unmountOnExit>
+
                 <List component="div" disablePadding>
-                        <ListItem button className={classes.nested} component={Link} to="/modulos">
+                        <ListItem button className={classes.nested} component={Link} to="/modulos" onClick={() => dispatch(updateTitleAction('Módulos'))}>
                             <ListItemText primary={buildLabel("Todos los módulos")} />
                         </ListItem>
 
-                        <ListItem button className={classes.nested} component={Link} to="/modulos/nuevo-modulo">
+                        <ListItem button className={classes.nested} component={Link} to="/modulos/nuevo-modulo" onClick={() => dispatch(updateTitleAction('Nuevo Módulo'))}>
                             <ListItemText primary={buildLabel("Agregar módulo")} />
                         </ListItem>
+
                 </List>
             </Collapse>
 
-                <ListItem button component={Link} to="/cursos">
+                <ListItem button component={Link} to="/cursos" onClick={() => dispatch(updateTitleAction('Cursos'))}>
                     <ListItemIcon>
                         <PeopleIcon style={{ color: '#FFFFFF' }}/>
                     </ListItemIcon>
                     <ListItemText primary={buildLabel('Cursos')} />
                 </ListItem>
 
-            <ListItem button component={Link} to="/proyectos">
+            <ListItem button component={Link} to="/proyectos" onClick={() => dispatch(updateTitleAction('Proyectos'))}>
                     <ListItemIcon>
                         <WorkIcon style={{ color: '#FFFFFF' }}/>
                     </ListItemIcon>
