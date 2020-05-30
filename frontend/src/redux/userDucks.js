@@ -2,18 +2,24 @@ import axios from 'axios'
 
 // Constantes
 const dataInicial = {
-    array : []
+    users : [],
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: ''
 }
 
+// Tipos
 const GET_USERS = 'GET_USERS'
-const REGISTER_USER = 'REGISTER_USER'
+const CREATE_USER = 'CREATE_USER'
 
 // Reducer
 export default function userReducer(state = dataInicial, action){
     switch(action.type){
         case GET_USERS:
-            return {...state, array: action.payload}
-        case REGISTER_USER:
+            return {...state, users: action.payload}
+        case CREATE_USER:
+            return {...state, users: [...state.users, action.payload]}
         default:
             return state
     }
@@ -32,17 +38,16 @@ export const getUsers = () => async (dispatch, getState) => {
     }
 }
 
-export const registerUser = (user) => async (dispatch, getState) => {
-    try{
-        axios.post('http://localhost:5000/users/register', {user})
-        .then(res => {
-            console.log(res);
-            console.log(res.data);
-        })
-        dispatch({
-            type: REGISTER_USER
-        })
-    } catch (error){
-        console.log(error)
+export const createUser = user => async dispatch => {
+    const data = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        password: user.password
     }
+    const resp = await axios.post('http://localhost:5000/users/create', data)
+    dispatch({
+        type: CREATE_USER,
+        payload: resp.data
+    })
 }

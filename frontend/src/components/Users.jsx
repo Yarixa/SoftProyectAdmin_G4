@@ -2,7 +2,7 @@ import React from 'react'
 
 // Hook React Redux
 import {useDispatch, useSelector} from 'react-redux'
-import {getUsers} from '../redux/userDucks'
+import {getUsers, createUser} from '../redux/userDucks'
 
 // Semantic Table | Estilos
 import {Table, Button, Icon} from 'semantic-ui-react'
@@ -14,6 +14,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import { TextField, makeStyles, DialogActions } from '@material-ui/core'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,8 +46,31 @@ const Users = () => {
         setOpen(false);
     }
 
-    const users = useSelector(store => store.users.array)
-    console.log(users)
+    // Obteniendo datos de formulario
+    const userName = e => {
+        user.first_name = e.target.value
+    }
+
+    const userLastName = e => {
+        user.last_name = e.target.value
+    }
+
+    const userEmail = e => {
+        user.email = e.target.value
+    }
+
+    const userPassword = e => {
+        user.password = e.target.value
+    }
+
+    const handleSubmit = () => {
+        // Validar Datos
+        dispatch(createUser(user))
+        setOpen(false)
+    }
+
+    const usersList = useSelector(store => store.users.users)
+    const user = useSelector(store => store.users)
 
     return (
         <div>
@@ -63,7 +87,7 @@ const Users = () => {
                 </Table.Header>
                 <Table.Body>
                     {
-                        users.map(item => (
+                        usersList.map(item => (
                             <Table.Row>
                                 <Table.Cell key = {item.first_name}>{item.first_name}</Table.Cell>
                                 <Table.Cell key = {item.last_name}>{item.last_name}</Table.Cell>
@@ -115,7 +139,6 @@ const Users = () => {
                 </Table.Footer>
             </Table>
             <form className = {classes.root} noValidate autoComplete = "off">
-                <div>
                 <Dialog open = {open} onClose = {handleClose} aria-labelledby = "form-dialog-title">
                     <DialogTitle id = "form-dialog-title">Agregar Usuario</DialogTitle>
                     <DialogContent>
@@ -124,11 +147,11 @@ const Users = () => {
                         </DialogContentText>
                         <TextField
                             autoFocus
-                            id = "name"
+                            id = "first_name"
                             label = "Nombres"
                             type = "nombre"
                             className = {classes.TextField}
-                            variant = "outlined"
+                            onChange = {userName}
                         />
                         <TextField
                             autoFocus
@@ -136,36 +159,35 @@ const Users = () => {
                             label = "Apellidos"
                             type = "apellido"
                             className = {classes.TextField}
-                            variant = "outlined"
+                            onChange = {userLastName}
                         />
                         <TextField
                             autoFocus
                             id = "email"
                             label = "E-mail"
                             type = "email"
-                            variant = "outlined"
                             fullWidth
                             style = {{ margin: 8}}
+                            onChange = {userEmail}
                         />
                         <TextField
                             autoFocus
                             id = "password"
                             label = "Contraseña"
                             type = "password"
-                            variant = "outlined"
                             className = {classes.TextField}
+                            onChange = {userPassword}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button autoFocus onClick = {handleClose}>
                             Cancelar
                         </Button>
-                        <Button onClick = {handleClose} color = "primary">
+                        <Button onClick = {handleSubmit} color = "primary">
                             Agregar
                         </Button>
                     </DialogActions>
                 </Dialog>
-                </div>
             </form>
         </div>
     )
