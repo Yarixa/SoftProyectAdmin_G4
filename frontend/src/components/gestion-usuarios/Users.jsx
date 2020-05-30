@@ -2,7 +2,7 @@ import React from 'react'
 
 // Hook React Redux
 import {useDispatch, useSelector} from 'react-redux'
-import {getUsers, createUser} from '../redux/userDucks'
+import {getUsers, createUser} from './userDucks'
 
 // Semantic Table | Estilos
 import {Table, Button, Icon} from 'semantic-ui-react'
