@@ -16,13 +16,18 @@ module.exports = db.sequelize.define(
 			type: Sequelize.STRING
 		},
 		email: {
+			type: Sequelize.STRING,
+			unique: true
+		},
+		role: {
 			type: Sequelize.STRING
 		},
 		password: {
 			type: Sequelize.STRING
 		},
-		role: {
-			type: Sequelize.STRING
+		disponible: {
+			type: Sequelize.BOOLEAN,
+			defaultValue: true
 		},
 		created: {
 			type: Sequelize.DATE,

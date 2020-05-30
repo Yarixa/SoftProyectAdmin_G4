@@ -4,9 +4,9 @@ const bcrypt = require("bcrypt")
 const User = require("../models/User")
 
 const sgMail = require('@sendgrid/mail');
+
+//Es necesario el solicitar la API KEY y declarala como variable de entorno.
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-
 
 process.env.SECRET_KEY = 'secret'
 
@@ -15,10 +15,12 @@ process.env.SECRET_KEY = 'secret'
 exports.create = (req, res) => {
 	const today = new Date()
 	const dPassword =  Math.random().toString(36).substr(2, 5)
+	const dRole = checkRegex(req.body.email)
 	const userData = {
 		first_name: req.body.first_name,
 		last_name: req.body.last_name,
 		email: req.body.email,
+		role: dRole,
 		password: dPassword,
 		created: today
 	}
@@ -53,7 +55,6 @@ exports.create = (req, res) => {
 	})
 }
 
-
 //Declaramos la funcion que permite al usuario logearse a la pagina.
 //Problemas conocidos son por ejemplo el hecho de que aun no se implementa un metodo para hacer expirar nuestro token.
 //Recomendable, cambiar el tipo de token por uno que permita renovarse e implementar los metodos GET necesarios.
@@ -85,9 +86,9 @@ exports.login = (req, res) => {
 	})
 }
 
-//Declaramos la funcion que permite borrar un usuario. Cabe destacar de que esta funcion cambiará de borrar a deshabilitar.
+//Declaramos la funcion que permite deshabilitar un usuario.
 //Esta funcion necesita recibir un parametro, :email en este caso.
-exports.delete = (req, res) => {
+exports.disable = (req, res) => {
 	User.findOne({
 		where: {
 			email: req.params.email
@@ -95,16 +96,48 @@ exports.delete = (req, res) => {
 	})
 	.then(user => {
 		if(user){
-			User.destroy({
-				where: {
-					email: req.params.email
-				}
-			})
+			User.update(
+				{disponible: false},
+				{where:
+						{email: req.params.email}	}
+			)
 			.then(user => {
-				res.json({status: req.params.email + ' deleted'})
+				res.json({status: req.params.email + ' disabled'})
 			})
 			.catch(user => {
-				res.json({error: "Can't delete user."})
+				res.json({error: "Can't disable user."})
+			})
+		}else{
+			res.status(400).json({error: 'User does not exist'})
+			res.end()
+		}
+	})
+	.catch(err => {
+		res.status(400).json({error: err})
+	})
+}
+
+//Declaramos la funcion que permite habilitar un usuario.
+//Esta funcion necesita recibir un parametro, :email en este caso.
+exports.enable = (req, res) => {
+	User.findOne({
+		where: {
+			email: req.params.email
+		}
+	})
+	.then(user => {
+		if(user){
+			User.update(
+				{disponible: true},
+				{where:
+					{email: req.params.email}
+				}
+			)
+			.then(user => {
+				res.json({status: req.params.email + ' enabled'})
+			})
+			.catch(user => {
+				res.json({error: "Can't enable user."})
 			})
 		}else{
 			res.status(400).json({error: 'User does not exist'})
@@ -156,7 +189,6 @@ exports.updatePassword = (req, res) => {
 	})
 }
 
-
 //Funcion usada para poder actualizar un usuario, es necesario el tener el email
 //y el objeto usuario para poder efectuar esta operacion.
 //Solo se puede modificar el nombre y el apellido con esta funcion
@@ -191,7 +223,6 @@ exports.updateUser = (req, res) => {
 		res.end()
 	})
 }
-
 
 //Funcion que permite listar todos los usuarios.
 exports.readAll = (req, res) => {
@@ -279,10 +310,12 @@ exports.massiveCreate = async (req, res) => {
 			for(var i = 0; i < userArray.length; i++){
 				const today = new Date()
 				const dPassword =  Math.random().toString(36).substr(2, 5)
+				const dRole = checkRegex(userArray[i]["Dirección de correo"])
 				const userData = {
 					first_name: userArray[i].Nombre,
 					last_name: userArray[i]["Apellido(s)"],
 					email: userArray[i]["Dirección de correo"],
+					role: dRole,
 					password: dPassword,
 					created: today
 				}
@@ -304,7 +337,7 @@ exports.massiveCreate = async (req, res) => {
 								sendPasswordEmail(dPassword, userData.email, userData.first_name);
 							})
 							.catch(err => {
-								res.send('error' + err)
+								console.log('error' + err)
 							})
 						})
 					}else{
@@ -312,7 +345,7 @@ exports.massiveCreate = async (req, res) => {
 					}
 				})
 				.catch(err => {
-					res.send('error: ' + err)
+					console.log('error: ' + err)
 				})
 			}
 		res.json("All Users registered")
@@ -320,6 +353,123 @@ exports.massiveCreate = async (req, res) => {
 	catch(e){
 		res.json("There was an error on the file.")
 	}
+}
+
+//Funcion que carga un archivo .xlsx para luego crear una cantidad n de usuario
+//donde n es la cantidad de usuarios no repetidos.
+//dicha funcion se encarga de crear usuarios de test, los cuales no reciben correo
+//y tienen contraseña fija "1234"
+exports.testMassiveCreate = async (req, res) => {
+	var XLSX = require('xlsx');
+		try{
+			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
+			var sheetNames = workbook.SheetNames;
+
+			var sheetIndex = 1;
+
+			var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+
+			for(var i = 0; i < userArray.length; i++){
+				const today = new Date()
+				const dPassword =  "1234"
+				const dRole = checkRegex(userArray[i]["Dirección de correo"])
+				const userData = {
+					first_name: userArray[i].Nombre,
+					last_name: userArray[i]["Apellido(s)"],
+					email: userArray[i]["Dirección de correo"],
+					role: dRole,
+					password: dPassword,
+					created: today
+				}
+				User.findOne({
+					where: {
+						email: req.body.email
+					}
+				})
+				.then(user =>{
+					if(!user){
+						const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
+							userData.password = hash
+							User.create(userData)
+							.then(user => {
+								console.log("User " + userData.email + " created.")
+							})
+							.catch(err => {
+								console.log('Error: ' + err + " User already created.")
+							})
+						})
+					}else{
+						console.log("User already exist")
+					}
+				})
+				.catch(err => {
+					console.log('error: ' + err)
+				})
+			}
+		res.json("All Users registered")
+	}
+	catch(e){
+		res.json("There was an error on the file.")
+	}
+}
+
+//Declaramos la funcion create. Esta funcion esta encargada de crear un usuario si y solo si no existe un usuario con el mismo email.
+//Es recomendable cambiar findOne por findByPk, dado a que esto es lo que Sequelize recomienda.
+//Version de prueba, tiene contraseña fija "1234" y no envia correo al nuevo usuario.
+exports.testCreate = (req, res) => {
+	const today = new Date()
+	const dPassword = "1234"
+	const dRole = checkRegex(req.body.email)
+	const userData = {
+		first_name: req.body.first_name,
+		last_name: req.body.last_name,
+		email: req.body.email,
+		role: dRole,
+		password: dPassword,
+		created: today
+	}
+	User.findOne({
+		where: {
+			email: req.body.email
+		}
+	})
+	.then(user =>{
+		if(!user){
+			const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
+				userData.password = hash
+				User.create(userData)
+				.then(user => {
+					/*Llama a la funcino encargada de enviar el correo con la nueva contraseña
+					*No se esta haciendo tratamiento para los correos enviados con email invalido,
+					*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
+					*/
+					//sendPasswordEmail(dPassword, userData.email, userData.first_name);
+					res.json({status: user.email + ' registered'})
+				})
+				.catch(err => {
+					res.json({error: err})
+				})
+			})
+		}else{
+			res.json({error: "User already exist"})
+		}
+	})
+	.catch(err => {
+		res.json({error: err})
+	})
+}
+
+//Funcion encargada de revisar el correo para determinar el tipo de usuario
+//para los casos que consideren @utalca seran definidos como Profesor
+//mientras que los casos contrarios seran Alumno.
+//Debe de entenderse de que el calce debe de ser preciso.
+var checkRegex = (email) => {
+	var examineRegex = email.match(/@utalca.cl/g)
+	console.log(examineRegex)
+	if(examineRegex != null){
+		return "Profesor"
+	}
+	return "Alumno"
 }
 
 //Funcion privada encargada de enviar el correo con la nueva contraseña al usuario

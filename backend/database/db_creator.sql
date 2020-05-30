@@ -9,9 +9,10 @@ create table users(
 	id int primary key auto_increment,
 	first_name varchar(40) default '' not null,
 	last_name varchar(40) default '' not null,
-	email varchar(40) default '' not null,
+	email varchar(40) default '' not null unique,
 	role varchar(20) default '' not null,
 	password text not null,
+	disponible boolean not null default true,
 	created date
 );
 
