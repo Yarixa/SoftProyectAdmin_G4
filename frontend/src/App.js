@@ -3,7 +3,8 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
 
 import './App.css';
-import generateStore from "./components/navigation/navigationStore";
+import  TablaModulos  from './components/vista-modulos/listado-modulos/TablaModulos'
+import generateStore from "./components/store";
 
 // *** Components ***
 import RAppBar from "./components/navigation/RAppBar/RAppBar.jsx";
@@ -26,34 +27,33 @@ class App extends Component {
                     <RAppBar/>
                     <Switch>
                         <Route exact path="/">
-                            <Container>
+                            <MainBox>
                                 <h1>Dashboard</h1>
                                 {/*<Dashboard />*/}
-                            </Container>
+                            </MainBox>
                         </Route>
                         <Route exact path="/modulos">
-                            <Container>
-                                <h1>Modulos</h1>
-                            {/*<Modulos />*/}
-                            </Container>
+                            <MainBox>
+                                <TablaModulos />
+                            </MainBox>
                         </Route>
                         <Route exact path="/modulos/nuevo-modulo">
-                            <Container>
+                            <MainBox>
                                 <h1>Nuevo Modulo</h1>
-                            </Container>
+                            </MainBox>
                             {/*<NuevoModulo />*/}
                         </Route>
-                        <Route path="/cursos">
-                            <Container>
+                        <Route path="/modulosApi">
+                            <MainBox>
                                 <h1>Cursos</h1>
-                            </Container>
+                            </MainBox>
                             {/*<Cursos />*/}
                         </Route>
                         <Route path="/Proyectos">
-                            <Container>
+                            <MainBox>
                                 <h1>Proyectos</h1>
                             {/*<Poyectos />*/}
-                            </Container>
+                            </MainBox>
                         </Route>
                     </Switch>
                     <RDrawer/>
@@ -63,10 +63,10 @@ class App extends Component {
     }
 }
 
-class Container extends Component{
+class MainBox extends Component{
     render(){
         return(
-            <div className="container">
+            <div className="main-box">
                 {this.props.children}
             </div>
         );

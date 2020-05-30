@@ -20,9 +20,6 @@ import {ExpandLess, ExpandMore} from "@material-ui/icons";
 
 
 const useStyles = makeStyles((theme) => ({
-    active: {
-        backgroundColor: 'yellow',
-    },
     root: {},
     nested: {
         paddingLeft: theme.spacing(10),
@@ -77,7 +74,7 @@ export default function RListItems() {
                 </List>
             </Collapse>
 
-                <ListItem button component={Link} to="/cursos" onClick={() => dispatch(updateTitleAction('Cursos'))}>
+                <ListItem button component={Link} to="/modulosApi" onClick={() => dispatch(updateTitleAction('Cursos'))}>
                     <ListItemIcon>
                         <PeopleIcon style={{ color: '#FFFFFF' }}/>
                     </ListItemIcon>

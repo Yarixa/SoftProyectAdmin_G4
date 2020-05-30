@@ -11,7 +11,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Typography from "@material-ui/core/Typography";
 
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     iconBadge: {
@@ -73,7 +73,6 @@ export default function RAppBar() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const [currentSection] = React.useState("Fix");
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
