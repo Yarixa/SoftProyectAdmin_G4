@@ -18,6 +18,21 @@ create table users(
 
 alter table users auto_increment = 1;
 
+CREATE TABLE subjects (
+  id varchar(25) NOT NULL PRIMARY KEY,
+  nombre varchar(40) NOT NULL,
+  degree varchar(40) NOT NULL,
+  disponible int(11) DEFAULT 1
+);
+
+create table courses(
+	id int primary key auto_increment,
+	subject_id varchar(25) not null,
+	anio int not null,
+	semestre int not null,
+	disponible boolean DEFAULT true
+);
+
 -- Separado el crear un usuario de la asignacion de privilegios, para evitar problemas.
 DROP USER 'administrador'@'%';
 
