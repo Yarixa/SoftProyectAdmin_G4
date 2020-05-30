@@ -5,8 +5,7 @@ const dataInicial = {
     users : [],
     first_name: '',
     last_name: '',
-    email: '',
-    password: ''
+    email: ''
 }
 
 // Tipos
@@ -42,8 +41,7 @@ export const createUser = user => async dispatch => {
     const data = {
         first_name: user.first_name,
         last_name: user.last_name,
-        email: user.email,
-        password: user.password
+        email: user.email
     }
     const resp = await axios.post('http://localhost:5000/users/create', data)
     dispatch({

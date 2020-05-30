@@ -59,10 +59,6 @@ const Users = () => {
         user.email = e.target.value
     }
 
-    const userPassword = e => {
-        user.password = e.target.value
-    }
-
     const handleSubmit = () => {
         // Validar Datos
         dispatch(createUser(user))
@@ -81,6 +77,7 @@ const Users = () => {
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
                         <Table.HeaderCell>Apellido</Table.HeaderCell>
                         <Table.HeaderCell>E-mail</Table.HeaderCell>
+                        <Table.HeaderCell>Rol</Table.HeaderCell>
                         <Table.HeaderCell>Registrado</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Acciones</Table.HeaderCell>
                     </Table.Row>
@@ -92,6 +89,7 @@ const Users = () => {
                                 <Table.Cell key = {item.first_name}>{item.first_name}</Table.Cell>
                                 <Table.Cell key = {item.last_name}>{item.last_name}</Table.Cell>
                                 <Table.Cell key = {item.email}>{item.email}</Table.Cell>
+                                <Table.Cell key = {item.created}>{item.role}</Table.Cell>
                                 <Table.Cell key = {item.created}>{item.created}</Table.Cell>
                                 <Table.Cell textAlign = 'center'>
                                     <Button animated>
@@ -113,7 +111,7 @@ const Users = () => {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '5'>
+                        <Table.HeaderCell colSpan = '6'>
                             <Button
                                 onClick = {() => dispatch(getUsers())}
                                 floated = 'right'
@@ -169,14 +167,6 @@ const Users = () => {
                             fullWidth
                             style = {{ margin: 8}}
                             onChange = {userEmail}
-                        />
-                        <TextField
-                            autoFocus
-                            id = "password"
-                            label = "Contraseña"
-                            type = "password"
-                            className = {classes.TextField}
-                            onChange = {userPassword}
                         />
                     </DialogContent>
                     <DialogActions>
