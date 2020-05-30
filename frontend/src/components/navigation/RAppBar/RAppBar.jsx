@@ -11,6 +11,8 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Typography from "@material-ui/core/Typography";
 
+import { useSelector } from "react-redux";
+
 const useStyles = makeStyles((theme) => ({
     iconBadge: {
         backgroundColor: "#007EDC"
@@ -20,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         backgroundColor: "#ffffff",
+        position: 'fixed',
+        display: 'block',
     },
     grow: {
         flexGrow: 1,
@@ -52,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     sectionDesktop: {
         display: 'none',
         [theme.breakpoints.up('md')]: {
-            display: 'flex',
+            display: 'block',
         },
     },
     sectionMobile: {
@@ -64,6 +68,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RAppBar() {
+    const title = useSelector(store => store.appBar.title);
+
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -142,7 +148,7 @@ export default function RAppBar() {
             <AppBar position="absolute" className={classes.appBar}>
                 <Toolbar>
                     <Typography component="h1" className={classes.title} variant="h6" noWrap>
-                        Material-UI
+                        {title}
                     </Typography>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
