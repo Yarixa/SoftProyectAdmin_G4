@@ -30,7 +30,6 @@ export default function FilaTabla(props){
                 </div>
             </Table.Cell>
         </Table.Row>
-
     )
 }
 
