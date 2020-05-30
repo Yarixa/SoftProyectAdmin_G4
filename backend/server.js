@@ -16,7 +16,9 @@ app.use(fileUpload({
 }));
 
 var Users = require("./routes/Users")
+var Modulos = require("./routes/Modulo")
 
+app.use("/modulos", Modulos)
 app.use("/users", Users)
 
 
