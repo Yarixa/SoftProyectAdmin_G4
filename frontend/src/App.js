@@ -29,7 +29,6 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/">
                             <MainBox>
-                                <Users />
                                 {/*<Dashboard />*/}
                             </MainBox>
                         </Route>
@@ -52,7 +51,7 @@ class App extends Component {
                         </Route>
                         <Route path="/Proyectos">
                             <MainBox>
-                                <h1>Proyectos</h1>
+                                <Users />
                             {/*<Poyectos />*/}
                             </MainBox>
                         </Route>
