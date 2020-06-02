@@ -4,10 +4,12 @@ import thunk from "redux-thunk";
 import appBarReducer from "./navigation/appBarDuck";
 import modulosReducer from "./vista-modulos/modulosDuck";
 import userReducer from './gestion-usuarios/userDucks'
+import cursosReducer from "./vista-modulos/cursosDuck";
 
 const rootReducer = combineReducers({
     appBar : appBarReducer,
     listaModulos : modulosReducer,
+    listaCursos : cursosReducer,
     users : userReducer
 });
 

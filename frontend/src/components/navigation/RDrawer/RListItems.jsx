@@ -11,7 +11,7 @@ import {Link} from "react-router-dom";
 import {useDispatch} from 'react-redux';
 import {updateTitleAction} from '../appBarDuck';
 
-// *** Icons ***
+// * Icons *
 import BookIcon from '@material-ui/icons/Book';
 import WorkIcon from '@material-ui/icons/Work';
 import DashboardIcon from '@material-ui/icons/Dashboard';
