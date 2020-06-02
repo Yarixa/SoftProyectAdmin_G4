@@ -29,7 +29,7 @@ export default function ListaCursos(props){
                     <EliminarCurso id={curso.id}/>
                 </div>
             </Table.Cell>
-        </Table.Row>curso
+        </Table.Row>
 
     )
 }

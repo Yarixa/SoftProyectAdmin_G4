@@ -23,7 +23,7 @@ export default function TablaCursos(){
                 </Table.Header>
                 <Table.Body>
                     {
-                        cursos.map((curso) => <FilaTabla key={curso.id} curso={curso}/>)
+                        cursos.map((curso) => <ListaCursos key={curso.id} curso={curso}/>)
                     }
                 </Table.Body>
             </Table>
@@ -31,4 +31,4 @@ export default function TablaCursos(){
         </div>
     )
 
-}s
+}
