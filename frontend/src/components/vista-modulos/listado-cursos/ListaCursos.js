@@ -25,8 +25,8 @@ export default function ListaCursos(props){
             <Table.Cell>{curso.profesor}</Table.Cell>
             <Table.Cell>
                 <div className={classes.row} >
-                    <FormularioModulo esModoEditar={true} moduloParaEditar={curso}/>
-                    <EliminarCurso id={curso.id}/>
+                    <FormularioCurso esModoEditar={true} cursoParaEditar={curso}/>
+                    <DeshabilitarCurso id={curso.id}/>
                 </div>
             </Table.Cell>
         </Table.Row>

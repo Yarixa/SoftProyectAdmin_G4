@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
 
 import './App.css';
-import  TablaModulos  from './components/vista-modulos/listado-modulos/TablaModulos'
+import  Modulos  from './components/vista-modulos/Modulos';
 import Users from './components/gestion-usuarios/Users';
 import generateStore from "./components/store";
 
@@ -34,7 +34,8 @@ class App extends Component {
                         </Route>
                         <Route exact path="/modulos">
                             <MainBox>
-                                <TablaModulos />
+                                <Modulos />
+                                {/*<TablaModulos />*/}
                             </MainBox>
                         </Route>
                         <Route exact path="/modulos/nuevo-modulo">

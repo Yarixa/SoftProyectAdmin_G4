@@ -8,7 +8,7 @@ import cursosReducer from "./vista-modulos/cursosDuck";
 
 const rootReducer = combineReducers({
     appBar : appBarReducer,
-    listaModulos : modulosReducer,
+    modulos : modulosReducer,
     listaCursos : cursosReducer,
     users : userReducer
 });

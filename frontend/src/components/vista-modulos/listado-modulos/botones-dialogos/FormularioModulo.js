@@ -75,7 +75,6 @@ export default function FormularioModulo(props) {
 
     const handleAccept = () => {
         const nuevoModulo = {
-            id : idAux,
             nombre : nombreModulo,
             profesor : profesor,
             semestre : semestre,
