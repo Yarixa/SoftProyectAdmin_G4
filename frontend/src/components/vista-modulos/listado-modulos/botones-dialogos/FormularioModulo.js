@@ -115,6 +115,8 @@ export default function FormularioModulo(props) {
                                 label="Nombre Modulo"
                                 onChange={(e) => setNombreModulo(e.target.value)}
                                 defaultValue={esModoEditar?nombreModulo:''}
+                                error={nombreModulo === "prueba"}
+                                helpertext={"error"}
                             />
                             <TextField
                                 className={classes.formItem}
