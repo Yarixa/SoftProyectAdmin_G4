@@ -54,20 +54,29 @@ const Users = () => {
     }
 
     const handleClose = () => {
+        user.first_name = ''
+        user.last_name = ''
+        user.email = ''
         setOpen(false);
     }
 
     // Diaglo Editar Usuario
     const handleCloseEdit = () => {
+        user.first_name = ''
+        user.last_name = ''
+        user.email = ''
         setEdit(false);
     }
 
-    const handleOpenEdit = () => {
+    const handleOpenEdit = e => {
+        user.first_name = e.currentTarget.attributes['first_name'].value
+        user.last_name = e.currentTarget.attributes['last_name'].value
+        user.email = e.currentTarget.attributes['email'].value
         setEdit(true);
     }
 
     const handleEditar = () => {
-        //dispatch(updateUser())
+        dispatch(updateUser(user))
         setEdit(false)
     }
 
@@ -129,7 +138,10 @@ const Users = () => {
                                         key = {item.id} 
                                         variant="contained" 
                                         color="primary" 
-                                        onClick ={handleOpenEdit}
+                                        onClick = {handleOpenEdit}
+                                        first_name = {item.first_name}
+                                        last_name = {item.last_name}
+                                        email = {item.email}
                                         >
                                         <EditIcon />
                                     </Button>
@@ -218,6 +230,7 @@ const Users = () => {
                             label = "Nombres"
                             type = "nombre"
                             className = {classes.TextField}
+                            defaultValue = {user.first_name}
                             onChange = {userName}
                         />
                         <TextField
@@ -226,6 +239,7 @@ const Users = () => {
                             label = "Apellidos"
                             type = "apellido"
                             className = {classes.TextField}
+                            defaultValue = {user.last_name}
                             onChange = {userLastName}
                         />
                     </DialogContent>

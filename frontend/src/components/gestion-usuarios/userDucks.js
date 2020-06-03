@@ -93,8 +93,8 @@ export const updateUser = user => async dispatch => {
         last_name: user.last_name,
         email: user.email
     }
-    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
     const resp = await axios.put('http://localhost:5000/users/updateuser/' + data.email, data)
+    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
     dispatch({
         type: UPDATE_USER,
         payload: resp,

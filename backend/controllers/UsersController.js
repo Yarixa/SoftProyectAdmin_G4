@@ -98,8 +98,7 @@ exports.disable = (req, res) => {
 		if(user){
 			User.update(
 				{disponible: false},
-				{where:
-						{email: req.params.email}	}
+				{where: {email: req.params.email}}
 			)
 			.then(user => {
 				res.json({status: req.params.email + ' disabled'})
@@ -202,20 +201,17 @@ exports.updateUser = (req, res) => {
 	.then(user => {
 		if(user){
 				User.update(
-					{first_name: req.body.first_name},
-					{last_name: req.body.last_name},
-					{where: { email: req.params.email } }
-				).then(result =>{
-							res.json({status: req.params.email + ' updated'})
-							res.send()
-				})
-				.catch(err =>{
-						res.json({error: err})
+					{first_name: req.body.first_name,
+					last_name: req.body.last_name},
+					{where: {email: req.params.email}}				
+				).then(result => {
+					res.json({status: req.params.email + ' updated'}
+				)}).catch(err =>{
+					res.json({error: err})
 				})
 			}
-			else{
+		else{
 				res.json({error: 'Wrong password'})
-				res.end()
 			}
 		})
 	.catch(err => {
