@@ -202,8 +202,8 @@ exports.updateUser = (req, res) => {
 	.then(user => {
 		if(user){
 				User.update(
-					{first_name: req.params.first_name},
-					{last_name: req.params.last_name},
+					{first_name: req.body.first_name},
+					{last_name: req.body.last_name},
 					{where: { email: req.params.email } }
 				).then(result =>{
 							res.json({status: req.params.email + ' updated'})

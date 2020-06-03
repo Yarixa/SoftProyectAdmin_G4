@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 // Hook React Redux
 import {useDispatch, useSelector} from 'react-redux'
-import {getUsers, createUser, disableUser, enableUser} from './userDucks'
+import {getUsers, createUser, disableUser, enableUser, updateUser} from './userDucks'
 
 // Semantic Table | Estilos
 import {Table} from 'semantic-ui-react'
@@ -38,6 +38,7 @@ const Users = () => {
     const user = useSelector(store => store.users)
 
     const [open, setOpen] = React.useState(false);
+    const [edit, setEdit] = React.useState(false);
 
     const dispatch = useDispatch()
     // Carga inicial de usuarios en sistema
@@ -47,13 +48,27 @@ const Users = () => {
 
     const classes = useStyles()
 
-
+    // Dialogo Agregar Usuario
     const handleClickOpen = () => {
         setOpen(true);
     }
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    // Diaglo Editar Usuario
+    const handleCloseEdit = () => {
+        setEdit(false);
+    }
+
+    const handleOpenEdit = () => {
+        setEdit(true);
+    }
+
+    const handleEditar = () => {
+        //dispatch(updateUser())
+        setEdit(false)
     }
 
     // Obteniendo datos de formulario
@@ -110,7 +125,12 @@ const Users = () => {
                                 <Table.Cell key = {item.role}>{item.role}</Table.Cell>
                                 <Table.Cell key = {item.created}>{item.created}</Table.Cell>
                                 <Table.Cell textAlign = 'center'>
-                                    <Button key = {item.id} variant="contained" color="primary">
+                                    <Button 
+                                        key = {item.id} 
+                                        variant="contained" 
+                                        color="primary" 
+                                        onClick ={handleOpenEdit}
+                                        >
                                         <EditIcon />
                                     </Button>
                                 </Table.Cell>
@@ -176,11 +196,45 @@ const Users = () => {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button autoFocus onClick = {handleClose}>
+                        <Button autoFocus onClick = {handleCloseEdit}>
                             Cancelar
                         </Button>
                         <Button onClick = {handleSubmit} color = "primary">
                             Agregar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </form>
+            <form className = {classes.root} noValidate autoComplete = "off">
+                <Dialog open = {edit} onClose = {handleCloseEdit} aria-labelledby = "form-dialog-title">
+                    <DialogTitle id = "form-dialog-title">Editar Usuario</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Formulario para editar usuario, complete con la información solicitada.
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            id = "first_name"
+                            label = "Nombres"
+                            type = "nombre"
+                            className = {classes.TextField}
+                            onChange = {userName}
+                        />
+                        <TextField
+                            autoFocus
+                            id = "last_name"
+                            label = "Apellidos"
+                            type = "apellido"
+                            className = {classes.TextField}
+                            onChange = {userLastName}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button autoFocus onClick = {handleCloseEdit}>
+                            Cancelar
+                        </Button>
+                        <Button onClick = {handleEditar} color = "primary">
+                            Editar
                         </Button>
                     </DialogActions>
                 </Dialog>

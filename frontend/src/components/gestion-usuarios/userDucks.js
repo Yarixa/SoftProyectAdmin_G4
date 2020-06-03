@@ -87,3 +87,17 @@ export const enableUser = user => async dispatch => {
     })
 }
 
+export const updateUser = user => async dispatch => {
+    const data = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email
+    }
+    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
+    const resp = await axios.put('http://localhost:5000/users/updateuser/' + data.email, data)
+    dispatch({
+        type: UPDATE_USER,
+        payload: resp,
+        readUser: readUser.data
+    })
+}
