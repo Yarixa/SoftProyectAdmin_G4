@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 
 import './App.css';
 import  TablaModulos  from './components/vista-modulos/listado-modulos/TablaModulos'
+import VistaCurso from './components/vista-modulos/visualizacion-curso/VistaCurso';
 import Users from './components/gestion-usuarios/Users';
 import generateStore from "./components/store";
 
@@ -29,7 +30,10 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/">
                             <MainBox>
-                                {/*<Dashboard />*/}
+                                <VistaCurso>
+
+                                </VistaCurso>
+
                             </MainBox>
                         </Route>
                         <Route exact path="/modulos">
