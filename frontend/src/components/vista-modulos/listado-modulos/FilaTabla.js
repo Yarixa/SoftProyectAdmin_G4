@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+
 export default function FilaTabla(props){
     const{ modulo } = props;
     const classes = useStyles();
@@ -30,7 +31,6 @@ export default function FilaTabla(props){
                 </div>
             </Table.Cell>
         </Table.Row>
-
     )
 }
 

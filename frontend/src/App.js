@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 
 import './App.css';
 import  TablaModulos  from './components/vista-modulos/listado-modulos/TablaModulos'
+import Users from './components/gestion-usuarios/Users';
 import generateStore from "./components/store";
 
 // *** Components ***
@@ -28,7 +29,6 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/">
                             <MainBox>
-                                <h1>Dashboard</h1>
                                 {/*<Dashboard />*/}
                             </MainBox>
                         </Route>
@@ -51,7 +51,7 @@ class App extends Component {
                         </Route>
                         <Route path="/Proyectos">
                             <MainBox>
-                                <h1>Proyectos</h1>
+                                <Users />
                             {/*<Poyectos />*/}
                             </MainBox>
                         </Route>
