@@ -11,6 +11,9 @@ const dataInicial = {
 // Tipos
 const GET_USERS = 'GET_USERS'
 const CREATE_USER = 'CREATE_USER'
+const DISABLE_USER = 'DISABLE_USER'
+const ENABLE_USER = 'ENABLE_USER'
+const UPDATE_USER = 'UPDATE_USER'
 
 // Reducer
 export default function userReducer(state = dataInicial, action){
@@ -19,6 +22,12 @@ export default function userReducer(state = dataInicial, action){
             return {...state, users: action.payload}
         case CREATE_USER:
             return {...state, users: state.users.concat(action.nuevo)}
+        case DISABLE_USER:
+            return {...state, users: state.users.map(user => user.email === action.readUser.email ? action.readUser: user)}
+        case ENABLE_USER:
+            return {...state, users: state.users.map(user => user.email === action.readUser.email ? action.readUser: user)}
+        case UPDATE_USER:
+            return {...state, users: state.users.map(user => user.email === action.readUser.email ? action.readUser: user)}
         default:
             return state
     }
@@ -51,3 +60,30 @@ export const createUser = user => async dispatch => {
         nuevo: newUser.data
     })
 }
+
+export const disableUser = user => async dispatch => {
+    const data = {
+        email: user.email
+    }
+    const resp = await axios.put('http://localhost:5000/users/disable/' + data.email)
+    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
+    dispatch({
+        type: DISABLE_USER,
+        payload: resp,
+        readUser: readUser.data
+    })
+}
+
+export const enableUser = user => async dispatch => {
+    const data = {
+        email: user.email
+    }
+    const resp = await axios.put('http://localhost:5000/users/enable/' + data.email)
+    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
+    dispatch({
+        type: ENABLE_USER,
+        payload: resp,
+        readUser: readUser.data
+    })
+}
+

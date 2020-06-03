@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // Hook React Redux
 import {useDispatch, useSelector} from 'react-redux'
-import {getUsers, createUser} from './userDucks'
+import {getUsers, createUser, disableUser, enableUser} from './userDucks'
 
 // Semantic Table | Estilos
-import {Table, Button, Icon} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 
 // Material Dialog
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
-import { TextField, makeStyles, DialogActions } from '@material-ui/core'
+import { TextField, makeStyles, DialogActions, Switch } from '@material-ui/core'
+import EditIcon from "@material-ui/icons/Edit";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +34,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Users = () => {
 
+    const usersList = useSelector(store => store.users.users)
+    const user = useSelector(store => store.users)
+
+    const [open, setOpen] = React.useState(false);
+
     const dispatch = useDispatch()
+    // Carga inicial de usuarios en sistema
+    useEffect(() => {
+        dispatch(getUsers())
+    },[dispatch])
 
     const classes = useStyles()
 
-    const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -65,8 +75,15 @@ const Users = () => {
         setOpen(false)
     }
 
-    const usersList = useSelector(store => store.users.users)
-    const user = useSelector(store => store.users)
+    // Deshabilitar Usuario
+    const handleDisable = e => {
+        if (e.currentTarget.attributes['disponible'].value === "true"){
+            dispatch(disableUser({email: e.currentTarget.attributes['email'].value}))
+        }
+        else{
+            dispatch(enableUser({email: e.currentTarget.attributes['email'].value}))
+        }
+    }
 
     return (
         <div>
@@ -79,31 +96,33 @@ const Users = () => {
                         <Table.HeaderCell>E-mail</Table.HeaderCell>
                         <Table.HeaderCell>Rol</Table.HeaderCell>
                         <Table.HeaderCell>Registrado</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Acciones</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Editar</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Activo</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
                         usersList.map(item => (
-                            <Table.Row>
+                            <Table.Row key = {item.id + "t"}>
                                 <Table.Cell key = {item.first_name}>{item.first_name}</Table.Cell>
                                 <Table.Cell key = {item.last_name}>{item.last_name}</Table.Cell>
                                 <Table.Cell key = {item.email}>{item.email}</Table.Cell>
-                                <Table.Cell key = {item.created}>{item.role}</Table.Cell>
+                                <Table.Cell key = {item.role}>{item.role}</Table.Cell>
                                 <Table.Cell key = {item.created}>{item.created}</Table.Cell>
                                 <Table.Cell textAlign = 'center'>
-                                    <Button animated>
-                                        <Button.Content hidden>Editar</Button.Content>
-                                        <Button.Content visible>
-                                            <Icon name = 'edit'/>
-                                        </Button.Content>
+                                    <Button key = {item.id} variant="contained" color="primary">
+                                        <EditIcon />
                                     </Button>
-                                    <Button animated color = 'red'>
-                                        <Button.Content hidden>Eliminar</Button.Content>
-                                        <Button.Content visible>
-                                            <Icon name = 'user delete'/>
-                                        </Button.Content>
-                                    </Button>
+                                </Table.Cell>
+                                <Table.Cell textAlign = 'center'>
+                                    <Switch 
+                                        key = {item.id + "s"}
+                                        checked = {item.disponible}
+                                        onClick = {handleDisable}
+                                        name="disable" 
+                                        email = {item.email}
+                                        disponible = {item.disponible.toString()}
+                                    />
                                 </Table.Cell>
                             </Table.Row>
                         ))
@@ -111,26 +130,13 @@ const Users = () => {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '6'>
+                        <Table.HeaderCell colSpan = '7'>
                             <Button
-                                onClick = {() => dispatch(getUsers())}
-                                floated = 'right'
-                                icon
-                                positive
-                                labelPosition = 'left'
-                                size = 'small'
+                                variant="contained"
+                                onClick={handleClickOpen}
+                                color="primary"
                             >
-                                <Icon name = 'eye' /> Mostrar Usuarios
-                            </Button>
-                            <Button
-                                onClick = {handleClickOpen}
-                                floated = 'right'
-                                icon
-                                labelPosition = 'left'
-                                primary
-                                size = 'small'
-                            >
-                                <Icon name = 'user'/> Agregar Usuario
+                                Agregar Usuario
                             </Button>
                         </Table.HeaderCell>
                     </Table.Row>
