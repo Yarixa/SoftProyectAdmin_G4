@@ -18,7 +18,7 @@ export default function userReducer(state = dataInicial, action){
         case GET_USERS:
             return {...state, users: action.payload}
         case CREATE_USER:
-            return {...state, users: [...state.users, action.payload]}
+            return {...state, users: state.users.concat(action.nuevo)}
         default:
             return state
     }
@@ -44,8 +44,10 @@ export const createUser = user => async dispatch => {
         email: user.email
     }
     const resp = await axios.post('http://localhost:5000/users/create', data)
+    const newUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
     dispatch({
         type: CREATE_USER,
-        payload: resp.data
+        payload: resp.data,
+        nuevo: newUser.data
     })
 }
