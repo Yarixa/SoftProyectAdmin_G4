@@ -17,7 +17,9 @@ app.use(fileUpload({
 
 var Users = require("./routes/Users")
 var Modulos = require("./routes/Modulo")
+var Courses = require("./routes/Courses")
 
+app.use("/courses", Courses) //ruta de cursos
 app.use("/modulos", Modulos)
 app.use("/users", Users)
 
