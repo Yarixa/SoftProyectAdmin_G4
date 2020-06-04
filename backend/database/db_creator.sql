@@ -19,7 +19,7 @@ create table users(
 alter table users auto_increment = 1;
 
 CREATE TABLE subjects (
-  id varchar(25) NOT NULL PRIMARY KEY,
+  id int PRIMARY KEY auto_increment,
   nombre varchar(40) NOT NULL,
   degree varchar(40) NOT NULL,
   disponible int(11) DEFAULT 1

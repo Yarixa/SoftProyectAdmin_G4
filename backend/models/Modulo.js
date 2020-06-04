@@ -6,8 +6,9 @@ module.exports = db.sequelize.define(
     'subjects',
     {
         id:{
-            type : Sequelize.TEXT,
-            primaryKey:true
+            type: Sequelize.INTEGER,
+			primaryKey: true,
+			autoIncrement: true
         },
         nombre:{
             type: Sequelize.TEXT
