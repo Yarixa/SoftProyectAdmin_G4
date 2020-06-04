@@ -18,6 +18,7 @@ exports.create = (req,res)=>{
             Modulo.create(moduloData).then(
                 modulo=>{
                     res.json({
+                        id : modulo.id,
                         status : modulo.nombre + ' registrado'
                     })
                 }
