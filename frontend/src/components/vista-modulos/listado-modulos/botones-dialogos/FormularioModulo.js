@@ -82,20 +82,25 @@ export default function FormularioModulo(props) {
             anio : anio,
             anioSemestre : anio + "-" + semestre
         }
-
-        if(esModoEditar) {
-            dispatch(editarModulo(nuevoModulo));
+        //Validacion   
+        //console.log(parseInt(nuevoModulo.anio, 10))
+        //console.log('semestre:'+nuevoModulo.semestre+"----")
+        if(!isNaN(parseInt(nuevoModulo.anio, 10)) &&
+        nuevoModulo.semestre!==' ' &&
+        nuevoModulo.nombre!=='' &&
+        nuevoModulo.profesor!==''){
+            if(esModoEditar) {
+                dispatch(editarModulo(nuevoModulo));
+            }
+            else   {
+                dispatch(agregarModulo(nuevoModulo));
+                setNombreModulo('');
+                setSemestre(" ");
+                setAnio('');
+                setProfesor('');
+            }
+            setOpen(false);
         }
-        else   {
-            dispatch(agregarModulo(nuevoModulo));
-
-            setNombreModulo('');
-            setSemestre(" ");
-            setAnio('');
-            setProfesor('');
-        }
-
-        setOpen(false);
     };
 
     return (
@@ -113,10 +118,10 @@ export default function FormularioModulo(props) {
                                 id="NombreModulo"
                                 fullWidth={true}
                                 label="Nombre Modulo"
-                                onChange={(e) => setNombreModulo(e.target.value)}
                                 defaultValue={esModoEditar?nombreModulo:''}
-                                error={nombreModulo === "prueba"}
-                                helpertext={"error"}
+                                onChange={(e) => setNombreModulo(e.target.value)}
+                                error={nombreModulo === ""}
+                                helperText={nombreModulo === "" ? 'Por favor, rellene el campo' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -124,6 +129,8 @@ export default function FormularioModulo(props) {
                                 label="Profesor"
                                 onChange={(e) => setProfesor(e.target.value)}
                                 defaultValue={esModoEditar?profesor:''}
+                                error={profesor === ""}
+                                helperText={profesor === "" ? 'Por favor, rellene el campo' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -131,6 +138,8 @@ export default function FormularioModulo(props) {
                                 label="Año"
                                 onChange={(e) => setAnio(e.target.value)}
                                 defaultValue={esModoEditar?anio:''}
+                                error={isNaN(parseInt(anio, 10))===true || anio===''} //se validan que sea integer, y que no esté vacío
+                                helperText={ (isNaN(parseInt(anio, 10))===true || anio==='' ) ? 'Rellene el campo con los datos solicitados' : ' '}
                             />
                             <InputLabel
                                 className={classes.formItem}
@@ -142,6 +151,7 @@ export default function FormularioModulo(props) {
                                 defaultValue={esModoEditar?semestre:" "}
                                 onChange={handleChange}
                                 input={<Input />}
+                                error={semestre===' '}
                             >
                                 <MenuItem value={" "}>
                                     <em>Ninguno</em>
