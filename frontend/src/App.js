@@ -7,7 +7,7 @@ import  TablaModulos  from './components/vista-modulos/listado-modulos/TablaModu
 import VistaCurso from './components/vista-modulos/visualizacion-curso/VistaCurso';
 import Users from './components/gestion-usuarios/Users';
 import generateStore from "./components/store";
-
+import TablaPrueba from "./components/vista-modulos/visualizacion-curso/TablaPrueba";
 // *** Components ***
 import RAppBar from "./components/navigation/RAppBar/RAppBar.jsx";
 import RDrawer from "./components/navigation/RDrawer/RDrawer.jsx";
@@ -30,9 +30,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/">
                             <MainBox>
-                                <VistaCurso>
-
-                                </VistaCurso>
+                                <VistaCurso> </VistaCurso>
 
                             </MainBox>
                         </Route>

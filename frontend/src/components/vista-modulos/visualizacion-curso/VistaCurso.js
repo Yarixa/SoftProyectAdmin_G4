@@ -6,7 +6,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import withStyles from "@material-ui/core/styles/withStyles";
+import TablaGrupos from './ListaGrupos';
+import TablaPrueba from "./TablaPrueba";
 
 
 const useStyles = makeStyles({
@@ -15,6 +16,16 @@ const useStyles = makeStyles({
         minWidth: "250px",
         boxSizing: "border-box"
 
+    },
+    tarjetaEstadistica:{
+        margin: "1em",
+        minWidth: "250px",
+        maxWidth: 50,
+    },
+    tarjetaGrupo:{
+        margin: "1em",
+        minWidth: "250px",
+        maxWidth: 700,
     },
     bullet: {
         display: 'flex',
@@ -109,7 +120,7 @@ export default function VistaCurso() {
 
                     <Card className={classes.root}>
                         <CardContent>
-                            <Button className={classes.botonAgregar}>agregar</Button>
+                            <Button className={classes.botonAgregar}>Agregar</Button>
                             <Typography className={classes.title} color="textSecondary" gutterBottom>
                                 Proyectos
                             </Typography>
@@ -125,7 +136,7 @@ export default function VistaCurso() {
 
                 <Card className={classes.root}>
                     <CardContent>
-                        <Button className={classes.botonAgregar}>agregar</Button>
+                        <Button className={classes.botonAgregar}>Agregar</Button>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                             Integrantes
                         </Typography>
@@ -140,7 +151,7 @@ export default function VistaCurso() {
 
                 <Card className={classes.root}>
                     <CardContent>
-                        <Button className={classes.botonAgregar}>agregar</Button>
+                        <Button className={classes.botonAgregar}>Agregar</Button>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                             Ayudante
                         </Typography>
@@ -158,8 +169,27 @@ export default function VistaCurso() {
                 </Card>
 
             </Grid>
+            <Grid container spacing={4}>
+                <Card className={classes.tarjetaGrupo}>
+                    <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            Componentes del Curso
+                        </Typography>
+                        <TablaPrueba></TablaPrueba>
+                    </CardContent>
+                </Card>
+                <Card className={classes.tarjetaEstadistica}>
+                    <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            Estadísticas
+                        </Typography>
+
+                    </CardContent>
+                </Card>
+            </Grid>
 
         </div>
+
 
 
 

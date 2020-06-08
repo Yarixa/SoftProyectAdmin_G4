@@ -5,11 +5,13 @@ import appBarReducer from "./navigation/appBarDuck";
 import modulosReducer from "./vista-modulos/modulosDuck";
 import userReducer from './gestion-usuarios/userDucks'
 import cursosReducer from "./vista-modulos/cursosDuck";
+import gruposReducer from "./vista-modulos/gruposDuck";
 
 const rootReducer = combineReducers({
     appBar : appBarReducer,
     listaModulos : modulosReducer,
     listaCursos : cursosReducer,
+    ListaGrupos : gruposReducer,
     users : userReducer
 });
 
