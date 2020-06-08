@@ -16,17 +16,18 @@ export default function TablaModulos(){
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Nombre módulo</Table.HeaderCell>
+                        <Table.HeaderCell>Deartamento</Table.HeaderCell>
                         <Table.HeaderCell>Número de instancias</Table.HeaderCell>
                         <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
-                        listaModulos.map((modulo) => <FilaTabla key={modulo.id} modulo={modulo}/>)
+                        listaModulos.map((modulo) => <FilaTabla key={ modulo.id } modulo={ modulo }/>)
                     }
                 </Table.Body>
             </Table>
-            <FormularioModulo esModoEditar={false} moduloParaEditar={{}} />
+            <FormularioModulo esModoEditar={ false } moduloParaEditar={{}} />
         </div>
     )
 

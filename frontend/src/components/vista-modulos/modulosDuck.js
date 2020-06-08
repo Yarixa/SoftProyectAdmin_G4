@@ -2,7 +2,7 @@ import axios from 'axios';
 // *** Constants ***
 const initialState = {
     listadoModulos: [],
-    idModuloSeleccionado: null
+    moduloSeleccionado: {}
 }
 
 // *** Types ***
@@ -29,12 +29,12 @@ export default function modulosReducer(state = initialState, action){
         };
         case MOSTRAR_INSTANCIAS: return {
             ...state,
-            idModuloSeleccionado: action.payload
+            moduloSeleccionado: action.payload
         };
         case FETCH_MODULOS_OK: return {
             ...state,
-            listadoModulos: state.listadoModulos.concat(action.payload)
-        }
+            listadoModulos: action.payload
+        };
         default:
             return state;
     }
@@ -44,10 +44,13 @@ export default function modulosReducer(state = initialState, action){
 export const agregarModulo = (nuevoModulo) => async (dispatch, getState) => {
     try{
         await axios.post('http://3.23.231.36:5000/modulos/create', nuevoModulo).then(response => {
-            console.log("recibiendo desde postModulo: " + response.data);
+            console.log("recibiendo desde postModulo: " + response.data.id);
             dispatch({
                 type: AGREGAR_MODULO,
-                payload: nuevoModulo,
+                payload: {
+                    ...nuevoModulo,
+                    id : response.data.id
+                },
             });
         })
     }catch (error){
@@ -57,30 +60,43 @@ export const agregarModulo = (nuevoModulo) => async (dispatch, getState) => {
 }
 
 export const eliminarModulo = (idModulo) => async (dispatch, getState) => {
-    dispatch({
-        type: ELIMINAR_MODULO,
-        payload: idModulo,
-    });
+    try{
+        await axios.put('http://3.23.231.36:5000/modulos/deshabilitar/' + idModulo).then(response => {
+            console.log("recibiendo desde eliminarModulo: " + response.data.status);
+            dispatch({
+                type: ELIMINAR_MODULO,
+                payload: idModulo,
+            });
+        })
+    }catch (error){
+        console.log("ERROR! " + error);
+    }
 }
 
 export const editarModulo = (nuevoModulo) => async (dispatch, getState) => {
-    dispatch({
-        type: ACTUALIZAR_MODULO,
-        payload: nuevoModulo,
-    });
+    try{
+        await axios.put('http://3.23.231.36:5000/modulos/update/'+nuevoModulo.id, nuevoModulo).then(response => {
+            console.log("recibiendo desde editarModulo: " + response.data.status);
+            dispatch({
+                type: ACTUALIZAR_MODULO,
+                payload: nuevoModulo,
+            });
+        })
+    }catch (error){
+        console.log("ERROR! " + error);
+    }
 }
 
-export const mostrarInstancias = (idModulo) => async (dispatch, getState) => {
+export const mostrarInstancias = (modulo) => async (dispatch, getState) => {
     dispatch({
         type: MOSTRAR_INSTANCIAS,
-        payload: idModulo,
+        payload: modulo,
     });
 }
 
 export const fetchModulos = () => async (dispatch, getState) => {
     try{
         await axios.get('http://3.23.231.36:5000/modulos/readAll').then(response => {
-            console.log("--> recibiendo desde api: " + response.data.modulos);
             dispatch({
                 type: FETCH_MODULOS_OK,
                 payload: response.data.modulos,

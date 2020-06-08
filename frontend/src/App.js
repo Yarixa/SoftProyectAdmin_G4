@@ -6,6 +6,7 @@ import './App.css';
 import  Modulos  from './components/vista-modulos/Modulos';
 import Users from './components/gestion-usuarios/Users';
 import generateStore from "./components/store";
+import Login from "./components/login/Login";
 
 // *** Components ***
 import RAppBar from "./components/navigation/RAppBar/RAppBar.jsx";
@@ -16,7 +17,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentSection: 'Dashboard'
+            currentSection: ''
         }
     }
 
@@ -25,20 +26,24 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <Router>
+                    {/*<Route exact path="/login">*/}
+                    {/*    <Login />*/}
+                    {/*</Route>*/}
                     <RAppBar/>
                     <Switch>
-                        <Route exact path="/">
+                        <Route path="/dashboard">
                             <MainBox>
+                                <h1>Dashboard</h1>
                                 {/*<Dashboard />*/}
                             </MainBox>
                         </Route>
-                        <Route exact path="/modulos">
+                        <Route path="/modulos">
                             <MainBox>
                                 <Modulos />
                                 {/*<TablaModulos />*/}
                             </MainBox>
                         </Route>
-                        <Route exact path="/modulos/nuevo-modulo">
+                        <Route path="/modulos/nuevo-modulo">
                             <MainBox>
                                 <h1>Nuevo Modulo</h1>
                             </MainBox>
@@ -53,10 +58,11 @@ class App extends Component {
                         <Route path="/Proyectos">
                             <MainBox>
                                 <Users />
-                            {/*<Poyectos />*/}
+                                {/*<Poyectos />*/}
                             </MainBox>
                         </Route>
                     </Switch>
+
                     <RDrawer/>
                 </Router>
             </Provider>

@@ -23,13 +23,14 @@ export default function FilaTabla(props){
     const classes = useStyles();
 
     return(
-        <Table.Row onClick={()=>dispatch(mostrarInstancias(modulo.id))}>
-            <Table.Cell>{modulo.nombre}</Table.Cell>
-            <Table.Cell>{modulo.id}</Table.Cell>
+        <Table.Row>
+            <Table.Cell onClick={()=>dispatch(mostrarInstancias(modulo))}>{modulo.nombre}</Table.Cell>
+            <Table.Cell onClick={()=>dispatch(mostrarInstancias(modulo))}>{modulo.degree}</Table.Cell>
+            <Table.Cell onClick={()=>dispatch(mostrarInstancias(modulo))}>{"N"}</Table.Cell>
             <Table.Cell>
                 <div className={classes.row}>
                     <FormularioModulo esModoEditar={true} moduloParaEditar={modulo}/>
-                    <EliminarCurso id={modulo.id}/>
+                    <EliminarCurso id={modulo.id} />
                 </div>
             </Table.Cell>
         </Table.Row>

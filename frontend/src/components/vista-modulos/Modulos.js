@@ -33,12 +33,12 @@ export default function Modulos(){
     }, [dispatch]);
 
     const classes = useStyles();
-    const idModuloSeleccionado = useSelector(store => store.modulos.idModuloSeleccionado);
+    const moduloSeleccionado = useSelector(store => store.modulos.moduloSeleccionado);
 
     return (
         <div className={classes.root}>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={idModuloSeleccionado==null?12:6}>
+                <Grid item xs={12} sm={moduloSeleccionado.nombre?6:12}>
                     <Card className={classes.card}>
                         <CardHeader title={"Módulos Activos"}/>
                         <CardContent>
@@ -46,19 +46,19 @@ export default function Modulos(){
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} sm={6} hidden={idModuloSeleccionado==null}>
+                <Grid item xs={12} sm={6} hidden={moduloSeleccionado.nombre?false:true}>
                     <Card className={classes.card}>
-                        <CardHeader title={"Instancias de " + idModuloSeleccionado} action={
-                            <IconButton onClick={() => dispatch(mostrarInstancias(null))}>
+                        <CardHeader title={moduloSeleccionado.nombre?'Instancias de ' + moduloSeleccionado.nombre:''} action={
+                            <IconButton onClick={() => dispatch(mostrarInstancias({}))}>
                                 <Close />
                             </IconButton>
                         }>
                         </CardHeader>
                         <CardContent>
                             {
-                                idModuloSeleccionado==null
+                                moduloSeleccionado==={}
                                     ?<div></div>
-                                    :<TablaCursos idModulo={idModuloSeleccionado}/>
+                                    :<TablaCursos idModulo={moduloSeleccionado.id}/>
                             }
                         </CardContent>
                     </Card>
