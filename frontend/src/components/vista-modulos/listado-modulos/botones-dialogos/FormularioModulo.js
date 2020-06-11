@@ -82,13 +82,10 @@ export default function FormularioModulo(props) {
             anio : anio,
             anioSemestre : anio + "-" + semestre
         }
-        //Validacion   
-        //console.log(parseInt(nuevoModulo.anio, 10))
-        //console.log('semestre:'+nuevoModulo.semestre+"----")
-        if(!isNaN(parseInt(nuevoModulo.anio, 10)) &&
-        nuevoModulo.semestre!==' ' &&
-        nuevoModulo.nombre!=='' &&
-        nuevoModulo.profesor!==''){
+        
+        if(!( simpleValidator(nuevoModulo.nombre) && simpleValidator(nuevoModulo.profesor) &&
+        simpleValidator(nuevoModulo.semestre) && simpleValidator(nuevoModulo.anio) )){
+
             if(esModoEditar) {
                 dispatch(editarModulo(nuevoModulo));
             }
@@ -100,6 +97,19 @@ export default function FormularioModulo(props) {
                 setProfesor('');
             }
             setOpen(false);
+
+        }
+        
+    };
+    //Funcion para validar datos
+    const simpleValidator = (text) => {
+        //console.log(isNum)
+        if(text===anio){
+            var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
+            if(!isNum){ return true }
+        }
+        else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
+            if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){return true}
         }
     };
 
@@ -120,8 +130,8 @@ export default function FormularioModulo(props) {
                                 label="Nombre Modulo"
                                 defaultValue={esModoEditar?nombreModulo:''}
                                 onChange={(e) => setNombreModulo(e.target.value)}
-                                error={nombreModulo === ""}
-                                helperText={nombreModulo === "" ? 'Por favor, rellene el campo' : ' '}
+                                error={simpleValidator(nombreModulo)}
+                                helperText={simpleValidator(nombreModulo) ? 'Por favor, rellene el campo' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -129,8 +139,8 @@ export default function FormularioModulo(props) {
                                 label="Profesor"
                                 onChange={(e) => setProfesor(e.target.value)}
                                 defaultValue={esModoEditar?profesor:''}
-                                error={profesor === ""}
-                                helperText={profesor === "" ? 'Por favor, rellene el campo' : ' '}
+                                error={simpleValidator(profesor)}
+                                helperText={simpleValidator(profesor) ? 'Por favor, rellene el campo' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -138,8 +148,8 @@ export default function FormularioModulo(props) {
                                 label="Año"
                                 onChange={(e) => setAnio(e.target.value)}
                                 defaultValue={esModoEditar?anio:''}
-                                error={isNaN(parseInt(anio, 10))===true || anio===''} //se validan que sea integer, y que no esté vacío
-                                helperText={ (isNaN(parseInt(anio, 10))===true || anio==='' ) ? 'Rellene el campo con los datos solicitados' : ' '}
+                                error={simpleValidator(anio)} //se validan que sea integer, y que no esté vacío
+                                helperText={ simpleValidator(anio) ? 'Rellene el campo con los datos solicitados' : ' '}
                             />
                             <InputLabel
                                 className={classes.formItem}
@@ -152,6 +162,7 @@ export default function FormularioModulo(props) {
                                 onChange={handleChange}
                                 input={<Input />}
                                 error={semestre===' '}
+                                helperText={ semestre===' ' ? 'Seleccione un semestre' : ' '}
                             >
                                 <MenuItem value={" "}>
                                     <em>Ninguno</em>
