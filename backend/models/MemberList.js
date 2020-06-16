@@ -40,6 +40,6 @@ module.exports = db.sequelize.define(
 		}
 	},
 	{
-		timestamp: false
+		timestamps: false
 	}
 )

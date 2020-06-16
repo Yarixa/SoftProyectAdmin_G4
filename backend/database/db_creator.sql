@@ -19,7 +19,7 @@ create table users(
 );
 
 CREATE TABLE subjects (
-  id varchar(25) NOT NULL PRIMARY KEY,
+  id int primary key auto_increment,
   nombre varchar(40) NOT NULL,
   degree varchar(40) NOT NULL,
   disponible int(11) DEFAULT 1
@@ -29,7 +29,7 @@ CREATE TABLE subjects (
 
 create table courses(
 	id int primary key auto_increment,
-	subject_id varchar(25) not null,
+	subject_id int not null,
 	anio int not null,
 	semestre int not null,
 	disponible boolean DEFAULT true,
@@ -52,7 +52,7 @@ create table memberLists(
 	user_email varchar(40) not null,
 	course_id int not null,
 	team_id int not null,
-	type varchar(10) not null default 'Alumno',
+	type varchar(15) not null default 'Alumno',
 	active boolean not null default true,
 	foreign key (user_email) references users(email) on delete restrict,
 	foreign key (course_id) references courses(id) on delete restrict,
@@ -61,8 +61,8 @@ create table memberLists(
 
 -- SELECT 'somed text' as '';
 
-insert into subjects (id ,nombre, degree) values ('default' ,'default', 'default');
-insert into courses (subject_id, anio, semestre) values ('default', 0, 1);
+insert into subjects (nombre, degree) values ('default', 'default');
+insert into courses (subject_id, anio, semestre) values (1, 0, 1);
 insert into teams (course_id, name) values (1, 'default');
 
 -- Separado el crear un usuario de la asignacion de privilegios, para evitar problemas.

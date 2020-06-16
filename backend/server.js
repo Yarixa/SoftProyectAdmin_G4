@@ -18,10 +18,12 @@ app.use(fileUpload({
 var Users = require("./routes/Users")
 var Modulos = require("./routes/Modulo")
 var Courses = require("./routes/Courses")
+var MemberList = require("./routes/MemberList")
 
 app.use("/courses", Courses) //ruta de cursos
 app.use("/modulos", Modulos)
 app.use("/users", Users)
+app.use("/memberlist", MemberList)
 
 
 app.listen(port, () => {
