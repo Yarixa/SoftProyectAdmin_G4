@@ -112,8 +112,45 @@ exports.readByTeam = (req, res) => {
 	})
 }
 
-exports.updateTeam = (req, res) => {
-
+exports.updateRole = (req, res) => {
+	MemberList.findOne({
+		where:{
+			user_email: req.params.user_email,
+			course_id: req.params.course_id
+		}
+	})
+	.then(memberList => {
+		if(memberList){
+			MemberList.update({
+					type: req.body.type
+				},
+				{where:{
+					user_email: req.params.user_email,
+					course_id: req.params.course_id
+				}
+			})
+			.then(result => {
+				res.json({
+					message: "Se ha modificado el rol del usuario"
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: "No existe el usuario dentro del tema"
+				})
+			})
+		}
+		else{
+			res.json({
+					error: "No existe el usuario dentro del tema"
+			})
+		}
+	})
+	.catch(err => {
+		res.json({
+				error: "No existe el usuario dentro del tema"
+		})
+	})
 }
 
 exports.enable = (req, res) => {

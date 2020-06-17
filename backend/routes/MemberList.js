@@ -19,6 +19,8 @@ memberList.get('/readByCourse', memberListController.readByCourse)
 
 memberList.get('/readByTeam', memberListController.readByTeam)
 
+memberList.put('/updateRole/:user_email/:course_id', memberListController.updateRole)
+
 memberList.put('/enable/:user_email/:course_id', memberListController.enable)
 
 memberList.put('/disable/:user_email/:course_id', memberListController.disable)
