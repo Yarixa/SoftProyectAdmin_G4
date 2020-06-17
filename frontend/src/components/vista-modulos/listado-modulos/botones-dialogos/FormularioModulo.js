@@ -82,36 +82,52 @@ export default function FormularioModulo(props) {
             anio : anio,
             anioSemestre : anio + "-" + semestre
         }
-        
-        if(!( simpleValidator(nuevoModulo.nombre) && simpleValidator(nuevoModulo.profesor) &&
-        simpleValidator(nuevoModulo.semestre) && simpleValidator(nuevoModulo.anio) )){
 
-            if(esModoEditar) {
-                dispatch(editarModulo(nuevoModulo));
-            }
-            else   {
-                dispatch(agregarModulo(nuevoModulo));
-                setNombreModulo('');
-                setSemestre(" ");
-                setAnio('');
-                setProfesor('');
-            }
-            setOpen(false);
-
+        if(esModoEditar) {
+            dispatch(editarModulo(nuevoModulo));
         }
+        else   {
+            dispatch(agregarModulo(nuevoModulo));
+            setNombreModulo('');
+            setSemestre(" ");
+            setAnio('');
+            setProfesor('');
+        }
+        setOpen(false);
         
     };
     //Funcion para validar datos
     const simpleValidator = (text) => {
-        //console.log(isNum)
+        //console.log(buttonAcceptCheck)
         if(text===anio){
             var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
             if(!isNum){ return true }
         }
+        else if (text===semestre){
+            if(semestre===' '){
+                return true
+            }
+        }
         else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
-            if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){return true}
+            if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
+                return true
+            }
+            else{
+                return false
+            }
         }
     };
+
+    const buttonAcceptCheck = () =>{
+        if( !simpleValidator(nombreModulo) && !simpleValidator(profesor) &&
+        !simpleValidator(semestre) && !simpleValidator(anio)){    
+            return false
+        }
+        else{
+            return true
+        }
+    }
+
 
     return (
         <div>
@@ -177,7 +193,7 @@ export default function FormularioModulo(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={handleAccept} color="primary">
+                    <Button onClick={handleAccept} color="primary" disabled={buttonAcceptCheck()} >
                         {esModoEditar?"Guardar":"Agregar"}
                     </Button>
                 </DialogActions>
