@@ -33,6 +33,17 @@ create table courses(
 	disponible boolean DEFAULT true
 );
 
+create table documents(
+	id int primary key auto_increment,
+	projectID int not null,
+	sectionType varchar(25) NOT NULL,
+	content varchar(1000) NOT NULL,
+	created_at timestamp default current_timestamp,
+	updated_at timestamp default current_timestamp,
+	deleted_at timestamp default current_timestamp,
+	disponible boolean default true
+);
+
 -- Separado el crear un usuario de la asignacion de privilegios, para evitar problemas.
 DROP USER 'administrador'@'%';
 
