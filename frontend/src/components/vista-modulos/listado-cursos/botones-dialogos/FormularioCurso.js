@@ -98,6 +98,38 @@ export default function FormularioCurso(props) {
         setOpen(false);
     };
 
+    //Funcion para validar datos
+    const simpleValidator = (text) => {
+        //console.log(buttonAcceptCheck)
+        if(text===anio){
+            var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
+            if(!isNum){ return true }
+        }
+        else if (text===semestre){
+            if(semestre===' '){
+                return true
+            }
+        }
+        else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
+            if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+    };
+
+    const buttonAcceptCheck = () =>{
+        if( !simpleValidator(nombreCurso && !simpleValidator(profesor) &&
+        !simpleValidator(semestre) && !simpleValidator(anio)){    
+            return false
+        }
+        else{
+            return true
+        }
+    }
+
     return (
         <div>
             <Button variant="contained" color = "primary" onClick={handleClickOpen}>
@@ -115,6 +147,8 @@ export default function FormularioCurso(props) {
                                 label="Nombre Curso"
                                 onChange={(e) => setNombreCurso(e.target.value)}
                                 defaultValue={esModoEditar?nombreCurso:''}
+                                error={simpleValidator(nombreCurso)}
+                                helperText={simpleValidator(nombreCurso) ? 'Por favor, rellene el campo' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -122,6 +156,8 @@ export default function FormularioCurso(props) {
                                 label="Profesor"
                                 onChange={(e) => setProfesor(e.target.value)}
                                 defaultValue={esModoEditar?profesor:''}
+                                error={simpleValidator(profesor)}
+                                helperText={simpleValidator(profesor) ? 'Por favor, rellene el campo' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -129,6 +165,8 @@ export default function FormularioCurso(props) {
                                 label="Año"
                                 onChange={(e) => setAnio(e.target.value)}
                                 defaultValue={esModoEditar?anio:''}
+                                error={simpleValidator(anio)} //se validan que sea integer, y que no esté vacío
+                                helperText={ simpleValidator(anio) ? 'Rellene el campo con los datos solicitados' : ' '}
                             />
                             <InputLabel
                                 className={classes.formItem}
@@ -140,6 +178,8 @@ export default function FormularioCurso(props) {
                                 defaultValue={esModoEditar?semestre:" "}
                                 onChange={handleChange}
                                 input={<Input />}
+                                error={semestre===' '}
+                                helperText={ semestre===' ' ? 'Seleccione un semestre' : ' '}
                             >
                                 <MenuItem value={" "}>
                                     <em>Ninguno</em>
@@ -154,7 +194,7 @@ export default function FormularioCurso(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={handleAccept} color="primary">
+                    <Button onClick={handleAccept} color="primary" disabled={buttonAcceptCheck()}>
                         {esModoEditar?"Guardar":"Agregar"}
                     </Button>
                 </DialogActions>
