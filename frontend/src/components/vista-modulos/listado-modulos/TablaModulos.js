@@ -8,26 +8,26 @@ import FilaTabla from './FilaTabla';
 import FormularioModulo from "./botones-dialogos/FormularioModulo";
 
 export default function TablaModulos(){
-    const modulos = useSelector(store => store.listaModulos.modulos);
+    const listaModulos = useSelector(store => store.modulos.listadoModulos);
 
     return (
         <div>
-            <Table fixed>
+            <Table striped selectable>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Nombre módulo</Table.HeaderCell>
-                        <Table.HeaderCell>Semestre</Table.HeaderCell>
-                        <Table.HeaderCell>Profesor(es)</Table.HeaderCell>
+                        <Table.HeaderCell>Deartamento</Table.HeaderCell>
+                        <Table.HeaderCell>Número de instancias</Table.HeaderCell>
                         <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
-                        modulos.map((modulo) => <FilaTabla key={modulo.id} modulo={modulo}/>)
+                        listaModulos.map((modulo) => <FilaTabla key={ modulo.id } modulo={ modulo }/>)
                     }
                 </Table.Body>
             </Table>
-            <FormularioModulo esModoEditar={false} moduloParaEditar={{}} />
+            <FormularioModulo esModoEditar={ false } moduloParaEditar={{}} />
         </div>
     )
 

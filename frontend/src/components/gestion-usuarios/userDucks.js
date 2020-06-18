@@ -27,7 +27,7 @@ export default function userReducer(state = dataInicial, action){
 // Acciones
 export const getUsers = () => async (dispatch, getState) => {
     try{
-        const resp = await axios.get('http://localhost:5000/users/readall')
+        const resp = await axios.get('http://3.23.231.36:5000/users/readall')
         dispatch({
             type: GET_USERS,
             payload: resp.data
@@ -43,7 +43,7 @@ export const createUser = user => async dispatch => {
         last_name: user.last_name,
         email: user.email
     }
-    const resp = await axios.post('http://localhost:5000/users/create', data)
+    const resp = await axios.post('http://3.23.231.36:5000/users/create', data)
     dispatch({
         type: CREATE_USER,
         payload: resp.data

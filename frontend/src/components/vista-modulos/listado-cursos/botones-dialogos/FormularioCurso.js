@@ -12,7 +12,7 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 import { useDispatch } from 'react-redux';
-import {agregarCurso, editarCurso} from "../../modulosDuck";
+import {agregarCurso, editarCurso} from "../../cursosDuck";
 import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles((theme) => ({
