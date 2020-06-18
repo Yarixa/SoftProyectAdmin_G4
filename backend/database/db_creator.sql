@@ -71,6 +71,17 @@ insert into subjects (nombre, degree) values ('default', 'default');
 insert into courses (subject_id, anio, semestre) values (1, 0, 1);
 insert into teams (course_id, name) values (1, 'default');
 
+create table documents(
+	id int primary key auto_increment,
+	projectID int not null,
+	sectionType varchar(25) NOT NULL,
+	content varchar(1000) NOT NULL,
+	created_at timestamp default current_timestamp,
+	updated_at timestamp default current_timestamp,
+	deleted_at timestamp default current_timestamp,
+	disponible boolean default true
+);
+
 -- Separado el crear un usuario de la asignacion de privilegios, para evitar problemas.
 DROP USER if exists 'administrador'@'%';
 
