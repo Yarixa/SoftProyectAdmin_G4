@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import MassiveAdd from '../massive-add/MassiveAdd'
 
 // Hook React Redux
 import {useDispatch, useSelector} from 'react-redux'
@@ -29,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: '25ch',
+    },
+    Button: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1)
     }
 }))
 
@@ -162,13 +167,15 @@ const Users = () => {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '7'>
+                        <Table.HeaderCell colSpan = '7' textAlign = 'right'>
+                            <MassiveAdd />
                             <Button
                                 variant="contained"
                                 onClick={handleClickOpen}
                                 color="primary"
+                                className = {classes.Button}
                             >
-                                Agregar Usuario
+                                Nuevo Usuario
                             </Button>
                         </Table.HeaderCell>
                     </Table.Row>
@@ -208,7 +215,7 @@ const Users = () => {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button autoFocus onClick = {handleCloseEdit}>
+                        <Button autoFocus onClick = {handleClose}>
                             Cancelar
                         </Button>
                         <Button onClick = {handleSubmit} color = "primary">

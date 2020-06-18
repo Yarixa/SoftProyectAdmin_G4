@@ -34,7 +34,7 @@ export default function userReducer(state = dataInicial, action){
 }
 
 // Acciones
-export const getUsers = () => async (dispatch, getState) => {
+export const getUsers = () => async dispatch => {
     try{
         const resp = await axios.get('http://localhost:5000/users/readall')
         dispatch({
