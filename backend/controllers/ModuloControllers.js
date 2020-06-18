@@ -5,20 +5,21 @@ const Modulo = require("../models/Modulo")
 //Funcion para crear un
 exports.create = (req,res)=>{
     const moduloData = {
-        id    : req.body.id,
+       // id    : req.body.id,
         nombre : req.body.nombre,
         degree : req.body.degree
     }
     Modulo.findOne({
         where : {
-            id : req.body.id
+            nombre : req.body.nombre
         }
     }).then(modulo=>{
         if(!modulo){
             Modulo.create(moduloData).then(
                 modulo=>{
                     res.json({
-                        status : modulo.id + ' registrado'
+                        id : modulo.id,
+                        status : modulo.nombre + ' registrado'
                     })
                 }
             ).catch(err =>{
