@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import React, { Component, useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Login from "../components/login/Login";
 import RAppBar from "../components/navigation/RAppBar/RAppBar";
@@ -7,6 +7,7 @@ import RDrawer from "../components/navigation/RDrawer/RDrawer";
 import RouterFacade from "./RouterFacade";
 
 export default function AppRouter() {
+
     return (
         <Router>
             <Switch>
@@ -18,14 +19,11 @@ export default function AppRouter() {
                     <Route
                         path="/home/:section"
                         render={renderProps => {
-                            if (sessionStorage.getItem('logged')) {
-                                return 
-                            } else {
-                                return <MainBox>
+                            return (
+                                <MainBox>
                                     <RouterFacade route={renderProps.match.params.section} />
                                 </MainBox>
-
-                            }
+                            )
                         }}
                     />
                     <RDrawer />

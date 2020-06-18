@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -65,7 +66,7 @@ export default function Login() {
     const dispatch = useDispatch();
 
     const loginError = useSelector(store => store.login.error);
-    const logged = sessionStorage.getItem('logged')??false;
+    const [logged, setLogged] = useState(sessionStorage.getItem('logged')??false);
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
 
@@ -77,15 +78,13 @@ export default function Login() {
             'email' : user,
             'password' : password
         }
-        dispatch(autenticarUsuario(loginData));
+        dispatch(autenticarUsuario(loginData, setLogged));
     }
 
-    useEffect(()=>{
-        console.log("error? " + loginError);
-        if(logged){
-            console.log("redirect!!!");
-        }
-    }, [logged, loginError]);
+    useEffect(()=>{}, [logged, loginError]);
+
+    if(logged === true)
+        return <Redirect to={"/home"} />
 
     return (
         <Grid container component="main" className={classes.root}>

@@ -47,7 +47,7 @@ export default function Modulos(){
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={6} hidden={moduloSeleccionado.nombre?false:true}>
-                    <Card className={classes.card}>
+                    <Card className={classes.card}> 
                         <CardHeader title={moduloSeleccionado.nombre?'Instancias de ' + moduloSeleccionado.nombre:''} action={
                             <IconButton onClick={() => dispatch(mostrarInstancias({}))}>
                                 <Close />
