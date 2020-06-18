@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,11 +13,14 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { useSelector, useDispatch } from "react-redux";
+import { autenticarUsuario } from "./loginDuck";
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="#">
+            <Link color="inherit" to="#">
                 RequiHUB
             </Link>{' '}
             {new Date().getFullYear()}
@@ -59,6 +62,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
     const classes = useStyles();
+    const dispatch = useDispatch();
+
+    const loginError = useSelector(store => store.login.error);
+    const logged = sessionStorage.getItem('logged')??false;
+    const [user, setUser] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("user: " + user);
+        console.log("password: " + password);
+        const loginData = {
+            'email' : user,
+            'password' : password
+        }
+        dispatch(autenticarUsuario(loginData));
+    }
+
+    useEffect(()=>{
+        console.log("error? " + loginError);
+        if(logged){
+            console.log("redirect!!!");
+        }
+    }, [logged, loginError]);
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -79,9 +106,12 @@ export default function Login() {
                             required
                             fullWidth
                             id="email"
-                            label="Email Address"
+                            label="Correo electrónico"
                             name="email"
                             autoComplete="email"
+                            onChange={event => setUser(event.target.value)}
+                            error={loginError}
+                            helperText={loginError?'Error al iniciar sesión':''}
                             autoFocus
                         />
                         <TextField
@@ -90,34 +120,36 @@ export default function Login() {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="Contraseña"
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={event => setPassword(event.target.value)}
+                            error={loginError}
+                            helperText={loginError?'Error al iniciar sesión':''}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
                         />
                         <Button
-                            // type="submit"
-                            component={Link}
-                            to="/home"
+                            //type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={handleSubmit}
                         >
                             <Typography style={{ color: '#FFFFFF' }}>{"Iniciar Sesión"}</Typography>
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                <Link to="#" variant="body2">
                                     ¿Olvidó su contraseña?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link to="#" variant="body2">
                                     {"¿Aun no tienes una cuenta? Regístrate"}
                                 </Link>
                             </Grid>

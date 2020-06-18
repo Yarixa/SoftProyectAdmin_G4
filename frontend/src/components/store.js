@@ -5,12 +5,14 @@ import appBarReducer from "./navigation/appBarDuck";
 import modulosReducer from "./vista-modulos/modulosDuck";
 import userReducer from './gestion-usuarios/userDucks'
 import cursosReducer from "./vista-modulos/cursosDuck";
+import loginReducer from "./login/loginDuck";
 
 const rootReducer = combineReducers({
     appBar : appBarReducer,
     modulos : modulosReducer,
     listaCursos : cursosReducer,
-    users : userReducer
+    users : userReducer,
+    login : loginReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // para la extensión redux_devtools de chrome
