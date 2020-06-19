@@ -1,12 +1,12 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import Button from '@material-ui/core/Button';
 import { uploadFile, loadFile } from './massiveAddDucks';
 
 export default function MassiveAdd () {
 
-    const fileName = useSelector(store => store.massive.name);
+    //const fileName = useSelector(store => store.massive.name);
     const dispatch = useDispatch();
 
     const handleFile = e => {
