@@ -6,8 +6,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TablaGrupos from "./TablaGrupos";
-import BotonAgregar from "./BotonAgregar";
-import BotonGestionar from "./BotonGestionar";
 
 
 const useStyles = makeStyles({

@@ -62,7 +62,7 @@ export default function DashboardAlumno() {
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Mis Cursos</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">4</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">4</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
                 </Card>
 
@@ -71,7 +71,7 @@ export default function DashboardAlumno() {
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Proyectos</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">3</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">3</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
                 </Card>
 
@@ -80,7 +80,7 @@ export default function DashboardAlumno() {
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Proyectos Pendientes</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">2</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">2</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
                 </Card>
 
@@ -88,7 +88,7 @@ export default function DashboardAlumno() {
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Proyectos Finalizados</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">1</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">1</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
                 </Card>
 
@@ -99,15 +99,14 @@ export default function DashboardAlumno() {
                 <Card className={classes.tarjetaEstadistica}>
                     <CardContent>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Resumen Semanal</Typography>
-
+                        {/* Aquí va un gráfico */}
                     </CardContent>
                 </Card>
 
                 <Card className={classes.tarjetaEstadistica}>
                     <CardContent>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Estadísticas</Typography>
-                        <div>
-                        </div>
+                        {/* Aquí va un gráfico */}
                     </CardContent>
                 </Card>
             </Grid>

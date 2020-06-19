@@ -34,6 +34,7 @@ export default function BotonGestionar(){
     return (
         <div>
             <Button className={classes.botonGestionar}>Gestionar</Button>
+            {/* Agregar acción de redirección */}
         </div>
     )
 

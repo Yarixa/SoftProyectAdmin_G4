@@ -63,7 +63,7 @@ export default function DashboardAdministrador() {
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Cursos Totales</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">60</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">60</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
                 </Card>
 
@@ -72,16 +72,16 @@ export default function DashboardAdministrador() {
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Cursos Activos</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">6</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">6</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
-                </Card>
+                    </Card>
 
 
                 <Card className={classes.root}>
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>Proyectos</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">2</Typography>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>Proyectos Activos</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">2</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
                 </Card>
 
@@ -89,7 +89,7 @@ export default function DashboardAdministrador() {
                     <CardContent>
                         <Chip className={classes.paper} color="primary" label="2020-1"/>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Total Usuarios</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">28</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">28</Typography>{/* consulta a la base de datos, el número es dato de ejemplo */}
                     </CardContent>
                 </Card>
 
@@ -100,15 +100,14 @@ export default function DashboardAdministrador() {
                 <Card className={classes.tarjetaEstadistica}>
                     <CardContent>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Resumen Semanal</Typography>
-
+                        {/* Aquí va un gráfico */}
                     </CardContent>
                 </Card>
 
                 <Card className={classes.tarjetaEstadistica}>
                     <CardContent>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Estadísticas</Typography>
-                        <div>
-                        </div>
+                        {/* Aquí va un gráfico */}
                     </CardContent>
                 </Card>
             </Grid>

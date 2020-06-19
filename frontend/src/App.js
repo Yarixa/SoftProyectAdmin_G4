@@ -4,19 +4,11 @@ import {Provider} from 'react-redux';
 
 import './App.css';
 import  TablaModulos  from './components/vista-modulos/listado-modulos/TablaModulos';
-import DashboardPofesor from "./components/dashboard/DashboardPofesor";
-import DashboardAdministrador from "./components/dashboard/DashboardAdministrador";
-import VistaCursoAlumno from "./components/vista-modulos/visualizacion-curso/VistaCursoAlumno";
-import VistaCursoAdministrador from "./components/vista-modulos/visualizacion-curso/VistaCursoAdministrador";
-import VistaCursoProfesor from './components/vista-modulos/visualizacion-curso/VistaCursoProfesor';
 import Users from './components/gestion-usuarios/Users';
 import generateStore from "./components/store";
 // *** Components ***
 import RAppBar from "./components/navigation/RAppBar/RAppBar.jsx";
 import RDrawer from "./components/navigation/RDrawer/RDrawer.jsx";
-import DashboardAdminisrador from "./components/dashboard/DashboardAdministrador";
-import DashboardAlumno from "./components/dashboard/DashboardAlumno";
-
 
 class App extends Component {
     constructor(props) {
@@ -35,7 +27,6 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/">
                             <MainBox>
-                                <DashboardAlumno></DashboardAlumno>
                             </MainBox>
                         </Route>
                         <Route exact path="/modulos">
