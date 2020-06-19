@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 export default function AgregarGrupo(props) {
 
     return (
-        <Button>
+        <Button color = 'primary' variant = 'contained'>
             Agregar Miembro
         </Button>
     )
