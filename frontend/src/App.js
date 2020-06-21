@@ -5,7 +5,6 @@ import './App.css';
 import generateStore from "./components/store";
 import AppRouter from './app-router/AppRouter';
 
-
 class App extends Component {
 
     render(){
