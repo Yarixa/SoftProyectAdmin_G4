@@ -74,15 +74,24 @@ exports.login = (req, res) => {
 				res.send(token)
 			}
 			else{
-				res.end()
+				res.status(400).json({
+					error: true,
+					errorMessage: "password invalida"
+				})
 			}
 		}else{
-			res.status(400).json({error: 'User does not exist'})
+			res.status(400).json({
+				error: true,
+				errorMessage: "User does not exists"
+			})
 			res.end()
 		}
 	})
 	.catch(err => {
-		res.status(400).json({error: err})
+		res.status(400).json({
+			error: true,
+			errorMessage: err
+		})
 	})
 }
 
