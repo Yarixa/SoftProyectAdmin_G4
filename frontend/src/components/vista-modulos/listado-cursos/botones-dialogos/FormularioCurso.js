@@ -122,7 +122,7 @@ export default function FormularioCurso(props) {
 
     const buttonAcceptCheck = () =>{
         if( !simpleValidator(nombreCurso && !simpleValidator(profesor) &&
-        !simpleValidator(semestre) && !simpleValidator(anio)){    
+        !simpleValidator(semestre) && !simpleValidator(anio))){    
             return false
         }
         else{

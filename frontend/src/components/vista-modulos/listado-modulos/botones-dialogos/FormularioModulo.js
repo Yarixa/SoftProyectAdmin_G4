@@ -82,28 +82,28 @@ export default function FormularioModulo(props) {
     //Funcion para validar datos
     const simpleValidator = (text) => {
         //console.log(buttonAcceptCheck)
-        if(text===anio){
-            var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
-            if(!isNum){ return true }
-        }
-        else if (text===semestre){
-            if(semestre===' '){
-                return true
-            }
-        }
-        else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
+        // if(text===anio){
+        //     var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
+        //     if(!isNum){ return true }
+        // }
+        // else if (text===semestre){
+        //     if(semestre===' '){
+        //         return true
+        //     }
+        // }
+        // else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
             if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
                 return true
             }
             else{
                 return false
             }
-        }
+        //}
     };
 
     const buttonAcceptCheck = () =>{
-        if( !simpleValidator(nombreModulo) && !simpleValidator(profesor) &&
-        !simpleValidator(semestre) && !simpleValidator(anio)){    
+        if( !simpleValidator(nombreModulo) && !simpleValidator(departamento)){
+        //!simpleValidator(semestre) && !simpleValidator(anio)){    
             return false
         }
         else{
