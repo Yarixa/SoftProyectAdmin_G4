@@ -20,14 +20,14 @@ var Modulos = require("./routes/Modulo")
 var Courses = require("./routes/Courses")
 var MemberList = require("./routes/MemberList")
 var Projects = require("./routes/Project")
-var Documents = require("./routes/Documents")
+//var Documents = require("./routes/Documents")
 
 app.use("/courses", Courses) //ruta de cursos
 app.use("/modulos", Modulos)
 app.use("/users", Users)
 app.use("/memberlist", MemberList)
 app.use("/projects", Projects)
-app.use("/documents", Documents)
+//app.use("/documents", Documents)
 
 
 app.listen(port, () => {

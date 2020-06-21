@@ -67,6 +67,8 @@ create table memberLists(
 	foreign key (team_id) references teams(id) on delete restrict
 );
 
+insert into users (first_name, last_name, email, role, password, disponible, created) values
+	("asdf",	"asdf",	"asdf@asdf.cl",	"Alumno",	"$2b$10$7KMqqhvM3C0AKHLvqYPj8OBgld2Yt66HucKKM3DEjCbIV675HRKki",	1,	"2020-06-21");
 insert into subjects (nombre, degree) values ('default', 'default');
 insert into courses (subject_id, anio, semestre) values (1, 0, 1);
 insert into teams (course_id, name) values (1, 'default');
