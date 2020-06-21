@@ -28,7 +28,7 @@ export const uploadFile = file => async dispatch => {
 
     formData.append('file', file)
 
-    const resp = await axios.post('http://localhost:5000/users/uploadfile', formData);
+    const resp = await axios.post('http://3.23.231.36:5000/users/uploadfile', formData);
     console.log(resp.data.data.name)
     dispatch({
         type: FILE_UPLOAD,
@@ -41,7 +41,7 @@ export const loadFile = file => async dispatch => {
         name : file
     }
     console.log(data.name)
-    const resp = await axios.post('http://localhost:5000/users/massivecreate/' + data.name);
+    const resp = await axios.post('http://3.23.231.36:5000/users/massivecreate/' + data.name);
     console.log(resp)
     dispatch({
         type: FILE_LOAD,

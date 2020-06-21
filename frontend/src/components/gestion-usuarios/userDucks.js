@@ -52,8 +52,8 @@ export const createUser = user => async dispatch => {
         last_name: user.last_name,
         email: user.email
     }
-    const resp = await axios.post('http://localhost:5000/users/create', data)
-    const newUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
+    const resp = await axios.post('http://3.23.231.36:5000/users/create', data)
+    const newUser = await axios.get('http://3.23.231.36:5000/users/readuser/' + data.email)
     dispatch({
         type: CREATE_USER,
         payload: resp.data,
@@ -65,8 +65,8 @@ export const disableUser = user => async dispatch => {
     const data = {
         email: user.email
     }
-    const resp = await axios.put('http://localhost:5000/users/disable/' + data.email)
-    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
+    const resp = await axios.put('http://3.23.231.36:5000/users/disable/' + data.email)
+    const readUser = await axios.get('http://3.23.231.36:5000/users/readuser/' + data.email)
     dispatch({
         type: DISABLE_USER,
         payload: resp,
@@ -78,8 +78,8 @@ export const enableUser = user => async dispatch => {
     const data = {
         email: user.email
     }
-    const resp = await axios.put('http://localhost:5000/users/enable/' + data.email)
-    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
+    const resp = await axios.put('http://3.23.231.36:5000/users/enable/' + data.email)
+    const readUser = await axios.get('http://3.23.231.36:5000/users/readuser/' + data.email)
     dispatch({
         type: ENABLE_USER,
         payload: resp,
@@ -93,8 +93,8 @@ export const updateUser = user => async dispatch => {
         last_name: user.last_name,
         email: user.email
     }
-    const resp = await axios.put('http://localhost:5000/users/updateuser/' + data.email, data)
-    const readUser = await axios.get('http://localhost:5000/users/readuser/' + data.email)
+    const resp = await axios.put('http://3.23.231.36:5000/users/updateuser/' + data.email, data)
+    const readUser = await axios.get('http://3.23.231.36:5000/users/readuser/' + data.email)
     dispatch({
         type: UPDATE_USER,
         payload: resp,
