@@ -1,0 +1,14 @@
+.main-box {
+    height: calc(100vh - 64px);
+    width: calc(100% - 240px);
+    /*background-color: aquamarine;*/
+    /*border: 1px solid red;*/
+    position: absolute;
+    padding: 16px;
+    top: 64px;
+    left: 240px;
+    justify-content: center;
+    vertical-align: center;
+    /*text-align: center;*/
+    /*vertical-align: center;*/
+}
