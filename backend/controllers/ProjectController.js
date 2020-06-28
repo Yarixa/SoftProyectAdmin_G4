@@ -10,23 +10,23 @@ exports.create = (req,res)=>{
     }
     Project.findOne({
         where : {
-            nombre :req.body.nombre//,
-         //   curso = {req.body.course_id}
+            nombre :req.body.nombre,
+            course_id : req.body.course_id
         }
     }).then(project =>{
         if(!project){
             Project.create(projectData).then(
-                project=>{
+                projects=>{
                     res.json({
-                        id : project.id,
-                        status : project.nombre + ' registrado'
+                        id : projects.id,
+                        status : projects.nombre + ' registrado'
                     })
                 }
             ).catch(err =>{
                 res.send(' error al crear '+err)
             })
         }else{
-            res.json({error:" Ya existe el proyecto con el mismo nombre en el proyecto con id "+project.id})
+            res.json({error:" Ya existe un proyecto '"+project.nombre+"' asociado al mismo curso. "})
         }
     }).catch(err=>{
         res.send('error al crear: '+err)

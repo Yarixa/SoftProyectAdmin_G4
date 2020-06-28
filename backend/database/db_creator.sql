@@ -42,7 +42,6 @@ create table projects(
     descripcion varchar(1000) not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
-    deleted_at timestamp default current_timestamp,
     disponible boolean default true,
     Foreign key(course_id) references courses(id) on update cascade on delete restrict
 );
