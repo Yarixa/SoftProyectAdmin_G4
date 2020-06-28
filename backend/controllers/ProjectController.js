@@ -10,8 +10,8 @@ exports.create = (req,res)=>{
     }
     Project.findOne({
         where : {
-            nombre :req.body.nombre,
-            curso = req.body.course_id
+            nombre :req.body.nombre//,
+         //   curso = {req.body.course_id}
         }
     }).then(project =>{
         if(!project){

@@ -19,6 +19,9 @@ module.exports = db.sequelize.define(
         },
         descripcion:{
             type : Sequelize.TEXT
-        }
+        },
+        disponible: {
+			type: Sequelize.BOOLEAN
+		}
     }
 )
