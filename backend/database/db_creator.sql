@@ -19,8 +19,8 @@ create table users(
 );
 
 CREATE TABLE subjects (
-  id int primary key auto_increment,
-  nombre varchar(40) NOT NULL,
+  id int PRIMARY KEY auto_increment,
+  nombre varchar(40) NOT NULL unique,
   degree varchar(40) NOT NULL,
   disponible int(11) DEFAULT 1
 );
@@ -43,7 +43,6 @@ create table projects(
     descripcion varchar(1000) not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
-    deleted_at timestamp default current_timestamp,
     disponible boolean default true,
     Foreign key(course_id) references courses(id) on update cascade on delete restrict
 );
