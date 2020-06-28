@@ -74,15 +74,24 @@ exports.login = (req, res) => {
 				res.send(token)
 			}
 			else{
-				res.end()
+				res.status(400).json({
+					error: true,
+					errorMessage: "password invalida"
+				})
 			}
 		}else{
-			res.status(400).json({error: 'User does not exist'})
+			res.status(400).json({
+				error: true,
+				errorMessage: "User does not exists"
+			})
 			res.end()
 		}
 	})
 	.catch(err => {
-		res.status(400).json({error: err})
+		res.status(400).json({
+			error: true,
+			errorMessage: err
+		})
 	})
 }
 
@@ -98,8 +107,7 @@ exports.disable = (req, res) => {
 		if(user){
 			User.update(
 				{disponible: false},
-				{where:
-						{email: req.params.email}	}
+				{where: {email: req.params.email}}
 			)
 			.then(user => {
 				res.json({status: req.params.email + ' disabled'})
@@ -202,20 +210,17 @@ exports.updateUser = (req, res) => {
 	.then(user => {
 		if(user){
 				User.update(
-					{first_name: req.params.first_name},
-					{last_name: req.params.last_name},
-					{where: { email: req.params.email } }
-				).then(result =>{
-							res.json({status: req.params.email + ' updated'})
-							res.send()
-				})
-				.catch(err =>{
-						res.json({error: err})
+					{first_name: req.body.first_name,
+					last_name: req.body.last_name},
+					{where: {email: req.params.email}}				
+				).then(result => {
+					res.json({status: req.params.email + ' updated'}
+				)}).catch(err =>{
+					res.json({error: err})
 				})
 			}
-			else{
+		else{
 				res.json({error: 'Wrong password'})
-				res.end()
 			}
 		})
 	.catch(err => {
