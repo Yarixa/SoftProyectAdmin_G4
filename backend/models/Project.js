@@ -8,10 +8,10 @@ module.exports = db.sequelize.define(
         id:{
             type: Sequelize.INTEGER,
             primaryKey : true,
-            autoincrement: true
+            autoIncrement: true
         },
         course_id :{
-            type : Sequelize.INTEGER,
+            type : Sequelize.INTEGER
             
         },
         nombre : {
@@ -19,6 +19,19 @@ module.exports = db.sequelize.define(
         },
         descripcion:{
             type : Sequelize.TEXT
-        }
+        },
+        //sequaelize no toma la columna 'created_at' por lo que se debe definir
+        createdAt: {
+            field: 'created_at',
+            type: Sequelize.DATE
+        },
+        updatedAt : {
+            field: 'updated_at',
+            type: Sequelize.DATE
+        },
+        disponible: {
+			type: Sequelize.BOOLEAN
+        },
+        
     }
 )

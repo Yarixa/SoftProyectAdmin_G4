@@ -13,6 +13,8 @@ modulos.delete('/delete/:id', moduloController.delete)
 
 modulos.get('/readAll', moduloController.readAll)
 
+modulos.get('/contarCursos', moduloController.contarCursos)
+
 modulos.put('/update/:id', moduloController.update)
 
 modulos.put('/deshabilitar/:id', moduloController.deshabilitar)
