@@ -79,31 +79,29 @@ export default function FormularioModulo(props) {
         setOpen(false);
         
     };
-    //Funcion para validar datos
+    //Funcion para validar datos (true si encuentra error, false si no encuentra error)
     const simpleValidator = (text) => {
-        //console.log(buttonAcceptCheck)
-        // if(text===anio){
-        //     var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
-        //     if(!isNum){ return true }
-        // }
-        // else if (text===semestre){
-        //     if(semestre===' '){
-        //         return true
-        //     }
-        // }
-        // else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
+        //en caso de que no se haya escrito nada, no se valida
+        if(text!==''){ 
+            //valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
             if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
                 return true
             }
             else{
                 return false
             }
-        //}
+        }
+        else{
+            return false
+        }
+        //console.log(buttonAcceptCheck)
     };
 
+    //Funcion para habilitar/deshabilitar boton de aceptar formulario
+    //Se vuelve a validar cada valor y además descrimina si se ha escrito algo en los campos del formulario
     const buttonAcceptCheck = () =>{
-        if( !simpleValidator(nombreModulo) && !simpleValidator(departamento)){
-        //!simpleValidator(semestre) && !simpleValidator(anio)){    
+        if( (!simpleValidator(nombreModulo) && !simpleValidator(departamento)) && 
+        (nombreModulo && departamento)!==''){
             return false
         }
         else{
@@ -130,7 +128,7 @@ export default function FormularioModulo(props) {
                                 defaultValue={esModoEditar?nombreModulo:''}
                                 onChange={(e) => setNombreModulo(e.target.value)}
                                 error={simpleValidator(nombreModulo)}
-                                helperText={simpleValidator(nombreModulo) ? 'Por favor, rellene el campo' : ' '}
+                                helperText={simpleValidator(nombreModulo) ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -138,6 +136,8 @@ export default function FormularioModulo(props) {
                                 label="Departamento"
                                 onChange={(e) => setDepartamento(e.target.value)}
                                 defaultValue={esModoEditar?departamento:''}
+                                error={simpleValidator(departamento)}
+                                helperText={simpleValidator(departamento) ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                             />
                         </form>
                     </div>
