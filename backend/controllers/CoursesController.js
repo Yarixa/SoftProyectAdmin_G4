@@ -22,7 +22,10 @@ exports.create = (req, res) => {
         if(!course){
 			Course.create(courseData)
 			.then(course => {
-				res.json({status: 'registrado'})
+				res.json({
+                    id : modulo.id,
+                    status: curso.id + 'registrado'
+                })
 			})
 			.catch(err => {
 				res.send('error' + err)
