@@ -85,10 +85,12 @@ create table documents(
 );
 
 -- Separado el crear un usuario de la asignacion de privilegios, para evitar problemas.
-DROP USER if exists 'administrador'@'%';
+-- Descomentar solo si es que se desea cargar el script en una base de datos local
+-- en la cual no exista ya el usuario administrador.
+-- DROP USER if exists 'administrador'@'%';
 
-CREATE USER 'administrador'@'%' IDENTIFIED BY 'abnormalize';
+-- CREATE USER 'administrador'@'%' IDENTIFIED BY 'abnormalize';
 
-GRANT ALL PRIVILEGES ON firstApp.* TO 'administrador'@'%';
-FLUSH PRIVILEGES;
+-- GRANT ALL PRIVILEGES ON firstApp.* TO 'administrador'@'%';
+-- FLUSH PRIVILEGES;
 
