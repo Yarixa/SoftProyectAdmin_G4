@@ -1,5 +1,5 @@
-import React from 'react';
-import {Link, useParams} from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import MemberCell from './MemberCell';
 import AgregarMiembro from './boton-miembros/AgregarMiembro';
 
@@ -9,38 +9,20 @@ import 'semantic-ui-css/semantic.min.css';
 
 // Material | Estilos
 import { IconButton } from '@material-ui/core';
-import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import { fetchIntegrantes } from '../groupMemberDucks';
 
 export default function GroupMember(props) {
-    
-    let {groupID} = useParams();
-    const MemberList = [
-        {
-            id: "1",
-            firstName: "Francisco Javier",
-            lastName: "Alvarez Aspee",
-            groupRole: "Programador"
-        },
-        {
-            id: "2",
-            firstName: "Yarixa",
-            lastName: "Galvez",
-            groupRole: "Programador"
-        },
-        {
-            id: "3",
-            firstName: "Matias",
-            lastName: "Escobar",
-            groupRole: "Jefe de Proyecto"
-        },
-    ];
+    const dispatch = useDispatch();
+    const { groupID } = props;
+
+    useEffect(()=>{
+        dispatch(fetchIntegrantes());
+        // hacer aquí el fetching de los integrantes
+    },[dispatch]);
+    const MemberList = useSelector(store => store.members.members);
 
     return (
         <div>
-            <IconButton component= {Link} to="/grupo" >
-                <KeyboardReturnIcon/> Regresar
-            </IconButton>
-            <h1 align = 'center'>Miembros de {groupID}</h1>
             <Table>
                 <Table.Header>
                     <Table.Row>
