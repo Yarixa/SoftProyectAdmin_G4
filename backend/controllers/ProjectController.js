@@ -1,5 +1,6 @@
 const db  = require("../database/db.js")
 const Project = require("../models/Project")
+const { Op } = require("sequelize")
 
 exports.create = (req,res)=>{
 
@@ -116,7 +117,7 @@ exports.update = (req, res)=>{
                 descripcion : req.body.descripcion
             },{
                 where:{
-                    id:req.params.id 
+                    id:req.params.id
                 }
             }).then(result=>{
                 res.json({status:project.id + " Actualizado"})
@@ -130,5 +131,27 @@ exports.update = (req, res)=>{
         res.status(400).json({error:" No se encuentra ID "+req.params.id+" "+err})
     })
 }
-
-exports.search = (req,res)=>{}
+//busqueda por criterios de nombre del proyecto o descripcion de este 
+exports.search = (req,res)=>{
+    Project.findAll({
+        where : {
+            disponible : true,
+            [Op.or]: [
+                {
+                  nombre: {
+                    [Op.like]: '%'+req.params.query + '%'
+                  }
+                },
+                {
+                  descripcion: {
+                    [Op.like]: '%'+req.params.query + '%'
+                  }
+                }
+              ]
+        }
+    }).then(proyectos =>{
+        res.json({
+            projects : proyectos
+        })
+    })
+}
