@@ -163,3 +163,21 @@ exports.readAll = (req, res) => {
 		})
 	})
 }
+
+//Funcion que retorna todos los cursos registrados
+exports.findAll = (req, res) => {
+    Course.findAll({
+        where : {
+            subject_id: req.params.subject_id
+        }
+    })
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).send({
+			message:
+				err.message || "Error"
+		})
+	})
+}
