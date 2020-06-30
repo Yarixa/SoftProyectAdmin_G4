@@ -44,16 +44,27 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
             console.log(response);
             if (response.status === 200 && response.data !== "") {
                 var decoded = jwt_decode(response.data);
+                console.log("decoded token:");
                 console.log(decoded);
-                sessionStorage.setItem('logged', true);
-                sessionStorage.setItem('usuarioActual', decoded);
-                setLogged(true);
+                if(decoded.disponible === false){
+                    setLogged(false);
+                    data = {
+                        ...loginData,
+                        error: true,
+                        errorMessage: 'usuario deshabilitado' // debería capturar el mensaje desde response
+                    }
+                }else{
+                    sessionStorage.setItem('logged', true);
+                    sessionStorage.setItem('nombre_completo', decoded.first_name + " " + decoded.last_name);
+                    sessionStorage.setItem('role', decoded.role);
+                    setLogged(true); 
+                }
             } else {
                 setLogged(false);
                 data = {
                     ...loginData,
                     error: true,
-                    errorMessage: 'login error !!' // debería capturar el mensaje desde response
+                    errorMessage: 'correo electrónico o contraseña incorrecta' // debería capturar el mensaje desde response
                 }
             }
         })
@@ -61,7 +72,7 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
         data = {
             ...loginData,
             error: true,
-            errorMessage: 'login error !!' // debería capturar el mensaje desde response
+            errorMessage: 'correo o contraseña incorrecta' // debería capturar el mensaje desde response
         }
         console.log("ERROR! " + error);
     } finally {
@@ -74,7 +85,8 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
 
 export const cerrarSesion = () => async (dispatch, getState) => {
     sessionStorage.setItem('logged', false);
-    sessionStorage.setItem('usuarioActual', {});
+    sessionStorage.setItem('nombre_completo', '');
+    sessionStorage.setItem('role', '');
     console.log("closing session!!");
     dispatch({
         type: CERRAR_SESION,
