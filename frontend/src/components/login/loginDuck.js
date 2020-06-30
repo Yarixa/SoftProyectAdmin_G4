@@ -1,4 +1,5 @@
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 // *** Constants ***
 const initialState = {
@@ -39,10 +40,13 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
     var data = {};
     try {
         await axios.post('http://3.23.231.36:5000/users/login', loginData).then(response => {
-            console.log("recibiendo desde postModulo: " + response.data);
-            if (response.status === 200) {
+            console.log("recibiendo desde postModulo: ");
+            console.log(response);
+            if (response.status === 200 && response.data !== "") {
+                var decoded = jwt_decode(response.data);
+                console.log(decoded);
                 sessionStorage.setItem('logged', true);
-                sessionStorage.setItem('usuarioActual', loginData);
+                sessionStorage.setItem('usuarioActual', decoded);
                 setLogged(true);
             } else {
                 setLogged(false);
