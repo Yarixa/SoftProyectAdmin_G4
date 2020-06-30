@@ -7,6 +7,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 
 import RListItems from './RListItems.jsx';
+import logo from './AppLogo.png';
 
 
 const drawerWidth = 240;
@@ -102,7 +103,7 @@ export default function RDrawer() {
             >
                 <div className="mainContent">
                     <div className={classes.toolbarIcon}>
-                        {/*// colocar aquí el logo de la app*/}
+                        <img src={logo} alt="SoftProjectHUB"/>
                     </div>
                     <Divider />
                     <List>
