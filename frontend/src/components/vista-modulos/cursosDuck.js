@@ -5,6 +5,8 @@ const initialState = {
     listadoCursos: []
 }
 
+const apiURL = process.env.REACT_APP_API_URL;
+
 // *** Types ***
 const AGREGAR_CURSO = 'ADD_CURSO';
 const ELIMINAR_CURSO = 'ELIMINAR_CURSO';
@@ -38,7 +40,7 @@ export default function cursosReducer(state = initialState, action){
 // *** Actions ***
 export const agregarCurso = (nuevoCurso) => async (dispatch, getState) => {
     try{
-        await axios.post('http://3.23.231.36:5000/courses/create', nuevoCurso).then(response => {
+        await axios.post('http://' + apiURL + ':5000/courses/create', nuevoCurso).then(response => {
             console.log("recibiendo desde postCurso: ");
             console.log(response.data);
             dispatch({
@@ -56,7 +58,7 @@ export const agregarCurso = (nuevoCurso) => async (dispatch, getState) => {
 
 export const eliminarCurso = (idCurso) => async (dispatch, getState) => {
     try{
-        await axios.post('http://3.23.231.36:5000/courses/deshabilitar/' + idCurso).then(response => {
+        await axios.post('http://' + apiURL + ':5000/courses/deshabilitar/' + idCurso).then(response => {
             console.log("recibiendo desde eliminarCurso: ");
             console.log(response.data);
             dispatch({
@@ -71,7 +73,7 @@ export const eliminarCurso = (idCurso) => async (dispatch, getState) => {
 
 export const editarCurso = (nuevoCurso) => async (dispatch, getState) => {
     try {
-        await axios.put('http://3.23.231.36:5000/courses/update/' + nuevoCurso.id, nuevoCurso).then(response => {
+        await axios.put('http://' + apiURL + ':5000/courses/update/' + nuevoCurso.id, nuevoCurso).then(response => {
             console.log("recibiendo desde editarCurso: " + response.data.status);
             dispatch({
                 type: ACTUALIZAR_CURSO,
@@ -85,7 +87,7 @@ export const editarCurso = (nuevoCurso) => async (dispatch, getState) => {
 
 export const fetchCursos = () => async (dispatch, getState) => {
     try{
-        await axios.get('http://3.23.231.36:5000/courses/readAll').then(response => {
+        await axios.get('http://' + apiURL + ':5000/courses/readAll').then(response => {
             console.log('recibiendo desde fetch cursos:');
             console.log(response.data);
             dispatch({
@@ -100,7 +102,7 @@ export const fetchCursos = () => async (dispatch, getState) => {
 
 export const fetchCursosPorIdModulo = (idModulo) => async (dispatch, getState) => {
     try{
-        await axios.get('http://3.23.231.36:5000/courses/findAll/' + idModulo).then(response => {
+        await axios.get('http://' + apiURL + ':5000/courses/findAll/' + idModulo).then(response => {
             console.log('recibiendo desde fetch cursos por id de módulo:');
             console.log(response.data);
             dispatch({

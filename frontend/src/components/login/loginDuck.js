@@ -9,6 +9,8 @@ const initialState = {
     errorMessage: ''
 }
 
+const apiURL = process.env.REACT_APP_API_URL;
+
 // *** Types ***
 const AUTENTICAR_USUARIO = 'AUTENTICAR_USUARIO';
 const CERRAR_SESION = 'CERRAR_SESION';
@@ -39,7 +41,7 @@ export default function loginReducer(state = initialState, action) {
 export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getState) => {
     var data = {};
     try {
-        await axios.post('http://3.23.231.36:5000/users/login', loginData).then(response => {
+        await axios.post('http://' + apiURL + ':5000/users/login', loginData).then(response => {
             console.log("recibiendo desde postModulo: ");
             console.log(response);
             if (response.status === 200 && response.data !== "") {
