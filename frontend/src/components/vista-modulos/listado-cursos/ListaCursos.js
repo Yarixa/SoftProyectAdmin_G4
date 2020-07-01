@@ -16,16 +16,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ListaCursos(props){
     const{ curso } = props;
+    const { nombreModulo } = props;
+
     const classes = useStyles();
 
     return(
         <Table.Row>
-            <Table.Cell>{curso.nombre}</Table.Cell>
-            <Table.Cell>{curso.anioSemestre}</Table.Cell>
+            <Table.Cell>{curso.anio + "-" + curso.semestre}</Table.Cell>
             <Table.Cell>{curso.profesor}</Table.Cell>
             <Table.Cell>
                 <div className={classes.row} >
-                    <FormularioCurso esModoEditar={true} cursoParaEditar={curso}/>
+                    <FormularioCurso esModoEditar={true} cursoParaEditar={curso} nombreModulo = {nombreModulo}/>
                     <DeshabilitarCurso id={curso.id}/>
                 </div>
             </Table.Cell>
