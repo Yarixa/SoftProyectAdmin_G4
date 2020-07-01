@@ -12,8 +12,6 @@ import Typography from '@material-ui/core/Typography';
 
 import RListItems from './RListItems.jsx';
 import logo from './AppLogo.png';
-import { useEffect } from 'react';
-
 
 const drawerWidth = 240;
 

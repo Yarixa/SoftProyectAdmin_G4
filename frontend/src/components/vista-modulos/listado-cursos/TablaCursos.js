@@ -1,6 +1,13 @@
 import React, { useEffect } from 'react';
 
-import { Table } from 'semantic-ui-react';
+//import { Table } from 'semantic-ui-react';
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TablePagination from '@material-ui/core/TablePagination';
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchCursosPorIdModulo} from '../cursosDuck';
 
@@ -28,20 +35,22 @@ export default function TablaCursos(props){
 
     return (
         <div>
-            <Table fixed>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Semestre</Table.HeaderCell>
-                        <Table.HeaderCell>Profesor(es)</Table.HeaderCell>
-                        <Table.HeaderCell></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {
-                        listadoCursos.map((curso) => <ListaCursos key={curso.id} curso={curso} nombreModulo = {nombreModulo} idModulo={idModulo}/>)
-                    }
-                </Table.Body>
-            </Table>
+            <TableContainer>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Semestre</TableCell>
+                            <TableCell>Profesor(es)</TableCell>
+                            <TableCell>Acciones</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            listadoCursos.map((curso) => <ListaCursos key={curso.id} curso={curso} nombreModulo = {nombreModulo} idModulo={idModulo}/>)
+                        }
+                    </TableBody>
+                </Table>
+            </TableContainer>
             <FormularioCurso esModoEditar={false} cursoParaEditar={{}} nombreModulo={nombreModulo} idModulo={idModulo} />
         </div>
     )

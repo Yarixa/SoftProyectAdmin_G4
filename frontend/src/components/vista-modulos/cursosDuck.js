@@ -28,7 +28,7 @@ export default function cursosReducer(state = initialState, action){
         };
         case FETCH_CURSOS_OK: return {
             ...state, 
-            listadoCursos: action.payload,
+            listadoCursos: action.payload.filter(curso=>curso.disponible===true),
         };
         default:
             return state;

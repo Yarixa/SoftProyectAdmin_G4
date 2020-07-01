@@ -1,8 +1,12 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+//import { Table } from 'semantic-ui-react';
 import DeshabilitarCurso from './botones-dialogos/DeshabilitarCurso';
-import FormularioCurso from "./botones-dialogos/FormularioCurso";
+import {Link} from "react-router-dom";
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from "@material-ui/core/styles";
+
+import FormularioCurso from "./botones-dialogos/FormularioCurso";
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -21,16 +25,16 @@ export default function ListaCursos(props){
     const classes = useStyles();
 
     return(
-        <Table.Row>
-            <Table.Cell>{curso.anio + "-" + curso.semestre}</Table.Cell>
-            <Table.Cell>{curso.profesor}</Table.Cell>
-            <Table.Cell>
+        <TableRow hover >
+            <TableCell component={Link} to={"/home/curso/"+curso.id}>{curso.anio + "-" + curso.semestre}</TableCell>
+            <TableCell component={Link} to={"/home/curso/"+curso.id}>{curso.profesor}</TableCell>
+            <TableCell>
                 <div className={classes.row} >
                     <FormularioCurso esModoEditar={true} cursoParaEditar={curso} nombreModulo = {nombreModulo}/>
                     <DeshabilitarCurso id={curso.id}/>
                 </div>
-            </Table.Cell>
-        </Table.Row>
+            </TableCell>
+        </TableRow>
 
     )
 }
