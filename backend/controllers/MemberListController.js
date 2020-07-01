@@ -2,6 +2,59 @@ const db = require("../database/db.js")
 //const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
+const Team = require("../models/Team")
+
+exports.createTeam = (req, res) => {
+	const teamData = {
+		course_id: req.params.course_id,
+		project_id: req.body.project_id,
+		name: req.body.name
+	}
+	Team.findOne({
+		where: {
+			course_id: teamData.course_id,
+			project_id: teamData.project_id,
+		}
+	})
+	.then(team => {
+		if(!team){
+			Team.create(teamData)
+			.then(team => {
+				res.json({message: "El team ha sido creado."})
+			})
+			.catch(err => {
+				res.status(400).json({
+					error: "Ha ocurrido un error al momento de ingresar el team a la base de datos."
+				})
+			})
+		}
+		else{
+			//Cabe destacar de que cada proyecto tiene un grupo, excepto por el proyecto 1, el cual es default.
+			if(teamData.project_id == 1){
+				Team.create(teamData)
+				.then(team => {
+					res.json({message: "El team ha sido creado."})
+				})
+				.catch(err => {
+					res.status(400).json({
+						error: "Ha ocurrido un error al momento de ingresar el team a la base de datos."
+					})
+				})
+			}
+			else{
+				res.json({
+					teamExists: "El team " + teamData.name + " ya esta registrado en el curso de ID "
+					+ teamData.course_id + " y con el projecto " + teamData.project_id
+				})
+			}
+		}
+	})
+	.catch(err => {
+		res.status(400).json({
+			error: "Ha ocurrido un error en el ingreso del usuario: " + err
+		})
+	})
+}
 
 exports.create = (req, res) => {
 	const memberListData = {
@@ -13,7 +66,8 @@ exports.create = (req, res) => {
 	MemberList.findOne({
 		where: {
 			user_email: memberListData.user_email,
-			course_id: memberListData.course_id
+			course_id: memberListData.course_id,
+			team_id: memberListData.team_id
 		}
 	})
 	.then(memberList => {
@@ -45,6 +99,22 @@ exports.create = (req, res) => {
 exports.readAll = (req, res) => {
 
 	MemberList.findAll({
+
+	})
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).json({
+			message:
+				err.message || "There was an error while retrieving"
+		})
+	})
+}
+
+exports.readAllTeams = (req, res) => {
+
+	Team.findAll({
 
 	})
 	.then(data => {
@@ -132,25 +202,26 @@ exports.updateTeam = (req, res) => {
 				}
 			})
 			.then(result => {
+				console.log(result)
 				res.json({
-					message: "Se ha modificado el grupo del usuario " + user_email
+					message: "Se ha modificado el grupo del usuario " + memberList.user_email
 				})
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema"
+					error: "No existe el usuario dentro del tema 2 " + err
 				})
 			})
 		}
 		else{
 			res.json({
-					error: "No existe el usuario dentro del tema"
+					error: "No existe el usuario dentro del tema 3 " + err
 			})
 		}
 	})
 	.catch(err => {
 		res.json({
-				error: "No existe el usuario dentro del tema"
+				error: "No existe el usuario dentro del tema 1 " + err
 		})
 	})
 }
@@ -345,7 +416,6 @@ exports.testMassiveCreate = async (req, res) => {
 							MemberList.create(memberListData)
 							.then(user => {
 								console.log("User " + memberListData.user_email + " linked.")
-								contador++
 							})
 							.catch(err => {
 								console.log('Error: ' + err )
@@ -357,16 +427,8 @@ exports.testMassiveCreate = async (req, res) => {
 				.catch(err => {
 					console.log('error: ' + err)
 				})
-			}
-		if(contador == memberListArray.length){
-			res.json("Todos los usuarios fueron agregados")
 		}
-		else if( contador > 0 && contador < memberListArray.length){
-			res.json("Algunos usuarios fueron agregados")
-		}
-		else{
-			res.json("Ningun usuario fue agregado")
-		}
+		res.json("La operación fue realizada.")
 	}
 	catch(e){
 		res.json("There was an error on the file. " + e)
@@ -381,4 +443,5 @@ var checkRegex = (email) => {
 	}
 	return "Alumno"
 }
+
 
