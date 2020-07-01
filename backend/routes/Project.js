@@ -17,6 +17,6 @@ projects.put('/deshabilitar/:id', projectController.deshabilitar)
 projects.put('/habilitar/:id', projectController.habilitar)
 
 //funcion busqueda de proyectos
-projects.search('/search/', projectController.search)
+projects.get('/search/:query', projectController.search)
 
 module.exports = projects;
