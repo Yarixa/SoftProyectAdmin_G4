@@ -66,8 +66,7 @@ export default function FormularioModulo(props) {
                 degree : departamento,
             }
             dispatch(editarModulo(nuevoModulo));
-        }
-        else   {
+        }else{
             const nuevoModulo = {
                 nombre : nombreModulo,
                 degree : departamento,
