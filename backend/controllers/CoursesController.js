@@ -8,7 +8,7 @@ process.env.SECRET_KEY = 'secret'
 //Funcion para crear un curso
 exports.create = (req, res) => {
 	const courseData = {
-        id : req.id,
+        //id : req.id,
 		subject_id: req.body.subject_id,
 		anio: req.body.anio,
 		semestre: req.body.semestre,
@@ -23,8 +23,8 @@ exports.create = (req, res) => {
 			Course.create(courseData)
 			.then(course => {
 				res.json({
-                    id : modulo.id,
-                    status: curso.id + 'registrado'
+                    id : course.id,
+                    status: course.id + 'registrado'
                 })
 			})
 			.catch(err => {
