@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Login from "../components/login/Login";
@@ -17,11 +17,11 @@ export default function AppRouter() {
                 <Route path="/home">
                     <RAppBar />
                     <Route
-                        path="/home/:section"
+                        path="/home/:section/:arg?"
                         render={renderProps => {
                             return (
                                 <MainBox>
-                                    <RouterFacade route={renderProps.match.params.section} />
+                                    <RouterFacade route={renderProps.match.params.section} arg={renderProps.match.params.arg}/>
                                 </MainBox>
                             )
                         }}

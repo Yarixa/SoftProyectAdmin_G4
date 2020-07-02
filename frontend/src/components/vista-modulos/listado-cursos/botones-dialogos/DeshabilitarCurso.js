@@ -40,7 +40,7 @@ export default function DeshabilitarCurso(props) {
     dispatch(eliminarCurso(id));
     setOpen(false);
   };
-
+ 
   return (
     <div>
       <Button

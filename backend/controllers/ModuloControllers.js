@@ -1,8 +1,8 @@
 const db = require("../database/db.js")
 const Modulo = require("../models/Modulo")
+const Curso = require("../models/Course")
 
-
-//Funcion para crear un
+// Funcion para crear un
 exports.create = (req,res)=>{
     const moduloData = {
        // id    : req.body.id,
@@ -123,7 +123,27 @@ exports.readAll = (req,res)=>{
         })
     })
 }
+//cuenta la cantidad de cursos que tiene asociado a cada modulo
+exports.contarCursos = (req,res)=>{
+    Curso.findAll({
+    //los atributos que salen en la busqueda
+    attributes: [ "subject_id", ["count(subject_id)","cantidad"]],
+    
+    group : ['subject_id'],
+    where:{
+        disponible:1
+    }
 
+    }).then(result=>{
+        res.json({
+            modulos: result
+        })
+    }).catch(err=>{
+        res.json({
+            status: "error al consultar "+ err
+        })
+    })
+}
 
 //Funcion para actualizar datos de modulos
 exports.update = (req, res)=>{
