@@ -19,6 +19,7 @@
     "mysql": "^2.14.1",
     "mysql2": "^1.6.1",
     "nodemon": "^1.18.3",
+    "package.json": "^2.0.1",
     "sequelize": "^4.38.0",
     "xlsx": "^0.16.1"
   }

@@ -8,7 +8,7 @@ process.env.SECRET_KEY = 'secret'
 //Funcion para crear un curso
 exports.create = (req, res) => {
 	const courseData = {
-        id : req.id,
+        //id : req.id,
 		subject_id: req.body.subject_id,
 		anio: req.body.anio,
 		semestre: req.body.semestre,
@@ -23,8 +23,8 @@ exports.create = (req, res) => {
 			Course.create(courseData)
 			.then(course => {
 				res.json({
-                    id : modulo.id,
-                    status: curso.id + 'registrado'
+                    id : course.id,
+                    status: course.id + 'registrado'
                 })
 			})
 			.catch(err => {
@@ -153,6 +153,24 @@ exports.update = (req, res)=>{
 //Funcion que retorna todos los cursos registrados
 exports.readAll = (req, res) => {
 	Course.findAll({})
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).send({
+			message:
+				err.message || "Error"
+		})
+	})
+}
+
+//Funcion que retorna todos los cursos registrados
+exports.findAll = (req, res) => {
+    Course.findAll({
+        where : {
+            subject_id: req.params.subject_id
+        }
+    })
 	.then(data => {
 		res.send(data)
 	})
