@@ -66,17 +66,25 @@ exports.login = (req, res) => {
 	})
 	.then(user => {
 		if(user){
-			//Funcion encargada para verificar el hash de password.
-			if(bcrypt.compareSync(req.body.password, user.password)){
-				let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
-					expiresIn: 60
-				})
-				res.send(token)
+			if(user.disponible){
+				//Funcion encargada para verificar el hash de password.
+				if(bcrypt.compareSync(req.body.password, user.password)){
+					let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
+						expiresIn: 60
+					})
+					res.send(token)
+				}
+				else{
+					res.status(400).json({
+						error: true,
+						errorMessage: "password invalida"
+					})
+				}
 			}
 			else{
 				res.status(400).json({
 					error: true,
-					errorMessage: "password invalida"
+					errorMessage: "El usuario se encuentra deshabilitado"
 				})
 			}
 		}else{
@@ -212,7 +220,7 @@ exports.updateUser = (req, res) => {
 				User.update(
 					{first_name: req.body.first_name,
 					last_name: req.body.last_name},
-					{where: {email: req.params.email}}				
+					{where: {email: req.params.email}}
 				).then(result => {
 					res.json({status: req.params.email + ' updated'}
 				)}).catch(err =>{
