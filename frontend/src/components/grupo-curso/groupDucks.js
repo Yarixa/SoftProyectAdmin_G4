@@ -27,6 +27,8 @@ const dataInicial = {
     selectedGroup: {}
 }
 
+const apiURL = process.env.REACT_APP_API_URL;
+
 // Tipos
 const ADD_GROUP = 'ADD_GROUP';
 const EDIT_GROUP = 'EDIT_GROUP';
