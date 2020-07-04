@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import AgregarGrupo from './boton-grupos/AgregarGrupo';
 import GroupCell from './GroupCell';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Semantic Table | Estilos
 import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 export default function CurseGroup(props) {
-    const {curso} = props;
-    const GroupList = useSelector(store => store.grupos.groups)
+    const {idCurso} = props;
+    const GroupList = useSelector(store => store.groups.groups)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        
+    }, [dispatch])
 
     return(
         <div>
