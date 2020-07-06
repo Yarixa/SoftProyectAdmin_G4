@@ -16,6 +16,7 @@ exports.create = (req, res) => {
 
     Course.findOne({
         where : {
+            subject_id: req.body.subject_id,
             anio: req.body.anio,
 		    semestre: req.body.semestre,
         }
