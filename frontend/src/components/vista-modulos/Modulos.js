@@ -48,7 +48,7 @@ export default function Modulos(){
                 </Grid>
                 <Grid item xs={12} sm={6} hidden={moduloSeleccionado.nombre?false:true}>
                     <Card className={classes.card}> 
-                        <CardHeader title={moduloSeleccionado.nombre?'Instancias de ' + moduloSeleccionado.nombre:''} action={
+                        <CardHeader title={moduloSeleccionado.nombre?moduloSeleccionado.nombre:''} action={
                             <IconButton onClick={() => dispatch(mostrarInstancias({}))}>
                                 <Close />
                             </IconButton>
@@ -58,7 +58,7 @@ export default function Modulos(){
                             {
                                 moduloSeleccionado==={}
                                     ?<div></div>
-                                    :<TablaCursos idModulo={moduloSeleccionado.id}/>
+                                    :<TablaCursos idModulo={moduloSeleccionado.id} nombreModulo={moduloSeleccionado.nombre}/>
                             }
                         </CardContent>
                     </Card>

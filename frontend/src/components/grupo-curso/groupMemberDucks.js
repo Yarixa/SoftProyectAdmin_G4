@@ -24,6 +24,8 @@ const dataInicial = {
     ]
 }
 
+const apiURL = process.env.REACT_APP_API_URL;
+
 // Tipos
 const ADD_MEMBER = 'ADD_MEMBER';
 const EDIT_MEMBER = 'EDIT_MEMBER';

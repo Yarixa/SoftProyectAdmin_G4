@@ -17,7 +17,7 @@ export default function TablaModulos(){
                     <Table.Row>
                         <Table.HeaderCell>Nombre módulo</Table.HeaderCell>
                         <Table.HeaderCell>Deartamento</Table.HeaderCell>
-                        <Table.HeaderCell>Número de instancias</Table.HeaderCell>
+                        <Table.HeaderCell>Número de cursos</Table.HeaderCell>
                         <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>

@@ -1,9 +1,12 @@
 import axios from 'axios';
+
 // *** Constants ***
 const initialState = {
     listadoModulos: [],
     moduloSeleccionado: {}
 }
+
+const apiURL = process.env.REACT_APP_API_URL;
 
 // *** Types ***
 const AGREGAR_MODULO = 'ADD_MODULO';
@@ -43,7 +46,7 @@ export default function modulosReducer(state = initialState, action){
 // *** Actions ***
 export const agregarModulo = (nuevoModulo) => async (dispatch, getState) => {
     try{
-        await axios.post('http://3.23.231.36:5000/modulos/create', nuevoModulo).then(response => {
+        await axios.post('http://' + apiURL + ':5000/modulos/create', nuevoModulo).then(response => {
             console.log("recibiendo desde postModulo: " + response.data.id);
             dispatch({
                 type: AGREGAR_MODULO,
@@ -61,7 +64,7 @@ export const agregarModulo = (nuevoModulo) => async (dispatch, getState) => {
 
 export const eliminarModulo = (idModulo) => async (dispatch, getState) => {
     try{
-        await axios.put('http://3.23.231.36:5000/modulos/deshabilitar/' + idModulo).then(response => {
+        await axios.put('http://' + apiURL + ':5000/modulos/deshabilitar/' + idModulo).then(response => {
             console.log("recibiendo desde eliminarModulo: " + response.data.status);
             dispatch({
                 type: ELIMINAR_MODULO,
@@ -75,7 +78,7 @@ export const eliminarModulo = (idModulo) => async (dispatch, getState) => {
 
 export const editarModulo = (nuevoModulo) => async (dispatch, getState) => {
     try{
-        await axios.put('http://3.23.231.36:5000/modulos/update/'+nuevoModulo.id, nuevoModulo).then(response => {
+        await axios.put('http://' + apiURL + ':5000/modulos/update/'+nuevoModulo.id, nuevoModulo).then(response => {
             console.log("recibiendo desde editarModulo: " + response.data.status);
             dispatch({
                 type: ACTUALIZAR_MODULO,
@@ -96,7 +99,7 @@ export const mostrarInstancias = (modulo) => async (dispatch, getState) => {
 
 export const fetchModulos = () => async (dispatch, getState) => {
     try{
-        await axios.get('http://3.23.231.36:5000/modulos/readAll').then(response => {
+        await axios.get('http://' + apiURL + ':5000/modulos/readAll').then(response => {
             dispatch({
                 type: FETCH_MODULOS_OK,
                 payload: response.data.modulos,
