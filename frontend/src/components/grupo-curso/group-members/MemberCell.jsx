@@ -5,7 +5,6 @@ import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 // Material | Estilos
-import BuildIcon from '@material-ui/icons/Build';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton } from '@material-ui/core';
 

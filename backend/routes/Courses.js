@@ -25,4 +25,7 @@ courses.post('/update/:id', courseController.update)
 //Listar cursos existentes de la BD
 courses.get('/readAll', courseController.readAll)
 
+//Listar todos los cursos asociados a un modulo, especificando su ID
+courses.get('/findAll/:subject_id', courseController.findAll)
+
 module.exports = courses;

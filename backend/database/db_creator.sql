@@ -44,14 +44,17 @@ create table projects(
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
     disponible boolean default true,
-    Foreign key(course_id) references courses(id) on update cascade on delete restrict
+    Foreign key (course_id) references courses(id) on update cascade on delete restrict
 );
 
 create table teams(
 	id int primary key auto_increment,
 	course_id int not null,
+	project_id int not null,
 	name varchar(40) not null,
-	foreign key (course_id) references courses(id) on delete restrict
+	active boolean default true,
+	foreign key (course_id) references courses(id) on delete restrict,
+	foreign key (project_id) references projects(id) on delete restrict
 );
 
 create table memberLists(
@@ -70,7 +73,9 @@ insert into users (first_name, last_name, email, role, password, disponible, cre
 	("asdf",	"asdf",	"asdf@asdf.cl",	"Alumno",	"$2b$10$7KMqqhvM3C0AKHLvqYPj8OBgld2Yt66HucKKM3DEjCbIV675HRKki",	1,	"2020-06-21");
 insert into subjects (nombre, degree) values ('default', 'default');
 insert into courses (subject_id, anio, semestre) values (1, 0, 1);
-insert into teams (course_id, name) values (1, 'default');
+insert into courses (subject_id, anio, semestre) values (1, 0, 2);
+insert into projects (id, course_id, nombre, descripcion) values (1, 1, 'default', 'este proyecto es default');
+insert into teams (course_id, project_id, name) values (1, 1, 'default');
 
 create table documents(
 	id int primary key auto_increment,
@@ -84,10 +89,12 @@ create table documents(
 );
 
 -- Separado el crear un usuario de la asignacion de privilegios, para evitar problemas.
-DROP USER if exists 'administrador'@'%';
+-- Descomentar solo si es que se desea cargar el script en una base de datos local
+-- en la cual no exista ya el usuario administrador.
+-- DROP USER if exists 'administrador'@'%';
 
-CREATE USER 'administrador'@'%' IDENTIFIED BY 'abnormalize';
+-- CREATE USER 'administrador'@'%' IDENTIFIED BY 'abnormalize';
 
-GRANT ALL PRIVILEGES ON firstApp.* TO 'administrador'@'%';
-FLUSH PRIVILEGES;
+-- GRANT ALL PRIVILEGES ON firstApp.* TO 'administrador'@'%';
+-- FLUSH PRIVILEGES;
 
