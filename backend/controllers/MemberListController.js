@@ -3,6 +3,8 @@ const db = require("../database/db.js")
 const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
 const Team = require("../models/Team")
+const Sequelize = require('sequelize')
+
 
 exports.createTeam = (req, res) => {
 	const teamData = {
@@ -127,6 +129,44 @@ exports.readAllTeams = (req, res) => {
 		})
 	})
 }
+
+exports.readTeamsByCourse = (req, res) => {
+
+	db.sequelize.query("Select * from teams inner join memberLists on teams.course_id = " + req.query.course_id	)
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).json({
+			message:
+				err.message || "There was an error while retrieving"
+		})
+	})
+}
+
+/*exports.readTeamsByCourse = (req, res) => {
+	Team.belongsTo(MemberList, {foreignKey: 'course_id', sourceKey: 'course_id'})
+	MemberList.belongsTo(Team, {foreignKey: 'course_id', sourceKey: 'course_id'})
+	Team.findAll({
+		where: {
+			course_id: req.query.course_id
+		},
+		include: [{
+			model: MemberList,
+			where: {course_id: Sequelize.col('team.course_id')},
+			required: true
+		}]
+	})
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).json({
+			message:
+				err.message || "There was an error while retrieving"
+		})
+	})
+}*/
 
 exports.readByUser = (req, res) => {
 
@@ -383,16 +423,29 @@ exports.uploadFile = async (req, res) => {
 }
 
 exports.testMassiveCreate = async (req, res) => {
-	var XLSX = require('xlsx');
+
 		try{
+
+
+			//console.log(memberListArray)
+
+			res.json(await cargaArchivo(req))
+
+	}
+	catch(e){
+		res.json("There was an error on the file. " + e)
+	}
+}
+
+var  cargaArchivo = async (req) =>{
+
+			var XLSX = require('xlsx');
 			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
 			var sheetNames = workbook.SheetNames;
 
 			var sheetIndex = 1;
 
 			var memberListArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
-
-			var contador = 0;
 
 			for(var i = 0; i < memberListArray.length; i++){
 				const dRole = checkRegex(memberListArray[i]["Dirección de correo"])
@@ -404,7 +457,8 @@ exports.testMassiveCreate = async (req, res) => {
 					type: dRole
 
 				}
-				MemberList.findOne({
+				console.log(memberListData)
+				await MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
 						course_id: memberListData.course_id,
@@ -428,11 +482,7 @@ exports.testMassiveCreate = async (req, res) => {
 					console.log('error: ' + err)
 				})
 		}
-		res.json("La operación fue realizada.")
-	}
-	catch(e){
-		res.json("There was an error on the file. " + e)
-	}
+		return("La operación fue realizada.")
 }
 
 var checkRegex = (email) => {
