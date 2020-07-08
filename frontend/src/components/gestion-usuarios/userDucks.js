@@ -1,4 +1,4 @@
-    import axios from 'axios'
+import axios from 'axios'
 
 // Constantes
 const dataInicial = {
@@ -38,7 +38,6 @@ export default function userReducer(state = dataInicial, action){
 
 // Acciones
 export const getUsers = () => async dispatch => {
-    console.log(apiURL)
     try{
         const resp = await axios.get('http://' + apiURL + ':5000/users/readall')
         dispatch({
