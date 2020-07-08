@@ -5,14 +5,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 import { useDispatch } from 'react-redux';
-import {agregarModulo, editarModulo} from "../../modulosDuck";
+import { agregarModulo, editarModulo } from "../../modulosDuck";
 import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,19 +41,9 @@ export default function FormularioModulo(props) {
 
     const [open, setOpen] = React.useState(false);
     const [nombreModulo, setNombreModulo] = React.useState(esModoEditar?moduloParaEditar.nombre:'');
-    const [profesor, setProfesor] = React.useState(esModoEditar?moduloParaEditar.profesor:'');
-    const [anio, setAnio] = React.useState(esModoEditar?moduloParaEditar.anio:'');
-    const [semestre, setSemestre] = React.useState(esModoEditar?moduloParaEditar.semestre:" ");
-
-    //borrar!! variable solo para uso preliminar... o debería venir de la api
-    var idAux = esModoEditar?moduloParaEditar.id:nombreModulo;
+    const [departamento, setDepartamento] = React.useState(esModoEditar?moduloParaEditar.degree:'');
 
     const dispatch = useDispatch();
-
-
-    const handleChange = (event) => {
-        setSemestre(Number(event.target.value) || " ");
-    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -66,49 +52,37 @@ export default function FormularioModulo(props) {
     const handleClose = () => {
         if(!esModoEditar){
             setNombreModulo('');
-            setSemestre(" ");
-            setAnio('');
-            setProfesor('');
+            setDepartamento('');
         }
         setOpen(false);
     };
 
     const handleAccept = () => {
-        const nuevoModulo = {
-            id : idAux,
-            nombre : nombreModulo,
-            profesor : profesor,
-            semestre : semestre,
-            anio : anio,
-            anioSemestre : anio + "-" + semestre
-        }
 
         if(esModoEditar) {
+            const nuevoModulo = {
+                id : moduloParaEditar.id,
+                nombre : nombreModulo,
+                degree : departamento,
+            }
             dispatch(editarModulo(nuevoModulo));
-        }
-        else   {
+        }else{
+            const nuevoModulo = {
+                nombre : nombreModulo,
+                degree : departamento,
+            }
             dispatch(agregarModulo(nuevoModulo));
             setNombreModulo('');
-            setSemestre(" ");
-            setAnio('');
-            setProfesor('');
+            setDepartamento('');
         }
         setOpen(false);
         
     };
-    //Funcion para validar datos
+    //Funcion para validar datos (true si encuentra error, false si no encuentra error)
     const simpleValidator = (text) => {
-        //console.log(buttonAcceptCheck)
-        if(text===anio){
-            var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
-            if(!isNum){ return true }
-        }
-        else if (text===semestre){
-            if(semestre===' '){
-                return true
-            }
-        }
-        else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
+        //en caso de que no se haya escrito nada, no se valida
+        if(text!==''){ 
+            //valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
             if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
                 return true
             }
@@ -116,11 +90,17 @@ export default function FormularioModulo(props) {
                 return false
             }
         }
+        else{
+            return false
+        }
+        //console.log(buttonAcceptCheck)
     };
 
+    //Funcion para habilitar/deshabilitar boton de aceptar formulario
+    //Se vuelve a validar cada valor y además descrimina si se ha escrito algo en los campos del formulario
     const buttonAcceptCheck = () =>{
-        if( !simpleValidator(nombreModulo) && !simpleValidator(profesor) &&
-        !simpleValidator(semestre) && !simpleValidator(anio)){    
+        if( (!simpleValidator(nombreModulo) && !simpleValidator(departamento)) && 
+        (nombreModulo && departamento)!==''){
             return false
         }
         else{
@@ -147,45 +127,17 @@ export default function FormularioModulo(props) {
                                 defaultValue={esModoEditar?nombreModulo:''}
                                 onChange={(e) => setNombreModulo(e.target.value)}
                                 error={simpleValidator(nombreModulo)}
-                                helperText={simpleValidator(nombreModulo) ? 'Por favor, rellene el campo' : ' '}
+                                helperText={simpleValidator(nombreModulo) ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
-                                id="Profesor"
-                                label="Profesor"
-                                onChange={(e) => setProfesor(e.target.value)}
-                                defaultValue={esModoEditar?profesor:''}
-                                error={simpleValidator(profesor)}
-                                helperText={simpleValidator(profesor) ? 'Por favor, rellene el campo' : ' '}
+                                id="Departeamento"
+                                label="Departamento"
+                                onChange={(e) => setDepartamento(e.target.value)}
+                                defaultValue={esModoEditar?departamento:''}
+                                error={simpleValidator(departamento)}
+                                helperText={simpleValidator(departamento) ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                             />
-                            <TextField
-                                className={classes.formItem}
-                                id="Anio"
-                                label="Año"
-                                onChange={(e) => setAnio(e.target.value)}
-                                defaultValue={esModoEditar?anio:''}
-                                error={simpleValidator(anio)} //se validan que sea integer, y que no esté vacío
-                                helperText={ simpleValidator(anio) ? 'Rellene el campo con los datos solicitados' : ' '}
-                            />
-                            <InputLabel
-                                className={classes.formItem}
-                                id="selecionar-semestre"> Semestre </InputLabel>
-                            <Select
-                                labelId="selecionar-semestre"
-                                id="dropwdown-list"
-                                value={semestre}
-                                defaultValue={esModoEditar?semestre:" "}
-                                onChange={handleChange}
-                                input={<Input />}
-                                error={semestre===' '}
-                                helperText={ semestre===' ' ? 'Seleccione un semestre' : ' '}
-                            >
-                                <MenuItem value={" "}>
-                                    <em>Ninguno</em>
-                                </MenuItem>
-                                <MenuItem value={"1"}>Primero</MenuItem>
-                                <MenuItem value={"2"}>Segundo</MenuItem>
-                            </Select>
                         </form>
                     </div>
                 </DialogContent>

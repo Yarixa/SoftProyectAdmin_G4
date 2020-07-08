@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { useDispatch } from 'react-redux';
-import { eliminarCurso } from "../../modulosDuck";
+import { eliminarCurso } from "../../cursosDuck";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -40,7 +40,7 @@ export default function DeshabilitarCurso(props) {
     dispatch(eliminarCurso(id));
     setOpen(false);
   };
-
+ 
   return (
     <div>
       <Button

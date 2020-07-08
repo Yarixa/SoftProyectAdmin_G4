@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,7 +11,9 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Typography from "@material-ui/core/Typography";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { cerrarSesion } from "../../login/loginDuck";
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     iconBadge: {
@@ -69,13 +71,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RAppBar() {
     const title = useSelector(store => store.appBar.title);
+    const dispatch = useDispatch();
 
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+    const [logged, setLogged] = useState(sessionStorage.getItem('logged'));
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    useEffect(() => {
+        console.log("changing logged! " + logged);
+    }, [logged])
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -89,6 +97,11 @@ export default function RAppBar() {
         setAnchorEl(null);
         handleMobileMenuClose();
     };
+
+    const handleCerrarSesion = () => {
+        dispatch(cerrarSesion());
+        setLogged(false);
+    }
 
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
@@ -105,8 +118,8 @@ export default function RAppBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Cerrar sesión</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Otra opción</MenuItem>
+            <MenuItem onClick={() => { }}>Otra opción</MenuItem>
+            <MenuItem onClick={handleCerrarSesion}>Cerrar sesión</MenuItem>
         </Menu>
     );
 
@@ -124,7 +137,7 @@ export default function RAppBar() {
             <MenuItem>
                 <IconButton aria-label="show 11 new notifications" color="inherit">
                     <Badge badgeContent={5} classes={{ badge: classes.iconBadge }}>
-                        <NotificationsIcon className={classes.appBarIcon}/>
+                        <NotificationsIcon className={classes.appBarIcon} />
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
@@ -136,12 +149,17 @@ export default function RAppBar() {
                     aria-haspopup="true"
                     color="inherit"
                 >
-                    <PowerSettingsNewIcon className={classes.appBarIcon}/>
+                    <PowerSettingsNewIcon className={classes.appBarIcon} />
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
         </Menu>
     );
+
+    if(logged === false){
+        console.log("redirecting from AppBar");
+        return <Redirect to={"/"} />
+    }
 
     return (
         <div className={classes.grow}>
@@ -154,7 +172,7 @@ export default function RAppBar() {
                     <div className={classes.sectionDesktop}>
                         <IconButton aria-label="show 17 new notifications" color="inherit">
                             <Badge badgeContent={5} classes={{ badge: classes.iconBadge }}>
-                                <NotificationsIcon className={classes.appBarIcon}/>
+                                <NotificationsIcon className={classes.appBarIcon} />
                             </Badge>
                         </IconButton>
                         <IconButton
@@ -165,7 +183,7 @@ export default function RAppBar() {
                             onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
-                            <PowerSettingsNewIcon className={classes.appBarIcon}/>
+                            <PowerSettingsNewIcon className={classes.appBarIcon} />
                         </IconButton>
                     </div>
                     <div className={classes.sectionMobile}>
@@ -176,7 +194,7 @@ export default function RAppBar() {
                             onClick={handleMobileMenuOpen}
                             color="inherit"
                         >
-                            <MoreIcon className={classes.appBarIcon}/>
+                            <MoreIcon className={classes.appBarIcon} />
                         </IconButton>
                     </div>
                 </Toolbar>

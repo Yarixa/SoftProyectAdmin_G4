@@ -1,34 +1,35 @@
 const db = require("../database/db.js")
 const Modulo = require("../models/Modulo")
+const Curso = require("../models/Course")
 
-
-//Funcion para crear un
+//Funcion para crear un modulo
 exports.create = (req,res)=>{
     const moduloData = {
-        id    : req.body.id,
+       // id    : req.body.id,
         nombre : req.body.nombre,
         degree : req.body.degree
     }
     Modulo.findOne({
         where : {
-            id : req.body.id
+            nombre : req.body.nombre
         }
     }).then(modulo=>{
         if(!modulo){
             Modulo.create(moduloData).then(
                 modulo=>{
                     res.json({
-                        status : modulo.id + ' registrado'
+                        id : modulo.id,
+                        //status : modulo.nombre + ' registrado'
                     })
                 }
             ).catch(err =>{
                 res.send('error en crear '+err)
             })
         }else{
-            res.json({error:"Ya existe un modulo con este codigo "+modulo.id})
+            res.json({error:"El modulo ya existe"+modulo.id})
         }
     }).catch(err=>{
-        res.send(`error al crear: ${err}`)
+        res.send(`Error al crear: ${err}`)
     })
 }
 //funcion para eliminar modulo 
@@ -97,7 +98,7 @@ exports.habilitar  = (req,res)=>{
                     id : req.params.id
                 }
             }).then(result=>{
-                res.json({status : req.params.id + ' habilitado'})
+                res.json({status : req.params.id + ' - tupla habilitada'})
             }).catch(err=>{
                 res.json({error : " No se puede habilitar"})
             })
@@ -122,7 +123,27 @@ exports.readAll = (req,res)=>{
         })
     })
 }
+//cuenta la cantidad de cursos que tiene asociado a cada modulo
+exports.contarCursos = (req,res)=>{
+    Curso.findAll({
+    //los atributos que salen en la busqueda
+    attributes: [ "subject_id", ["count(subject_id)","cantidad"]],
+    
+    group : ['subject_id'],
+    where:{
+        disponible:1
+    }
 
+    }).then(result=>{
+        res.json({
+            modulos: result
+        })
+    }).catch(err=>{
+        res.json({
+            status: "error al consultar "+ err
+        })
+    })
+}
 
 //Funcion para actualizar datos de modulos
 exports.update = (req, res)=>{
@@ -140,7 +161,7 @@ exports.update = (req, res)=>{
                    id : req.params.id
                }
            }).then(result =>{
-               res.json({status : modulo.id + " Actualizado "})
+               res.json({status : modulo.id + " tupla actualizada"})
            }).catch(err=>{
                res.json({error:req.params.id+" no se puede actualizar error "+err})
            })
