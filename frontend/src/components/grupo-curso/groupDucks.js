@@ -1,29 +1,8 @@
+import axios from 'axios';
+
 // Constantes
 const dataInicial = {
-    groups: [{
-        id: "1",
-        name: "Crudders",
-        members: "6",
-        boss: "Matías Escobar"
-    },
-    {
-        id: "2",
-        name: "AC/DC",
-        members: "6",
-        boss: "Rolando Granada"
-    },
-    {
-        id: "3",
-        name: "OMLUL",
-        members: "6",
-        boss: "Roberto Ramones"
-    },
-    {
-        id: "4",
-        name: "Traxer",
-        members: "6",
-        boss: "Baby Boss"
-    }],
+    groups: [],
     selectedGroup: {}
 }
 
@@ -60,10 +39,14 @@ export default function groupReducers(state = dataInicial, action){
 
 // Acciones
 export const agregarGrupo = (grupo) => async dispatch => {
-    // RUTA BACK
+    const data = {
+        name: grupo.name,
+        project_id: '1'
+    }
+    const resp = await axios.post('http://' + apiURL + ':5000/memberlist/readAllTeams' + grupo.idCurso, data);
     dispatch({
         type: ADD_GROUP,
-        payload: grupo
+        payload: resp.data.group
     })
 }
 
@@ -84,10 +67,10 @@ export const mostrarGrupos = (grupo) => async (dispatch, getState) => {
 
 export const fetchGrupos = () => async (dispatch, getState) => {
     try{
-        //Conectar
+        const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readAllTeams');
         dispatch({
             type: FETCH_GROUP,
-            payload: dataInicial.groups
+            payload: resp.data
         })
     }catch(error){
         console.log(error);
