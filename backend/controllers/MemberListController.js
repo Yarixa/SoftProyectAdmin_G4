@@ -22,7 +22,14 @@ exports.createTeam = (req, res) => {
 		if(!team){
 			Team.create(teamData)
 			.then(team => {
-				res.json({message: "El team ha sido creado."})
+				Team.findAll({
+					limit: 1,
+				  order: [ [ 'id', 'DESC' ]]
+				})
+				.then (team => {
+					res.json({data: team})
+				})
+
 			})
 			.catch(err => {
 				res.status(400).json({
@@ -35,7 +42,14 @@ exports.createTeam = (req, res) => {
 			if(teamData.project_id == 1){
 				Team.create(teamData)
 				.then(team => {
-					res.json({message: "El team ha sido creado."})
+					Team.findAll({
+						limit: 1,
+					  order: [ [ 'id', 'DESC' ]]
+					})
+					.then (team => {
+						res.json({data: team})
+					})
+
 				})
 				.catch(err => {
 					res.status(400).json({
@@ -132,7 +146,11 @@ exports.readAllTeams = (req, res) => {
 
 exports.readTeamsByCourse = (req, res) => {
 
-	db.sequelize.query("Select * from teams inner join memberLists on teams.course_id = " + req.query.course_id	)
+	Team.findAll({
+		where: {
+			course_id: req.body.course_id
+		}
+	})
 	.then(data => {
 		res.send(data)
 	})
@@ -143,6 +161,8 @@ exports.readTeamsByCourse = (req, res) => {
 		})
 	})
 }
+
+
 
 /*exports.readTeamsByCourse = (req, res) => {
 	Team.belongsTo(MemberList, {foreignKey: 'course_id', sourceKey: 'course_id'})
@@ -291,19 +311,19 @@ exports.updateRole = (req, res) => {
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema"
+					error: err + 'd'
 				})
 			})
 		}
 		else{
 			res.json({
-					error: "No existe el usuario dentro del tema"
+					error: err + 'a'
 			})
 		}
 	})
 	.catch(err => {
 		res.json({
-				error: "No existe el usuario dentro del tema"
+				error: err
 		})
 	})
 }
@@ -425,12 +445,8 @@ exports.uploadFile = async (req, res) => {
 exports.testMassiveCreate = async (req, res) => {
 
 		try{
-
-
 			//console.log(memberListArray)
-
 			res.json(await cargaArchivo(req))
-
 	}
 	catch(e){
 		res.json("There was an error on the file. " + e)
@@ -457,8 +473,8 @@ var  cargaArchivo = async (req) =>{
 					type: dRole
 
 				}
-				console.log(memberListData)
-				await MemberList.findOne({
+
+				MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
 						course_id: memberListData.course_id,
@@ -467,6 +483,7 @@ var  cargaArchivo = async (req) =>{
 				})
 				.then(memberList =>{
 					if(!memberList){
+
 							MemberList.create(memberListData)
 							.then(user => {
 								console.log("User " + memberListData.user_email + " linked.")
@@ -474,6 +491,7 @@ var  cargaArchivo = async (req) =>{
 							.catch(err => {
 								console.log('Error: ' + err )
 							})
+
 					}else{
 						console.log("Error")
 					}
@@ -487,7 +505,6 @@ var  cargaArchivo = async (req) =>{
 
 var checkRegex = (email) => {
 	var examineRegex = email.match(/@utalca.cl/g)
-	console.log(examineRegex)
 	if(examineRegex != null){
 		return "Profesor"
 	}
