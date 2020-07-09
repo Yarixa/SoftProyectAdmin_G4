@@ -28,8 +28,8 @@ export default function GroupMember(props) {
                     <Table.Row>
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
                         <Table.HeaderCell>Apellido</Table.HeaderCell>
-                        <Table.HeaderCell textAling = 'center'>Rol</Table.HeaderCell>
-                        <Table.HeaderCell textAling = 'center'>Acciones</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Rol</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Acciones</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
