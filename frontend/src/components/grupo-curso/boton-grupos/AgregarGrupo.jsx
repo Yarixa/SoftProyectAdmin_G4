@@ -35,6 +35,7 @@ export default function AgregarGrupo(props) {
 
     const {esEditar} = props;
     const {group} = props;
+    const {idCurso} = props;
 
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -50,8 +51,10 @@ export default function AgregarGrupo(props) {
     }
 
     const handleAccept = () => {
+        console.log(idCurso);
         const nuevoGrupo = {
-            name: nombreGrupo
+            name: nombreGrupo,
+            idCurso: idCurso
         }
         if (esEditar){
             dispatch(editarGrupo(nuevoGrupo));
