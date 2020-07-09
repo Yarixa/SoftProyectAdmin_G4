@@ -1,25 +1,13 @@
-const Sequelize = require('sequelize')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const db = require("../database/db.js")
-//Sequelize utiliza las tablas con nombre en plural en este senido debe terminar en 's'
-module.exports = db.sequelize.define(
-    'documents',
-    {
-        id:{
-            type : Sequelize.TEXT,
-            primaryKey:true
-        },
-        projectID:{
-            type : Sequelize.TEXT,
-        },
-        sectionType:{
-            type: Sequelize.TEXT
-        },
-        content:{
-            type: Sequelize.TEXT
-        },
-        disponible:{
-            type: Sequelize.BOOLEAN
-        }
-    }
- );
+const TaskSchema = Schema({
+  title: String,
+  description: String,
+  status: {
+    type: Boolean,
+    default: false
+  }
+});
+
+module.exports = mongoose.model('tasks', TaskSchema);

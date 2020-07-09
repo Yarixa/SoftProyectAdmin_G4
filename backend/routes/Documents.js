@@ -1,28 +1,44 @@
-const express = require("express")
-const documents = express.Router()
+const express = require('express');
+const router = express.Router();
+const Task = require('../models/Document');
 
-const documentsController = require("../controllers/DocumentsController.js")
+router.get('/', async (req, res) => {
+  const tasks = await Task.find();
+  res.render('Documents', {
+    tasks
+  });
+});
 
-const cors = require("cors")
+router.post('/add', async (req, res, next) => {
+  const task = new Task(req.body);
+  await task.save();
+  res.redirect('/');
+});
 
-documents.use(cors())
+router.get('/turn/:id', async (req, res, next) => {
+  let { id } = req.params;
+  const task = await Task.findById(id);
+  task.status = !task.status;
+  await task.save();
+  res.redirect('/');
+});
 
-//Crear curso
-documents.post('/create', documentsController.create)
+router.get('/edit/:id', async (req, res, next) => {
+  const task = await Task.findById(req.params.id);
+  console.log(task)
+  res.render('edit', { task });
+});
 
-//Borrar curso, se recibe el id para borrar la tupla
-documents.delete('/delete/:id', documentsController.delete)
+router.post('/edit/:id', async (req, res, next) => {
+  const { id } = req.params;
+  await Task.update({_id: id}, req.body);
+  res.redirect('/');
+});
 
-//Deshabilitar curso, se recibe el id
-documents.post('/deshabilitar/:id', documentsController.deshabilitar)
+router.get('/delete/:id', async (req, res, next) => {
+  let { id } = req.params;
+  await Task.remove({_id: id});
+  res.redirect('/');
+});
 
-//Habilitar curso, se recibe el id
-documents.post('/habilitar/:id', documentsController.habilitar)
-
-//Editar curso, se recibe el id para editar el curso
-documents.post('/update/:id', documentsController.update)
-
-//Listar cursos existentes de la BD
-documents.get('/readAll', documentsController.readAll)
-
-module.exports = documents;
+module.exports = router;

@@ -4,6 +4,14 @@ var bodyParser = require("body-parser")
 var fileUpload = require("express-fileupload")
 var app = express()
 var port = process.env.PORT || 5000
+//Conexion mongoDB
+const morgan = require('morgan');
+const mongoose = require('mongoose')
+
+// connection to db
+mongoose.connect('mongodb://localhost/crud-mongo')
+  .then(db => console.log('MongoDB conectado'))
+  .catch(err => console.log(err));
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -20,15 +28,18 @@ var Modulos = require("./routes/Modulo")
 var Courses = require("./routes/Courses")
 var MemberList = require("./routes/MemberList")
 var Projects = require("./routes/Project")
-//var Documents = require("./routes/Documents")
+var Documents = require("./routes/Documents")
 
-app.use("/courses", Courses) //ruta de cursos
+app.use("/courses", Courses)
 app.use("/modulos", Modulos)
 app.use("/users", Users)
 app.use("/memberlist", MemberList)
 app.use("/projects", Projects)
-//app.use("/documents", Documents)
+app.use("/documents", Documents)
 
+// middlewares
+app.use(morgan('dev'));
+app.use(express.urlencoded({extended: false}))
 
 app.listen(port, () => {
 	console.log("Server is running on port: " + port)
