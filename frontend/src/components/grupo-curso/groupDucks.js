@@ -43,11 +43,10 @@ export const agregarGrupo = (grupo) => async dispatch => {
         name: grupo.name,
         project_id: '1'
     }
-    console.log(grupo)
     const resp = await axios.post('http://' + apiURL + ':5000/memberlist/createTeam/' + grupo.idCurso, data);
     dispatch({
         type: ADD_GROUP,
-        payload: resp.data.group
+        payload: resp.data.data[0]
     })
 }
 
