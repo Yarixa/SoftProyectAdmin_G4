@@ -1,16 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { makeStyles } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Button from "@material-ui/core/Button";
 import { createDocument, disableDocumento, enableDocumento, editarDocumento, getDocument} from './documentDucks';
 
 
-const Documentos = ()=>{
+export default function Documentos(){
 
-    const dispach = useDispatch();
+    const dispatch = useDispatch();
 
     //obteniendo datos del formultario
 
@@ -18,8 +18,6 @@ const Documentos = ()=>{
     
     const handleSubmit = () => {
         // Validar Datos
-        dispatch(createUser(user))
-        setOpen(false)
     }
 
     const proyectoNombre = e =>{
@@ -40,7 +38,7 @@ const Documentos = ()=>{
                         console.log({event,editor,contenido});
                     }}
                 />
-                <Button onClick={this.handleSumit}>Guardar</Button>
+                <Button onClick={handleSubmit}>Guardar</Button>
 
             </div>
         </form>

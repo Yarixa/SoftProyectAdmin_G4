@@ -1,5 +1,8 @@
 import axios from 'axios'
 
+const dataInicial = {
+    documents: []
+}
 
 const apiURL = process.env.REACT_APP_API_URL;
 
@@ -9,6 +12,12 @@ const DISABLE_DOCUMENT = 'DISABLE_DOCUMENT'
 const ENABLE_DOCUMENT = 'ENABLE_DOCUMENT'
 const UPDATE_DOCUMENT = 'UPDATE_DOCUMENT'
 
+export default function documentReducers(state = dataInicial, action){
+    switch (action.type){
+        default:
+            return state
+    }
+}
 
 
 export const getDocument = ()=> async dispatch =>{

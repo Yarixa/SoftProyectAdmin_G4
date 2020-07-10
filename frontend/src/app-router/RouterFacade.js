@@ -4,6 +4,7 @@ import Modulos from '../components/vista-modulos/Modulos';
 import Users from '../components/gestion-usuarios/Users';
 import DashboardAdministrador from '../components/dashboard/DashboardAdministrador';
 import Curso from '../components/vista-curso';
+import Documentos from '../components/documento/Documento';
 
 export default function RouterFacade(props) {
     const { route } = props;
@@ -19,6 +20,7 @@ export default function RouterFacade(props) {
         case 'usuarios': return (<Users />);
         case 'dashboard': return (<DashboardAdministrador />);
         case 'curso': return (<Curso idCurso={arg}/>);
+        case 'proyectos': return (<Documentos />);
         default: return (<div> ERROR: RUTA NO ENCONTRADA !!</div>);
     }
 }

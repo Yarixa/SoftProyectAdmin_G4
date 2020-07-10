@@ -9,6 +9,7 @@ import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 export default function CurseGroup(props) {
+    
     const {idCurso} = props;
     const dispatch = useDispatch();
 
@@ -16,7 +17,7 @@ export default function CurseGroup(props) {
         dispatch(fetchMembers(idCurso));
     }, [dispatch])
 
-    const memberList = useSelector(store => store.courseMembers.members);
+    const courseMemberList = useSelector(store => store.courseMembers.members);
 
     return(
         <div>
@@ -32,7 +33,7 @@ export default function CurseGroup(props) {
                 </Table.Header>
                 <Table.Body>
                     {
-                        memberList.map((member) => <MemberListCell key = {member.id} member = {member}/>)
+                        courseMemberList.map((member) => <MemberListCell key = {member.id} member = {member}/>)
                     }
                 </Table.Body>
                 <Table.Footer>
