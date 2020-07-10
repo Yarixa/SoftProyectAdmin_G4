@@ -10,6 +10,8 @@ const apiURL = process.env.REACT_APP_API_URL;
 // Tipos
 const FETCH_MEMBERS = 'FETCH_MEMBERS';
 const ADD_MEMBER = 'ADD_MEMBER';
+const ENABLE_MEMBER = 'ENABLE_MEMBER';
+const DISABLE_MEMBER = 'DISABLE_MEMBER';
 
 // Reducers
 export default function courseMembersReducers(state = dataInicial, action){
@@ -18,6 +20,10 @@ export default function courseMembersReducers(state = dataInicial, action){
             return {...state, members: action.payload}
         case ADD_MEMBER:
             return {...state, members: action.payload}
+        case ENABLE_MEMBER:
+            return {...state, members: state.members.map(member => member.user_email === action.payload.user_email ? action.payload: member)}
+        case DISABLE_MEMBER:
+            return {...state, members: state.members.map(member => member.user_email === action.payload.user_email ? action.payload: member)}
         default:
             return state
     }
@@ -66,13 +72,31 @@ export const addMember = (member) => async dispatch => {
 }
 
 export const enableMember = (member) => async dispatch => {
-    
+    const data = {
+        email: member.email,
+        course_id: member.course_id
+    }
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/enable/' + data.email + '/' + data.course_id);
+    const readUser = await axios.get('http://' + apiURL + ':5000/memberlist/readByUser', {params: {email: data.email}});
+    dispatch({
+        type: ENABLE_MEMBER,
+        payload: readUser.data
+    })
 }
 
 export const disableMember = (member) => async dispatch => {
-    
+    const data = {
+        email: member.email,
+        course_id: member.course_id
+    }
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/disable/' + data.email + '/' + data.course_id);
+    const readUser = await axios.get('http://' + apiURL + ':5000/memberlist/readByUser', {params: {email: data.email}});
+    dispatch({
+        type: DISABLE_MEMBER,
+        payload: readUser.data
+    }) 
 }
 
 export const editMember = (member) => async dispatch => {
-    
+
 }

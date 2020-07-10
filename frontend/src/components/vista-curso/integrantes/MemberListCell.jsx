@@ -9,20 +9,21 @@ import 'semantic-ui-css/semantic.min.css';
 import { Switch } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton } from '@material-ui/core';
-import { disableMember, enableMember} from './membersDucks';
+import { disableMember, enableMember, fetchMembers} from './membersDucks';
 
 export default function GroupCell(props) {
     const {member} = props;
 
     const dispatch = useDispatch();
 
-    const handleActive = (e) =>{
+    const handleActive = e => {
         if (e.currentTarget.attributes['disponible'].value === "true"){
-            dispatch(disableMember({email: e.currentTarget.attributes['email'].value}))
+            dispatch(disableMember({email: e.currentTarget.attributes['email'].value, course_id: member.course_id}))
         }
         else{
-            dispatch(enableMember({email: e.currentTarget.attributes['email'].value}))
+            dispatch(enableMember({email: e.currentTarget.attributes['email'].value, course_id: member.course_id}))
         }
+        dispatch(fetchMembers(member.course_id))
     }
 
     return (
@@ -38,8 +39,8 @@ export default function GroupCell(props) {
                     key = {member.id + "s"}
                     checked = {member.active}
                     onClick = {handleActive}
-                    name="disable" 
-                    email = {member.email}
+                    name = "disable" 
+                    email = {member.user_email}
                     disponible = {member.active.toString()}
                 />
              </Table.Cell>
