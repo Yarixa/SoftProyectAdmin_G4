@@ -65,9 +65,12 @@ export const mostrarGrupos = (grupo) => async (dispatch, getState) => {
     });
 }
 
-export const fetchGrupos = () => async (dispatch, getState) => {
+export const fetchGrupos = (idCurso) => async (dispatch, getState) => {
+    const data = {
+        course_id: idCurso
+    }
     try{
-        const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readAllTeams');
+        const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readTeamByCourse', data);
         dispatch({
             type: FETCH_GROUP,
             payload: resp.data
