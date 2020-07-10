@@ -15,7 +15,7 @@ export default function GroupCell(props) {
     const dispatch = useDispatch();
 
     const handleActive = e => {
-        if (e.currentTarget.attributes['disponible'].value === "true"){
+        if (e.currentTarget.attributes['disponible'].value === "1"){
             dispatch(disableMember({email: e.currentTarget.attributes['email'].value, course_id: member.course_id}))
         }
         else{
