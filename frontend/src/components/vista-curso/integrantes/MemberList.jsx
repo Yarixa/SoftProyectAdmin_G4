@@ -40,7 +40,7 @@ export default function CurseGroup(props) {
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan = '7' textAlign = 'right'>
-                            <AddMember />
+                            <AddMember idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
