@@ -7,8 +7,6 @@ import 'semantic-ui-css/semantic.min.css';
 
 // Material | Estilos
 import { Switch } from '@material-ui/core'
-import DeleteIcon from '@material-ui/icons/Delete';
-import { IconButton } from '@material-ui/core';
 import { disableMember, enableMember, fetchMembers} from './membersDucks';
 
 export default function GroupCell(props) {
@@ -31,8 +29,6 @@ export default function GroupCell(props) {
             <Table.Cell>{member.first_name}</Table.Cell>
             <Table.Cell textAlign = 'center'>{member.last_name}</Table.Cell>
             <Table.Cell textAlign = 'center'>{member.type}</Table.Cell>
-             <Table.Cell textAlign = 'center'>{member.group}</Table.Cell>
-             <Table.Cell textAlign = 'center'>{member.group_role}</Table.Cell>
              <Table.Cell textAlign = 'center'>{member.user_email}</Table.Cell>
              <Table.Cell textAlign = 'center'>
                 <Switch 
