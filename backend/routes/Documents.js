@@ -1,28 +1,29 @@
 const express = require("express")
 const documents = express.Router()
-
-const documentsController = require("../controllers/DocumentsController.js")
+const documentController = require("../controllers/DocumentController.js");
 
 const cors = require("cors")
 
 documents.use(cors())
 
-//Crear curso
-documents.post('/create', documentsController.create)
+//Crear documento
+documents.post("/add", documentController.create)
 
-//Borrar curso, se recibe el id para borrar la tupla
-documents.delete('/delete/:id', documentsController.delete)
+//Obtener todos los documentos
+documents.get("/readAll", documentController.findAll)
 
-//Deshabilitar curso, se recibe el id
-documents.post('/deshabilitar/:id', documentsController.deshabilitar)
+//Obtener todos los documentos activos
+//documents.get("/disponibles", documentController.findAlldisponible)
 
-//Habilitar curso, se recibe el id
-documents.post('/habilitar/:id', documentsController.habilitar)
+//Obtener un único documento según su id
+documents.get("/get/:id", documentController.findOne)
 
-//Editar curso, se recibe el id para editar el curso
-documents.post('/update/:id', documentsController.update)
+//Actualizar documento según su id
+documents.put("/update/:id", documentController.update)
 
-//Listar cursos existentes de la BD
-documents.get('/readAll', documentsController.readAll)
+//Borrar un documento según su id
+documents.delete("/delete/:id", documentController.delete)
 
 module.exports = documents;
+
+//app.use("/api/documentController", documents);
