@@ -16,25 +16,27 @@ exports.create = (req, res) => {
 
     Course.findOne({
         where : {
-            id : req.id
+            subject_id: req.body.subject_id,
+            anio: req.body.anio,
+		    semestre: req.body.semestre,
         }
     }).then(course =>{
         if(!course){
 			Course.create(courseData)
 			.then(course => {
 				res.json({
-                    id : course.id,
-                    status: course.id + 'registrado'
+                    id : course.id
+                    //status: course.id + 'registrado'
                 })
 			})
 			.catch(err => {
-				res.send('error' + err)
+				res.send('Error al crear: ' + err)
 			})
         }else{
-            res.json({error:"El curso ya existe"})
+            res.json({error:"El curso ya existe en el periodo "+course.anio+"-"+course.semestre})
         }
     }).catch(err=>{
-        res.send('error: '+err)
+        res.send(`Error al crear: ${err}`)
     })
 }
 
@@ -83,7 +85,7 @@ exports.deshabilitar = (req, res)=>{
                    id : req.params.id
                }
            }).then(result =>{
-               res.json({status : course.id + "tupla deshabilitada "})
+               res.json({status : course.id + " - tupla deshabilitada "})
            }).catch(err=>{
                res.json({error:req.params.id+" no se puede deshabilitar, error "+err})
            })
@@ -131,6 +133,7 @@ exports.update = (req, res)=>{
     }).then(course=>{
         if(course){
            Course.update({
+               subject_id : req.body.subject_id,
                anio : req.body.anio,
                semestre : req.body.semestre
            },{
@@ -138,7 +141,7 @@ exports.update = (req, res)=>{
                    id : req.params.id
                }
            }).then(result =>{
-               res.json({status : course.id + "tupla actualizada "})
+               res.json({status : course.id + " tupla actualizada"})
            }).catch(err=>{
                res.json({error:req.params.id+" no se puede actualizar error "+err})
            })

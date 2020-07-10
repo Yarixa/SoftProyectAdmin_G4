@@ -44,12 +44,17 @@ const Users = () => {
 
     const [open, setOpen] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
+    const [carga, setCarga] = React.useState(false);
+    
+    const fetchUsers = () => {
+        dispatch(getUsers())
+    }
 
     const dispatch = useDispatch()
     // Carga inicial de usuarios en sistema
     useEffect(() => {
-        dispatch(getUsers())
-    },[dispatch])
+        fetchUsers();
+    },[carga, dispatch])
 
     const classes = useStyles()
 
@@ -168,7 +173,7 @@ const Users = () => {
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan = '7' textAlign = 'right'>
-                            <MassiveAdd />
+                            <MassiveAdd esVincular = {false} action = {setCarga} carga = {carga}/>
                             <Button
                                 variant="contained"
                                 onClick={handleClickOpen}

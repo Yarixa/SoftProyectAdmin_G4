@@ -23,17 +23,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Modulos(){
+export default function Grupos(props){
     const dispatch = useDispatch();
 
+    const {idCurso} = props;
+
     useEffect(() => {
-        dispatch(fetchGrupos());
+        dispatch(fetchGrupos(idCurso));
         // hacer aquí la llamada para fetching de grupos
-        console.log(selectedGroup.name)
     }, [dispatch]);
 
     const classes = useStyles();
-    const selectedGroup = useSelector(store => store.grupos.selectedGroup);
+    const selectedGroup = useSelector(store => store.groups.selectedGroup);
 
     return (
         <div className={classes.root}>
@@ -42,7 +43,7 @@ export default function Modulos(){
                     <Card className={classes.card}>
                         <CardHeader title={"Grupos Activos"}/>
                         <CardContent>
-                            <CurseGroup />
+                            <CurseGroup idCurso = {idCurso}/>
                         </CardContent>
                     </Card>
                 </Grid>

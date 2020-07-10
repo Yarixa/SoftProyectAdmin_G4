@@ -1,17 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { addMember, editMember } from '../membersDucks';
 
 // Material Estilos
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField} from '@material-ui/core';
-import { editarGrupo, agregarGrupo } from '../groupDucks';
 import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme) => ({
     formItem: {
-        marginRight: '12px',
-        marginBottom: '12px'
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
     },
     container: {
         display: 'flex',
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 150,
+        minWidth: 400,
         maxWidth: 330
     },
     root: {
@@ -33,13 +33,14 @@ const useStyles = makeStyles((theme) => ({
 export default function AgregarGrupo(props) {
 
     const {esEditar} = props;
-    const {group} = props;
     const {idCurso} = props;
 
     const classes = useStyles();
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
-    const [nombreGrupo, setNombre] = React.useState(esEditar?group.name:"");
+    const [first_name, setFirstName] = React.useState('');
+    const [last_name, setLastName] = React.useState('');
+    const [email, setEmail] = React.useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -50,37 +51,59 @@ export default function AgregarGrupo(props) {
     }
 
     const handleAccept = () => {
-        const nuevoGrupo = {
-            name: nombreGrupo,
-            idCurso: idCurso
+        console.log(idCurso)
+        const newMember = {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            idCurso: idCurso,
+            idTeam: "1"
         }
         if (esEditar){
-            dispatch(editarGrupo(nuevoGrupo));
+            dispatch(editMember(newMember));
         }
         else{
-            dispatch(agregarGrupo(nuevoGrupo));
-            setNombre("");
+            dispatch(addMember(newMember));
         }
         setOpen(false);
     }
 
     return (
         <div>
-            <Button color = 'primary' variant = 'contained' onClick = {handleClickOpen}>
-                {esEditar?<EditIcon />: "Agregar Grupo"}
+            <Button 
+                color = 'primary'
+                variant = 'contained'
+                onClick = {handleClickOpen}
+            >
+                {esEditar?<EditIcon />: "Agregar Alumno"}
             </Button>
             <Dialog disableBackdropClick disableEscapeKeyDown open = {open}>
-                <DialogTitle>Agrega Grupo</DialogTitle>
+                <DialogTitle>Agregar un alumno al curso</DialogTitle>
                 <DialogContent>
                     <div className = {classes.container}>
                         <form className = {classes.formControl}>
                             <TextField
                                 className = {classes.formItem}
-                                id = "GroupName"
-                                fullWidth = {true}
-                                label = "Nombre de Grupo"
-                                defaultValue = {esEditar?group.name:""}
-                                onChange = {(e) => setNombre(e.target.value)}
+                                id = "memberFirstName"
+                                label = "Nombre"
+                                defaultValue = ""
+                                onChange = {(e) => setFirstName(e.target.value)}
+                            />
+                            <TextField
+                                className = {classes.formItem}
+                                id = "memberLastName"
+                                label = "Apellido"
+                                defaultValue = ""
+                                onChange = {(e) => setLastName(e.target.value)}
+                            />
+                            <TextField
+                                className = {classes.formItem}
+                                id = "memberEmail"
+                                fullWidth
+                                label = "Correo Electrónico"
+                                style = {{ margin: 8}}
+                                defaultValue = ""
+                                onChange = {(e) => setEmail(e.target.value)}
                             />
                         </form>
                     </div>

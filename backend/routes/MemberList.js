@@ -60,6 +60,8 @@ memberList.get('/readByTeam', memberListController.readByTeam)
 
 memberList.get('/readAllTeams', memberListController.readAllTeams)
 
+memberList.get('/readTeamByCourse', memberListController.readTeamsByCourse)
+
 memberList.put('/updateTeam/:user_email/:course_id', memberListController.updateTeam)
 
 memberList.put('/updateRole/:user_email/:course_id/:team_id', memberListController.updateRole)
