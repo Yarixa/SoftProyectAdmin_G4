@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField} from '@material-ui/core';
 import { editarGrupo, agregarGrupo } from '../groupDucks';
 import EditIcon from '@material-ui/icons/Edit';
-import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     formItem: {
