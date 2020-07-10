@@ -9,7 +9,7 @@ export default function Curso(props) {
         <div>
             <div><h1 align='center'>Dashboard</h1></div>
             <div>
-                <Members />
+                <Members idCurso = {idCurso}/>
             </div>
             <br></br>
             <div>

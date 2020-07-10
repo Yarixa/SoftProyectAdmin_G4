@@ -145,10 +145,9 @@ exports.readAllTeams = (req, res) => {
 }
 
 exports.readTeamsByCourse = (req, res) => {
-
 	Team.findAll({
 		where: {
-			course_id: req.body.course_id
+			course_id: req.query.course_id
 		}
 	})
 	.then(data => {
@@ -208,13 +207,15 @@ exports.readByUser = (req, res) => {
 
 exports.readByCourse = (req, res) => {
 
-	MemberList.findAll({
+/*	MemberList.findAll({
 		where: {
 			course_id: req.query.course_id
-		}
-	})
-	.then(data => {
-		res.send(data)
+		}})*/
+	db.sequelize.query(
+		"Select distinct * from memberLists left join users on memberLists.user_email = users.email where memberLists.course_id = " + req.query.course_id
+	)
+	.spread(metadata => {
+		res.send(metadata)
 	})
 	.catch(err => {
 		res.status(500).json({

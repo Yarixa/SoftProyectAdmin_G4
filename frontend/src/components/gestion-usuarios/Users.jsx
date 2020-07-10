@@ -54,8 +54,6 @@ const Users = () => {
     // Carga inicial de usuarios en sistema
     useEffect(() => {
         fetchUsers();
-        console.log("Hola " + carga)
-        console.log(usersList)
     },[carga, dispatch])
 
     const classes = useStyles()
