@@ -26,8 +26,6 @@ export default function CurseGroup(props) {
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Apellido</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Tipo</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Grupo</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Rol</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Correo</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Acciones</Table.HeaderCell>
                     </Table.Row>
@@ -39,8 +37,8 @@ export default function CurseGroup(props) {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '7' textAlign = 'right'>
-                            <AddMember />
+                        <Table.HeaderCell colSpan = '5' textAlign = 'right'>
+                            <AddMember idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>

@@ -14,7 +14,7 @@ export default function Curso(props) {
             </div>
             <br></br>
             <div>
-                <Members />
+                <Members idCurso = {idCurso} />
             </div>
             <br></br>
             <div>

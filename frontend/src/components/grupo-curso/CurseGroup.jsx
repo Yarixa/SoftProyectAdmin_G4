@@ -30,13 +30,13 @@ export default function CurseGroup(props) {
                 </Table.Header>
                 <Table.Body>
                     {
-                        GroupList.map((group) => <GroupCell key = {group.id} group = {group}/>)
+                        GroupList.map((group) => <GroupCell key = {group.id} group = {group} idCurso = {idCurso}/>)
                     }
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan = '6' textAlign = 'right'>
-                            <AgregarGrupo esEditar = {false}/>
+                            <AgregarGrupo esEditar = {false} idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>

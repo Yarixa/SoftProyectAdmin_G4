@@ -15,13 +15,18 @@ import { IconButton } from '@material-ui/core';
 export default function GroupCell(props) {
     const dispatch = useDispatch();
     const {group} = props;
+    const {idCurso} = props;
+
+    const printID = () => {
+        console.log(idCurso);
+    }
 
     return (
         <Table.Row>
             <Table.Cell>{group.name}</Table.Cell>
             <Table.Cell textAlign = 'center'>{group.boss}</Table.Cell>
             <Table.Cell textAlign = 'center'>{group.members}</Table.Cell>
-            <Table.Cell textAlign = 'center'><IconButton color = 'primary'><AgregarGrupo esEditar = {true} group = {group}/></IconButton></Table.Cell>
+            <Table.Cell textAlign = 'center'><IconButton onClick={printID} color = 'primary'><AgregarGrupo esEditar = {true} group = {group} idCurso = {idCurso}/></IconButton></Table.Cell>
             <Table.Cell textAlign = 'center'><IconButton color = 'secondary'><DeleteIcon /></IconButton></Table.Cell>
             <Table.Cell textAlign = 'center'><IconButton onClick={()=>dispatch(mostrarGrupos(group))}><ArrowForwardIosIcon /></IconButton></Table.Cell>
         </Table.Row>
