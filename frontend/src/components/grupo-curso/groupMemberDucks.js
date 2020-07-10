@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // Constantes
 const dataInicial = {
     members: [{
@@ -75,12 +77,13 @@ export const mostrarIntegrante = (integrante) => async (dispatch, getState) => {
     });
 }
 
-export const fetchIntegrantes = () => async (dispatch, getState) => {
+export const fetchIntegrantes = (idTeam) => async (dispatch, getState) => {
     try{
         //Conectar
+        const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readByTeam', {params: {team_id: idTeam}})
         dispatch({
             type: FETCH_MEMBER,
-            payload: dataInicial.members
+            payload: resp.data
         })
     }catch(error){
         console.log(error);

@@ -50,7 +50,6 @@ export default function AgregarGrupo(props) {
     }
 
     const handleAccept = () => {
-        console.log(idCurso);
         const nuevoGrupo = {
             name: nombreGrupo,
             idCurso: idCurso
@@ -67,11 +66,7 @@ export default function AgregarGrupo(props) {
 
     return (
         <div>
-            <Button 
-                color = 'primary'
-                variant = 'contained'
-                onClick = {handleClickOpen}
-            >
+            <Button color = 'primary' variant = 'contained' onClick = {handleClickOpen}>
                 {esEditar?<EditIcon />: "Agregar Grupo"}
             </Button>
             <Dialog disableBackdropClick disableEscapeKeyDown open = {open}>
