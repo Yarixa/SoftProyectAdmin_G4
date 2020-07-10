@@ -29,17 +29,17 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-function createData(nombre, jefeGrupo, numIntegrantes, Proyecto,) {
-    return { nombre, jefeGrupo, numIntegrantes, Proyecto, };
+function createData(nombre, jefeGrupo, numIntegrantes, Proyecto, Requisitos, Testing,Diseño, Construccion ) {
+    return { nombre, jefeGrupo, numIntegrantes, Proyecto, Requisitos, Testing,Diseño, Construccion  };
 }
 
 const rows = [
-    createData('Grupo 1', 'Jose Pérez', 3, 'ProyectoX'),
-    createData('Grupo 2', 'Jose Pérez', 5, 'ProyectoX'),
-    createData('Grupo 3', 'Jose Pérez', 4, 'ProyectoX'),
-    createData('Grupo 4', 'Jose Pérez', 5, 'ProyectoX'),
-    createData('Grupo 5', 'Jose Pérez', 6, 'ProyectoX'),
-    createData('Grupo 5', 'Jose Pérez', 5, 'ProyectoX'),
+    createData('Grupo 1', 'Jose Pérez', 3, 'ProyectoX', '12%','12%','12%','12%'),
+    createData('Grupo 2', 'Jose Pérez', 5, 'ProyectoX','12%','12%','12%','12%'),
+    createData('Grupo 3', 'Jose Pérez', 4, 'ProyectoX','12%','12%','12%','12%'),
+    createData('Grupo 4', 'Jose Pérez', 5, 'ProyectoX','12%','12%','12%','12%'),
+    createData('Grupo 5', 'Jose Pérez', 6, 'ProyectoX','12%','12%','12%','12%'),
+    createData('Grupo 5', 'Jose Pérez', 5, 'ProyectoX','12%','12%','12%','12%'),
 ];
 
 const useStyles = makeStyles({
@@ -60,6 +60,11 @@ export default function TablaGrupos() {
                         <StyledTableCell align="right">Jefe de Grupo</StyledTableCell>
                         <StyledTableCell align="right">#Integrantes</StyledTableCell>
                         <StyledTableCell align="right">Proyecto</StyledTableCell>
+                        <StyledTableCell align="right">Requisitos</StyledTableCell>
+                        <StyledTableCell align="right">Testing</StyledTableCell>
+                        <StyledTableCell align="right">Diseño</StyledTableCell>
+                        <StyledTableCell align="right">Construcción</StyledTableCell>
+
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -69,6 +74,10 @@ export default function TablaGrupos() {
                             <StyledTableCell align="right">{row.jefeGrupo}</StyledTableCell>
                             <StyledTableCell align="right">{row.numIntegrantes}</StyledTableCell>
                             <StyledTableCell align="right">{row.Proyecto}</StyledTableCell>
+                            <StyledTableCell align="right">{row.Requisitos}</StyledTableCell>
+                            <StyledTableCell align="right">{row.Testing}</StyledTableCell>
+                            <StyledTableCell align="right">{row.Diseño}</StyledTableCell>
+                            <StyledTableCell align="right">{row.Construccion}</StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>

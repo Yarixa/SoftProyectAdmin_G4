@@ -13,19 +13,14 @@ import BotonGestionar from "./BotonGestionar";
 const useStyles = makeStyles({
     root: {
         margin: "1em",
-        minWidth: "180px",
+        minWidth: "250px",
         boxSizing: "border-box"
 
     },
-    tarjetaEstadistica:{
-        margin: "1em",
-        minWidth: "250px",
-        maxWidth: 50,
-    },
     tarjetaGrupo:{
         margin: "1em",
-        minWidth: "250px",
-        maxWidth: 700,
+        minWidth: 400,
+        boxSizing: "border-box"
     },
     bullet: {
         display: 'flex',
@@ -49,7 +44,7 @@ const useStyles = makeStyles({
 });
 
 
-export default function VistaCursoAdministrador() {
+export default function VistaCurso() {
     const classes = useStyles();
 
     const bull = <span className={classes.bullet}>•</span>;
@@ -57,31 +52,27 @@ export default function VistaCursoAdministrador() {
     return (
         <div>
             <Grid container spacing={4}>
-
                 <Card className={classes.root}>
                     <CardContent>
                         <BotonAgregar></BotonAgregar>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>Profesor</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h5" component="h3">Luis Silvestre</Typography>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>Grupos</Typography>
+                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">6</Typography>
                     </CardContent>
-                    <CardActions className={classes.centrado}>
+                    <CardActions>
                         <BotonGestionar></BotonGestionar>
                     </CardActions>
                 </Card>
 
-                <Card className={classes.root}>
-                    <CardContent>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>Grupos</Typography>
-                        <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">6</Typography>
-                    </CardContent>
-                </Card>
-
 
                 <Card className={classes.root}>
                     <CardContent>
+                        <BotonAgregar></BotonAgregar>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>Proyectos</Typography>
                         <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">2</Typography>
                     </CardContent>
+                    <CardActions>
+                        <BotonGestionar></BotonGestionar>
+                    </CardActions>
                 </Card>
 
 
@@ -109,9 +100,6 @@ export default function VistaCursoAdministrador() {
                     </CardActions>
                 </Card>
 
-            </Grid>
-
-            <Grid container spacing={4}>
 
                 <Card className={classes.tarjetaGrupo}>
                     <CardContent>
@@ -120,11 +108,6 @@ export default function VistaCursoAdministrador() {
                     </CardContent>
                 </Card>
 
-                <Card className={classes.tarjetaEstadistica}>
-                    <CardContent>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>Estadísticas</Typography>
-                    </CardContent>
-                </Card>
             </Grid>
 
         </div>
