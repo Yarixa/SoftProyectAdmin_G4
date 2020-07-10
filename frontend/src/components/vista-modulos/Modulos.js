@@ -29,7 +29,6 @@ export default function Modulos(){
     useEffect(() => {
         console.log("fetching de módulos !!");
         dispatch(fetchModulos());
-        // hacer aquí la llamada para fetching de módulos
     }, [dispatch]);
 
     const classes = useStyles();
