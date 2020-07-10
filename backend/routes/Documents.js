@@ -1,44 +1,29 @@
-const express = require('express');
-const router = express.Router();
-const Task = require('../models/Document');
+const express = require("express")
+const documents = express.Router()
+const documentController = require("../controllers/DocumentController.js");
 
-router.get('/', async (req, res) => {
-  const tasks = await Task.find();
-  res.render('Documents', {
-    tasks
-  });
-});
+const cors = require("cors")
 
-router.post('/add', async (req, res, next) => {
-  const task = new Task(req.body);
-  await task.save();
-  res.redirect('/');
-});
+documents.use(cors())
 
-router.get('/turn/:id', async (req, res, next) => {
-  let { id } = req.params;
-  const task = await Task.findById(id);
-  task.status = !task.status;
-  await task.save();
-  res.redirect('/');
-});
+//Crear documento
+documents.post("/add", documentController.create)
 
-router.get('/edit/:id', async (req, res, next) => {
-  const task = await Task.findById(req.params.id);
-  console.log(task)
-  res.render('edit', { task });
-});
+//Obtener todos los documentos
+documents.get("/readAll", documentController.findAll)
 
-router.post('/edit/:id', async (req, res, next) => {
-  const { id } = req.params;
-  await Task.update({_id: id}, req.body);
-  res.redirect('/');
-});
+//Obtener todos los documentos activos
+//documents.get("/disponibles", documentController.findAlldisponible)
 
-router.get('/delete/:id', async (req, res, next) => {
-  let { id } = req.params;
-  await Task.remove({_id: id});
-  res.redirect('/');
-});
+//Obtener un único documento según su id
+documents.get("/get/:id", documentController.findOne)
 
-module.exports = router;
+//Actualizar documento según su id
+documents.put("/update/:id", documentController.update)
+
+//Borrar un documento según su id
+documents.delete("/delete/:id", documentController.delete)
+
+module.exports = documents;
+
+//app.use("/api/documentController", documents);

@@ -4,14 +4,6 @@ var bodyParser = require("body-parser")
 var fileUpload = require("express-fileupload")
 var app = express()
 var port = process.env.PORT || 5000
-//Conexion mongoDB
-const morgan = require('morgan');
-const mongoose = require('mongoose')
-
-// connection to db
-mongoose.connect('mongodb://localhost/crud-mongo')
-  .then(db => console.log('MongoDB conectado'))
-  .catch(err => console.log(err));
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -37,9 +29,19 @@ app.use("/memberlist", MemberList)
 app.use("/projects", Projects)
 app.use("/documents", Documents)
 
-// middlewares
-app.use(morgan('dev'));
-app.use(express.urlencoded({extended: false}))
+//Conexión con mongoDB
+const db = require("./models/mongoDB");
+db.mongoose.connect(db.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Conectado a mongoDB");
+  })
+  .catch(err => {
+    console.log("No se puedo conectar a mongoDB", err);
+    process.exit();
+  });
 
 app.listen(port, () => {
 	console.log("Server is running on port: " + port)

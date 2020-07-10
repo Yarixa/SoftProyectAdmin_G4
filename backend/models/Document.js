@@ -1,13 +1,19 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+module.exports = mongoose => {
+  var schema = mongoose.Schema(
+    {
+      title: String,
+      description: String,
+      disponible: Boolean
+    },
+    { timestamps: true }
+  );
 
-const TaskSchema = Schema({
-  title: String,
-  description: String,
-  status: {
-    type: Boolean,
-    default: false
-  }
-});
+  schema.method("toJSON", function() {
+    const { __v, _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+  });
 
-module.exports = mongoose.model('tasks', TaskSchema);
+  const Document = mongoose.model("document", schema);
+  return Document;
+};
