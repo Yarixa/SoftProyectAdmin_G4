@@ -270,19 +270,19 @@ exports.updateTeam = (req, res) => {
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema 2 " + err
+					error: "No existe el usuario dentro del tema 2 "
 				})
 			})
 		}
 		else{
 			res.json({
-					error: "No existe el usuario dentro del tema 3 " + err
+					error: "No existe el usuario dentro del tema 3 "
 			})
 		}
 	})
 	.catch(err => {
 		res.json({
-				error: "No existe el usuario dentro del tema 1 " + err
+				error: "No existe el usuario dentro del tema 1 "
 		})
 	})
 }

@@ -59,7 +59,7 @@ export default function Grupos(props){
                             {
                                 selectedGroup==={}
                                     ?<div></div>
-                                    :<GroupMember groupID={selectedGroup.id}/>
+                                    :<GroupMember groupID={selectedGroup.id} idCurso = {selectedGroup.id} group = {selectedGroup}/>
                             }
                         </CardContent>
                     </Card>
