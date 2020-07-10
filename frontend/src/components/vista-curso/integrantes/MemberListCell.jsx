@@ -33,7 +33,7 @@ export default function GroupCell(props) {
              <Table.Cell textAlign = 'center'>
                 <Switch 
                     key = {member.id + "s"}
-                    checked = {member.active}
+                    checked = {member.active?true:false}
                     onClick = {handleActive}
                     name = "disable" 
                     email = {member.user_email}
