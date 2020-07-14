@@ -13,7 +13,7 @@ documents.post("/add", documentController.create)
 documents.get("/readAll", documentController.findAll)
 
 //Obtener todos los documentos activos
-//documents.get("/disponibles", documentController.findAlldisponible)
+documents.get("/disponibles", documentController.findAlldisponible)
 
 //Obtener un único documento según su id
 documents.get("/get/:id", documentController.findOne)

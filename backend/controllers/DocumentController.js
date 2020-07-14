@@ -4,36 +4,40 @@ const Document = db.tutorials;
 //Crear y guardar documento
 exports.create = (req, res) => {
   //Validar entrada
-  if (!req.body.title) {
-    res.status(400).send({ message: "Content can not be empty!" });
+  if (!req.body.courseID || !req.body.name) {
+    res.status(400).send({ message: "Error: Se debe ingresar el ID del curso y el nombre del documento." });
     return;
   }
 
   //Se crea el modelo
   const document = new Document({
-    title: req.body.title,
+    courseID: req.body.courseID,
+    name: req.body.name,
     description: req.body.description,
-    disponible: req.body.disponible ? req.body.disponible : false
+    disponible: req.body.disponible ? req.body.disponible : true
   });
 
   //Guardar en la bd
   document
     .save(document)
     .then(data => {
-      res.send(data);
+      //res.send(data);
+      res.send({
+        message: document.id
+      })
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Document."
+          err.message || "Error al crear el documento."
       });
     });
 };
 
 //Imprimir todos los documentos de la base de datos, estén activos o no
 exports.findAll = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+  const name = req.query.name;
+  var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
 
   Document.find(condition)
     .then(data => {
@@ -42,7 +46,7 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Error al cargar documentos."
       });
     });
 };
@@ -54,13 +58,13 @@ exports.findOne = (req, res) => {
   Document.findById(id)
     .then(data => {
       if (!data)
-        res.status(404).send({ message: "Not found Document with id " + id });
+        res.status(404).send({ message: "No se encontró el documento con la id=" + id });
       else res.send(data);
     })
     .catch(err => {
       res
         .status(500)
-        .send({ message: "Error retrieving Document with id=" + id });
+        .send({ message: "Error al obtener el documento con la id=" + id });
     });
 };
 
@@ -68,7 +72,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
-      message: "Data to update can not be empty!"
+      message: "Debe ingreasar los campos a modificar"
     });
   }
 
@@ -78,13 +82,13 @@ exports.update = (req, res) => {
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Document with id=${id}. Maybe Document was not found!`
+          message: `No se puede actualizar documento id=${id}`
         });
-      } else res.send({ message: "Document was updated successfully." });
+      } else res.send({ message: "El documento fue actualizado exitosamente" });
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Document with id=" + id
+        message: "Error al actualizar el documento id=" + id
       });
     });
 };
@@ -97,17 +101,17 @@ exports.delete = (req, res) => {
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete Document with id=${id}. Maybe Document was not found!`
+          message: `No se puede eliminar el documento id=${id}.`
         });
       } else {
         res.send({
-          message: "Document was deleted successfully!"
+          message: "El documento fue eliminado exitosamente"
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Document with id=" + id
+        message: "No se pudo borrar el documento con id=" + id
       });
     });
 };
@@ -138,7 +142,7 @@ exports.findAlldisponible = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Error al mostrar los documentos."
       });
     });
 };

@@ -1,7 +1,8 @@
 module.exports = mongoose => {
   var schema = mongoose.Schema(
     {
-      title: String,
+      courseID : Number,
+      name: String,
       description: String,
       disponible: Boolean
     },
