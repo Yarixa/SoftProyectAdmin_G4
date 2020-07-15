@@ -43,10 +43,10 @@ export const agregarGrupo = (grupo) => async dispatch => {
         name: grupo.name,
         project_id: '1'
     }
-    const resp = await axios.post('http://' + apiURL + ':5000/memberlist/readAllTeams' + grupo.idCurso, data);
+    const resp = await axios.post('http://' + apiURL + ':5000/memberlist/createTeam/' + grupo.idCurso, data);
     dispatch({
         type: ADD_GROUP,
-        payload: resp.data.group
+        payload: resp.data.data[0]
     })
 }
 
@@ -65,9 +65,9 @@ export const mostrarGrupos = (grupo) => async (dispatch, getState) => {
     });
 }
 
-export const fetchGrupos = () => async (dispatch, getState) => {
+export const fetchGrupos = (idCurso) => async (dispatch, getState) => {
     try{
-        const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readAllTeams');
+        const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readTeamByCourse', {params: {course_id: idCurso}});
         dispatch({
             type: FETCH_GROUP,
             payload: resp.data

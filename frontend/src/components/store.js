@@ -9,6 +9,7 @@ import loginReducer from "./login/loginDuck";
 import groupReducers from './grupo-curso/groupDucks';
 import memberReducers from './grupo-curso/groupMemberDucks';
 import courseMembersReducers from './vista-curso/integrantes/membersDucks';
+import documentReducers from './documento/documentDucks';
 
 const rootReducer = combineReducers({
     appBar : appBarReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     users : userReducer,
     groups : groupReducers,
     members : memberReducers,
-    courseMembers : courseMembersReducers
+    courseMembers : courseMembersReducers,
+    documents : documentReducers
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // para la extensión redux_devtools de chrome

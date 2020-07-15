@@ -145,10 +145,9 @@ exports.readAllTeams = (req, res) => {
 }
 
 exports.readTeamsByCourse = (req, res) => {
-
 	Team.findAll({
 		where: {
-			course_id: req.body.course_id
+			course_id: req.query.course_id
 		}
 	})
 	.then(data => {
@@ -271,19 +270,19 @@ exports.updateTeam = (req, res) => {
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema 2 " + err
+					error: "No existe el usuario dentro del tema 2 "
 				})
 			})
 		}
 		else{
 			res.json({
-					error: "No existe el usuario dentro del tema 3 " + err
+					error: "No existe el usuario dentro del tema 3 "
 			})
 		}
 	})
 	.catch(err => {
 		res.json({
-				error: "No existe el usuario dentro del tema 1 " + err
+				error: "No existe el usuario dentro del tema 1 "
 		})
 	})
 }

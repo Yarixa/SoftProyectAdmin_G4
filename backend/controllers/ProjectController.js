@@ -24,13 +24,13 @@ exports.create = (req,res)=>{
                     })
                 }
             ).catch(err =>{
-                res.send(' error al crear '+err)
+                res.send(' error al crear (revisar los parametros) '+err)
             })
         }else{
             res.json({error:" Ya existe un proyecto '"+project.nombre+"' asociado al mismo curso. "})
         }
     }).catch(err=>{
-        res.send('error al crear: '+err)
+        res.send('error al crear proyecto (problemas con la conexion): '+err)
     })
 }
 
@@ -104,6 +104,25 @@ exports.readAll = (req,res)=>{
     })
 }
 
+exports.buscar = (req,res)=>{
+    Project.findAll({
+        where : {
+        disponible : true,
+        course_id : req.params.curso
+        }
+    }).then(proyectos=>{
+        if(proyectos.length){
+            res.json({
+                cantidad : proyectos.length,
+                projects : proyectos
+            })
+        }else{
+            res.json({
+                status: "No se encontraron proyectos asociados al curso id "+ req.params.curso
+            })
+        }
+    })
+}
 exports.update = (req, res)=>{
     Project.findOne({
         where : {

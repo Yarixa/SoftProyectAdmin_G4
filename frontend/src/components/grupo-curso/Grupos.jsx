@@ -29,9 +29,8 @@ export default function Grupos(props){
     const {idCurso} = props;
 
     useEffect(() => {
-        dispatch(fetchGrupos());
+        dispatch(fetchGrupos(idCurso));
         // hacer aquí la llamada para fetching de grupos
-        console.log(selectedGroup.name)
     }, [dispatch]);
 
     const classes = useStyles();
@@ -60,7 +59,7 @@ export default function Grupos(props){
                             {
                                 selectedGroup==={}
                                     ?<div></div>
-                                    :<GroupMember groupID={selectedGroup.id}/>
+                                    :<GroupMember groupID={selectedGroup.id} idCurso = {selectedGroup.id} group = {selectedGroup}/>
                             }
                         </CardContent>
                     </Card>
