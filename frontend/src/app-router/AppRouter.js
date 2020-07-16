@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 import Login from "../components/login/Login";
 import RAppBar from "../components/navigation/RAppBar/RAppBar";
@@ -14,7 +14,9 @@ export default function AppRouter() {
                 <Route exact path="/">
                     <Login />
                 </Route>
-                <Route path="/home">
+                sessionStorage.getItem('logged') === 'false'
+                ?<Redirect to={'/'}/>
+                :<Route path="/home">
                     <RAppBar />
                     <Route
                         path="/home/:section/:arg?"
