@@ -206,8 +206,7 @@ exports.readByUser = (req, res) => {
 }
 
 exports.readByCourse = (req, res) => {
-
-/*	MemberList.findAll({
+  /*MemberList.findAll({
 		where: {
 			course_id: req.query.course_id
 		}})*/
@@ -329,6 +328,41 @@ exports.updateRole = (req, res) => {
 	})
 }
 
+exports.updateTeamName = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				name: req.body.name
+			},
+			{
+				where:{
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.name = req.body.name
+				res.json({
+					team: team
+				})
+			})
+		}
+		else{
+			res.json({
+				err: true,
+				messageError: "No se encontro un team con esa id"
+			})
+		}
+	})
+	.catch(err => {
+
+	})
+}
+
 exports.enable = (req, res) => {
 	MemberList.findOne({
 		where:{
@@ -408,6 +442,76 @@ exports.disable = (req, res) => {
 		res.json({
 				error: "No existe el usuario dentro del tema"
 		})
+	})
+}
+
+exports.enableTeam = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				active: true
+			},
+			{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.active = true
+				res.json({
+					team: team
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err =>{
+
+	})
+}
+
+exports.disableTeam = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				active: false
+			},
+			{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.active = false
+				res.json({
+					team: team
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err =>{
+
 	})
 }
 
