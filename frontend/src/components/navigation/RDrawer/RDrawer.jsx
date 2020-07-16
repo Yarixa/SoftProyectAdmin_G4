@@ -113,7 +113,7 @@ export default function RDrawer() {
             >
                 <div className="mainContent">
                     <div className={classes.toolbarIcon}>
-                        <img class={classes.logo} src={logo} alt="SoftProjectHUB" />
+                        <img className={classes.logo} src={logo} alt="SoftProjectHUB" />
                     </div>
                     <Divider />
                     <List>

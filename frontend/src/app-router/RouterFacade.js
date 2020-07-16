@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 
 import Modulos from '../components/vista-modulos/Modulos';
 import Users from '../components/gestion-usuarios/Users';
@@ -18,7 +18,7 @@ export default function RouterFacade(props) {
 
     if(sessionStorage.getItem('logged') === 'false'){
         console.log("redirecting!!")
-        return <Redirect to="/"/>
+        return (<Redirect to="/"/>)
     }
 
     switch (route) {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 import Login from "../components/login/Login";
@@ -7,29 +7,37 @@ import RDrawer from "../components/navigation/RDrawer/RDrawer";
 import RouterFacade from "./RouterFacade";
 
 export default function AppRouter() {
+    const ss = sessionStorage.getItem('logged');
+    useEffect(()=>{
+        console.log("---> session storage: " + ss)
+        console.log("---> type: " + typeof ss)
+    }, [ss]);
 
     return (
         <Router>
             <Switch>
                 <Route exact path="/">
                     <Login />
-                </Route>
-                sessionStorage.getItem('logged') === 'false'
-                ?<Redirect to={'/'}/>
-                :<Route path="/home">
-                    <RAppBar />
-                    <Route
-                        path="/home/:section/:arg?"
-                        render={renderProps => {
-                            return (
+                </Route>            
+                <Route
+                    path="/home/:section/:arg?"
+                    render={renderProps => {
+                        if(sessionStorage.getItem('logged')==='false'){
+                            console.log("redirecting to login from AppRouter")
+                            return (<Redirect to={'/'}/>)
+                        }
+                        return (
+                            <div>
+                                <RAppBar />
                                 <MainBox>
                                     <RouterFacade route={renderProps.match.params.section} arg={renderProps.match.params.arg}/>
                                 </MainBox>
-                            )
-                        }}
-                    />
-                    <RDrawer />
-                </Route>
+                                <RDrawer />
+                            </div>
+                        )
+                    }}
+                />  
+                <Redirect to={'/home/error'} />
             </Switch>
         </Router>
     )
