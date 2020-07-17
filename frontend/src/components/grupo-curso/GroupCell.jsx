@@ -30,8 +30,6 @@ export default function GroupCell(props) {
     return (
         <Table.Row>
             <Table.Cell>{group.name}</Table.Cell>
-            <Table.Cell textAlign = 'center'>{group.boss}</Table.Cell>
-            <Table.Cell textAlign = 'center'>{group.members}</Table.Cell>
             <Table.Cell textAlign = 'center'><IconButton color = 'primary'><AgregarGrupo esEditar = {true} group = {group} idCurso = {idCurso}/></IconButton></Table.Cell>
             <Table.Cell textAlign = 'center'>
                 <Switch 

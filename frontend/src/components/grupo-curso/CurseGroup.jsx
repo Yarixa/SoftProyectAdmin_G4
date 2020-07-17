@@ -22,8 +22,6 @@ export default function CurseGroup(props) {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Jefe de Proyecto</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>N° Integrantes</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Editar</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Eliminar</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Gestion Integrantes</Table.HeaderCell>
@@ -36,7 +34,7 @@ export default function CurseGroup(props) {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '6' textAlign = 'right'>
+                        <Table.HeaderCell colSpan = '4' textAlign = 'right'>
                             <AgregarGrupo esEditar = {false} idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>
