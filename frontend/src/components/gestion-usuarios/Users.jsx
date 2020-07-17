@@ -44,14 +44,23 @@ const Users = () => {
 
     const [open, setOpen] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
+    const [carga, setCarga] = React.useState(false);
+    
+    const fetchUsers = () => {
+        dispatch(getUsers())
+    }
 
     const dispatch = useDispatch()
     // Carga inicial de usuarios en sistema
     useEffect(() => {
-        dispatch(getUsers())
-    },[dispatch])
+        fetchUsers();
+    },[carga, dispatch])
 
     const classes = useStyles()
+
+    const toggleCarga = (newValue) => {
+        setCarga(newValue);
+    }
 
     // Dialogo Agregar Usuario
     const handleClickOpen = () => {
@@ -133,11 +142,11 @@ const Users = () => {
                     {
                         usersList.map(item => (
                             <Table.Row key = {item.id + "t"}>
-                                <Table.Cell key = {item.first_name}>{item.first_name}</Table.Cell>
-                                <Table.Cell key = {item.last_name}>{item.last_name}</Table.Cell>
+                                <Table.Cell key = {item.id + "n"}>{item.first_name}</Table.Cell>
+                                <Table.Cell key = {item.id + "a"}>{item.last_name}</Table.Cell>
                                 <Table.Cell key = {item.email}>{item.email}</Table.Cell>
-                                <Table.Cell key = {item.role}>{item.role}</Table.Cell>
-                                <Table.Cell key = {item.created}>{item.created}</Table.Cell>
+                                <Table.Cell key = {item.id + "r"}>{item.role}</Table.Cell>
+                                <Table.Cell key = {item.id + "c"}>{item.created}</Table.Cell>
                                 <Table.Cell textAlign = 'center'>
                                     <Button 
                                         key = {item.id} 
@@ -168,7 +177,7 @@ const Users = () => {
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan = '7' textAlign = 'right'>
-                            <MassiveAdd />
+                            <MassiveAdd esVincular = {false} action = {toggleCarga} carga = {carga}/>
                             <Button
                                 variant="contained"
                                 onClick={handleClickOpen}

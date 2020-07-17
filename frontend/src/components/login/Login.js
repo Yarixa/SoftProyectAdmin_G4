@@ -66,6 +66,7 @@ export default function Login() {
     const dispatch = useDispatch();
 
     const loginError = useSelector(store => store.login.error);
+    const loginErrorMessage = useSelector(store => store.login.errorMessage);
     const [logged, setLogged] = useState(sessionStorage.getItem('logged')??false);
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
@@ -81,10 +82,12 @@ export default function Login() {
         dispatch(autenticarUsuario(loginData, setLogged));
     }
 
-    useEffect(()=>{}, [logged, loginError]);
+    useEffect(()=>{}, [logged, loginError, loginErrorMessage]);
 
-    if(logged === true)
-        return <Redirect to={"/home/dashboard"} />
+    if(logged === true){
+        console.log("logged == true");
+        return (<Redirect to={"/home/dashboard"} />)
+    }
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -110,7 +113,7 @@ export default function Login() {
                             autoComplete="email"
                             onChange={event => setUser(event.target.value)}
                             error={loginError}
-                            helperText={loginError?'Error al iniciar sesión':''}
+                            helperText={loginError?loginErrorMessage:''}
                             autoFocus
                         />
                         <TextField
@@ -125,7 +128,7 @@ export default function Login() {
                             autoComplete="current-password"
                             onChange={event => setPassword(event.target.value)}
                             error={loginError}
-                            helperText={loginError?'Error al iniciar sesión':''}
+                            // helperText={loginError?loginErrorMessage:''}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}

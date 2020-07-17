@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField} from '@material-ui/core';
 import { editarGrupo, agregarGrupo } from '../groupDucks';
 import EditIcon from '@material-ui/icons/Edit';
-import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     formItem: {
@@ -35,6 +34,7 @@ export default function AgregarGrupo(props) {
 
     const {esEditar} = props;
     const {group} = props;
+    const {idCurso} = props;
 
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -50,13 +50,19 @@ export default function AgregarGrupo(props) {
     }
 
     const handleAccept = () => {
-        const nuevoGrupo = {
-            name: nombreGrupo
-        }
         if (esEditar){
+            const nuevoGrupo = {
+                id: group.id,
+                name: nombreGrupo,
+                idCurso: idCurso
+            }
             dispatch(editarGrupo(nuevoGrupo));
         }
         else{
+            const nuevoGrupo = {
+                name: nombreGrupo,
+                idCurso: idCurso
+            }
             dispatch(agregarGrupo(nuevoGrupo));
             setNombre("");
         }
@@ -65,11 +71,7 @@ export default function AgregarGrupo(props) {
 
     return (
         <div>
-            <Button 
-                color = 'primary'
-                variant = 'contained'
-                onClick = {handleClickOpen}
-            >
+            <Button color = 'primary' variant = 'contained' onClick = {handleClickOpen}>
                 {esEditar?<EditIcon />: "Agregar Grupo"}
             </Button>
             <Dialog disableBackdropClick disableEscapeKeyDown open = {open}>

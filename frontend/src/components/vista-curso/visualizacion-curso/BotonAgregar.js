@@ -31,12 +31,13 @@ const useStyles = makeStyles({
 
 });
 
-export default function BotonAgregar(){
+export default function BotonAgregar(props){
     const classes = useStyles();
+    const { action } = props;
+
     return (
         <div>
-            <Button className={classes.botonAgregar}>Agregar</Button>
+            <Button className={classes.botonAgregar} onClick={action}>Agregar</Button>{/* Agregar acción de redirección */}
         </div>
     )
-
 }

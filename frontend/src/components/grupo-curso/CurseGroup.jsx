@@ -1,54 +1,41 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import AgregarGrupo from './boton-grupos/AgregarGrupo';
 import GroupCell from './GroupCell';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Semantic Table | Estilos
 import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import { fetchGrupos } from './groupDucks';
 
 export default function CurseGroup(props) {
-    const {curso} = props;
-    const GroupList = [{
-            id: "1",
-            name: "Crudders",
-            members: "6"
-        },
-        {
-            id: "2",
-            name: "AC/DC",
-            members: "6"},
-        {
-            id: "3",
-            name: "OMLUL",
-            members: "6"},
-        {
-            id: "4",
-            name: "Traxer",
-            members: "6"
-        }];
+    const {idCurso} = props;
+    const GroupList = useSelector(store => store.groups.groups)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchGrupos(idCurso))
+    }, [dispatch])
 
     return(
         <div>
-            <h1 align = 'center'>Grupos del Curso</h1>
             <Table fixed>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Integrantes</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Edit</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Gestion Integrantes</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Editar</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Eliminar</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Gestion Integrantes</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
-                        GroupList.map((group) => <GroupCell key = {group.id} group = {group}/>)
+                        GroupList.map((group) => <GroupCell key = {group.id} group = {group} idCurso = {idCurso}/>)
                     }
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '5' textAlign = 'right'>
-                            <AgregarGrupo esEditar = {false}/>
+                        <Table.HeaderCell colSpan = '4' textAlign = 'right'>
+                            <AgregarGrupo esEditar = {false} idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
