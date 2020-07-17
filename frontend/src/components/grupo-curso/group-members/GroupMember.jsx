@@ -16,9 +16,10 @@ export default function GroupMember(props) {
     const {idCurso} = props;
 
     useEffect(()=>{
+        console.log("member",groupID);
         dispatch(fetchIntegrantes(groupID));
         // hacer aquí el fetching de los integrantes
-    },[dispatch]);
+    },[groupID, dispatch]);
     
     const GroupMemberList = useSelector(store => store.members.members);
 

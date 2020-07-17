@@ -2,8 +2,7 @@ import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 
 import Button from '@material-ui/core/Button';
-import { uploadFile, loadFile } from './massiveAddDucks';
-import { getUsers } from '../gestion-usuarios/userDucks';
+import { uploadFile, loadFile, vinculate } from './massiveAddDucks';
 
 export default function MassiveAdd (props) {
     
@@ -15,7 +14,10 @@ export default function MassiveAdd (props) {
 
     const handleFile = e => {
         if (esVincular){
-
+            setFileName(e.target.files[0].name)
+            /* Subir Archivo */
+            dispatch(uploadFile(e.target.files[0]));
+            props.action(true);
         }
         else{
             setFileName(e.target.files[0].name)
@@ -26,12 +28,19 @@ export default function MassiveAdd (props) {
 
     const handleLoad = e => {
         if (esVincular){
-
+            /* Vincular Usuarios */
+            const file = {
+                name: fileName,
+                idCurso: idCurso
+            }
+            dispatch(vinculate(file));
+            setFileName('');
+            props.action(false);
         }
         else{
+            /* Registrar Usuarios */
             dispatch(loadFile(fileName));
             setFileName('');
-            dispatch(getUsers());
             props.action(false);
         }
     }
@@ -42,21 +51,24 @@ export default function MassiveAdd (props) {
                 component="label"
                 color="secondary"
                 onClick={handleLoad}
-            >Subir Archivo</Button>
+            >Ejecutar Carga</Button>
         )
     }
-    return (
-        <Button
-            variant="contained"
-            component="label"
-        >
-        Cargar Archivo
-        <input
-            type="file"
-            style={{ display: "none" }}
-            accept = ".xlsx"
-            onChange = {handleFile}
-        />
-        </Button>
-    )
+    else{
+        return (
+            <Button
+                variant="contained"
+                component="label"
+            >
+            Cargar Archivo
+            <input
+                type="file"
+                autoFocus = {false}
+                style={{display: "none"}}
+                accept = ".xlsx"
+                onChange = {handleFile}
+            />
+            </Button>
+        )
+    } 
 }
