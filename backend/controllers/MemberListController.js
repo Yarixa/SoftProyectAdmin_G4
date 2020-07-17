@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
 const Team = require("../models/Team")
 const Sequelize = require('sequelize')
+const fs = require('fs')
 
 
 exports.createTeam = (req, res) => {
@@ -588,6 +589,8 @@ var  cargaArchivo = async (req) =>{
 
 				}
 
+
+
 				MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
@@ -613,6 +616,16 @@ var  cargaArchivo = async (req) =>{
 				.catch(err => {
 					console.log('error: ' + err)
 				})
+		}
+		//Metodo para eliminar el archivo subido y cargado.
+		try{
+			const path = "./upload/" + req.params.xlsx_name
+			fs.unlink( path, (err) =>{
+
+			})
+		}
+		catch(err){
+			console.error(err)
 		}
 		return("La operación fue realizada.")
 }

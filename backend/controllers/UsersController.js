@@ -361,7 +361,21 @@ exports.massiveCreate = async (req, res) => {
 					console.log('error: ' + err)
 				})
 			}
+
+		//Metodo para eliminar el archivo subido y cargado.
+		try{
+			const path = "./upload/" + req.params.xlsx_name
+			fs.unlink( path, (err) =>{
+
+			})
+		}
+		catch(err){
+			console.error(err)
+		}
+
 		res.json("All Users registered")
+
+
 	}
 	catch(e){
 		res.json("There was an error on the file.")
