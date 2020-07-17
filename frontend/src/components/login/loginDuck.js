@@ -43,12 +43,13 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
     try {
         await axios.post('http://' + apiURL + ':5000/users/login', loginData).then(response => {
             console.log("recibiendo desde postModulo: ");
-            console.log(response);
+            console.log(response.data);
             if (response.status === 200 && response.data !== "") {
                 var decoded = jwt_decode(response.data);
                 console.log("decoded token:");
                 console.log(decoded);
                 if(decoded.disponible === false){
+                    setLogoutData();
                     setLogged(false);
                     data = {
                         ...loginData,
@@ -56,12 +57,11 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
                         errorMessage: 'usuario deshabilitado' // debería capturar el mensaje desde response
                     }
                 }else{
-                    sessionStorage.setItem('logged', true);
-                    sessionStorage.setItem('nombre_completo', decoded.first_name + " " + decoded.last_name);
-                    sessionStorage.setItem('role', decoded.role);
+                    setLoginData(decoded);
                     setLogged(true); 
                 }
             } else {
+                setLogoutData();
                 setLogged(false);
                 data = {
                     ...loginData,
@@ -71,6 +71,7 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
             }
         })
     } catch (error) {
+        setLogoutData();
         data = {
             ...loginData,
             error: true,
@@ -86,13 +87,22 @@ export const autenticarUsuario = (loginData, setLogged) => async (dispatch, getS
 }
 
 export const cerrarSesion = () => async (dispatch, getState) => {
-    sessionStorage.setItem('logged', false);
-    sessionStorage.setItem('nombre_completo', '');
-    sessionStorage.setItem('role', '');
-    console.log("closing session!!");
+    setLogoutData();
     dispatch({
         type: CERRAR_SESION,
         payload: {}
     });
+}
 
+const setLogoutData=()=>{
+    sessionStorage.setItem('logged', false);
+    sessionStorage.setItem('nombre_completo', '');
+    sessionStorage.setItem('role', '');
+    console.log("closing session!!");
+}
+
+const setLoginData=(userData)=>{
+    sessionStorage.setItem('logged', true);
+    sessionStorage.setItem('nombre_completo', userData.first_name + " " + userData.last_name);
+    sessionStorage.setItem('role', userData.role);
 }

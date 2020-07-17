@@ -206,13 +206,12 @@ exports.readByUser = (req, res) => {
 }
 
 exports.readByCourse = (req, res) => {
-
-/*	MemberList.findAll({
+  /*MemberList.findAll({
 		where: {
 			course_id: req.query.course_id
 		}})*/
 	db.sequelize.query(
-		"Select distinct * from memberLists left join users on memberLists.user_email = users.email where memberLists.course_id = " + req.query.course_id
+		"Select * from memberLists left join users on memberLists.user_email = users.email where memberLists.course_id = " + req.query.course_id
 	)
 	.spread(metadata => {
 		res.send(metadata)
@@ -225,15 +224,22 @@ exports.readByCourse = (req, res) => {
 	})
 }
 
+//retornar objeto <-
 exports.readByTeam = (req, res) => {
 
-	MemberList.findAll({
+	/*MemberList.findAll({
 		where: {
 			team_id: req.query.team_id,
 		}
 	})
 	.then(data => {
 		res.send(data)
+	})*/
+	db.sequelize.query(
+		"Select * from memberLists left join users on memberLists.user_email = users.email where memberLists.team_id = " + req.query.team_id
+	)
+	.spread(metadata => {
+		res.send(metadata)
 	})
 	.catch(err => {
 		res.status(500).json({
@@ -243,6 +249,8 @@ exports.readByTeam = (req, res) => {
 	})
 }
 
+
+//retornar objeto <-
 exports.updateTeam = (req, res) => {
 	MemberList.findOne({
 		where:{
@@ -263,9 +271,9 @@ exports.updateTeam = (req, res) => {
 				}
 			})
 			.then(result => {
-				console.log(result)
+				memberList.team_id = Number(req.body.team_id)
 				res.json({
-					message: "Se ha modificado el grupo del usuario " + memberList.user_email
+					memberList: memberList
 				})
 			})
 			.catch(err => {
@@ -326,6 +334,41 @@ exports.updateRole = (req, res) => {
 		res.json({
 				error: err
 		})
+	})
+}
+
+exports.updateTeamName = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				name: req.body.name
+			},
+			{
+				where:{
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.name = req.body.name
+				res.json({
+					team: team
+				})
+			})
+		}
+		else{
+			res.json({
+				err: true,
+				messageError: "No se encontro un team con esa id"
+			})
+		}
+	})
+	.catch(err => {
+
 	})
 }
 
@@ -408,6 +451,76 @@ exports.disable = (req, res) => {
 		res.json({
 				error: "No existe el usuario dentro del tema"
 		})
+	})
+}
+
+exports.enableTeam = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				active: true
+			},
+			{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.active = true
+				res.json({
+					team: team
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err =>{
+
+	})
+}
+
+exports.disableTeam = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				active: false
+			},
+			{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.active = false
+				res.json({
+					team: team
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err =>{
+
 	})
 }
 
