@@ -39,8 +39,7 @@ export const agregarIntegrante = (integrante) => async dispatch => {
         course_id: integrante.course_id,
         team_id: integrante.team_id
     }
-    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/updateTeam/' + data.email + '/' + data.course_id, data);
-    console.log(resp)
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/updateTeam/' + data.email + '/' + data.course_id, data); 
     dispatch({
         type: ADD_MEMBER,
         payload: resp.data
@@ -65,8 +64,8 @@ export const mostrarIntegrante = (integrante) => async (dispatch, getState) => {
 export const fetchIntegrantes = (idTeam) => async (dispatch, getState) => {
     try{
         //Conectar
-        console.log(idTeam)
         const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readByTeam', {params: {team_id: idTeam}})
+        console.log(resp.data)
         dispatch({
             type: FETCH_MEMBER,
             payload: resp.data

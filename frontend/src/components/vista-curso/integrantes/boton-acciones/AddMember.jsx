@@ -28,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
             width: '25ch',
         },
     },
+    Button: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1)
+    }
 }));
 
 export default function AgregarGrupo(props) {
@@ -74,6 +78,7 @@ export default function AgregarGrupo(props) {
                 color = 'primary'
                 variant = 'contained'
                 onClick = {handleClickOpen}
+                className = {classes.Button}
             >
                 {esEditar?<EditIcon />: "Agregar Alumno"}
             </Button>
