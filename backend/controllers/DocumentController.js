@@ -4,14 +4,14 @@ const Document = db.tutorials;
 //Crear y guardar documento
 exports.create = (req, res) => {
   //Validar entrada
-  if (!req.body.courseID || !req.body.name) {
+  if (!req.body.projectID || !req.body.name) {
     res.status(400).send({ message: "Error: Se debe ingresar el ID del curso y el nombre del documento." });
     return;
   }
 
   //Se crea el modelo
   const document = new Document({
-    courseID: req.body.courseID,
+    projectID: req.body.projectID,
     name: req.body.name,
     description: req.body.description,
     disponible: req.body.disponible ? req.body.disponible : true
@@ -146,3 +146,23 @@ exports.findAlldisponible = (req, res) => {
       });
     });
 };
+
+
+/*/Habilitar documento
+exports.habilitar = (req, res) => {
+  const id = req.params.id;
+
+  Document.findById(id)
+    .then(data => {
+      if (!data)
+        res.status(404).send({ message: "No se encontró el documento con la id=" + id });
+      else{
+        res.send(data)
+      }
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .send({ message: "Error al obtener el documento con la id=" + id });
+    });
+};*/
