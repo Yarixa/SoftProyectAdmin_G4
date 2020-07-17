@@ -20,7 +20,7 @@ export default function AppRouter() {
                     <Login />
                 </Route>            
                 <Route
-                    path="/home/:section/:arg?"
+                    path="/home/:subseccion"
                     render={renderProps => {
                         if(sessionStorage.getItem('logged')==='false'){
                             console.log("redirecting to login from AppRouter")
@@ -30,13 +30,31 @@ export default function AppRouter() {
                             <div>
                                 <RAppBar />
                                 <MainBox>
-                                    <RouterFacade route={renderProps.match.params.section} arg={renderProps.match.params.arg}/>
+                                    <RouterFacade root={"home"} subseccion={renderProps.match.params.subseccion}/>
                                 </MainBox>
                                 <RDrawer />
                             </div>
                         )
                     }}
                 />  
+                <Route
+                    path="/curso/:id/:subseccion"
+                    render={renderProps => {
+                        if(sessionStorage.getItem('logged')==='false'){
+                            console.log("redirecting to login from AppRouter")
+                            return (<Redirect to={'/'}/>)
+                        }
+                        return (
+                            <div>
+                                <RAppBar />
+                                <MainBox>
+                                    <RouterFacade root={"curso"} id={renderProps.match.params.id} subseccion={renderProps.match.params.subseccion}/>
+                                </MainBox>
+                                <RDrawer />
+                            </div>
+                        )
+                    }}
+                /> 
                 <Redirect to={'/home/error'} />
             </Switch>
         </Router>
