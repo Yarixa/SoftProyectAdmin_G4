@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     bottomBox: {
         height: "10%",
         width: drawerWidth - 1,
-        display: 'flex',
+        display: 'block',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#1F2A36',
@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
         padding: '0 8px',
         ...theme.mixins.toolbar,
+    },
+    logo: {
+        width: '100%'
     },
     menuButton: {
         marginRight: 36,
@@ -110,7 +113,7 @@ export default function RDrawer() {
             >
                 <div className="mainContent">
                     <div className={classes.toolbarIcon}>
-                        <img src={logo} alt="SoftProjectHUB" />
+                        <img className={classes.logo} src={logo} alt="SoftProjectHUB" />
                     </div>
                     <Divider />
                     <List>

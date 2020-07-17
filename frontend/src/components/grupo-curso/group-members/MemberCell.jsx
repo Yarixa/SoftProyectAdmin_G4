@@ -9,14 +9,13 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton } from '@material-ui/core';
 
 export default function GroupCell(props) {
-
     const {member} = props;
 
     return (
         <Table.Row>
-            <Table.Cell>{member.firstName}</Table.Cell>
+            <Table.Cell>{member.user_email}</Table.Cell>
             <Table.Cell>{member.lastName}</Table.Cell>
-            <Table.Cell>{member.groupRole}</Table.Cell>
+            <Table.Cell>{member.type}</Table.Cell>
             <Table.Cell><IconButton><DeleteIcon/></IconButton></Table.Cell>
         </Table.Row>
     )

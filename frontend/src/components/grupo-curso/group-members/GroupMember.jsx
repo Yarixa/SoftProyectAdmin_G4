@@ -8,18 +8,20 @@ import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 // Material | Estilos
-import { IconButton } from '@material-ui/core';
 import { fetchIntegrantes } from '../groupMemberDucks';
 
 export default function GroupMember(props) {
     const dispatch = useDispatch();
-    const { groupID } = props;
+    const {groupID} = props;
+    const {idCurso} = props;
 
     useEffect(()=>{
-        dispatch(fetchIntegrantes());
+        console.log("member",groupID);
+        dispatch(fetchIntegrantes(groupID));
         // hacer aquí el fetching de los integrantes
-    },[dispatch]);
-    const MemberList = useSelector(store => store.members.members);
+    },[groupID, dispatch]);
+    
+    const GroupMemberList = useSelector(store => store.members.members);
 
     return (
         <div>
@@ -28,19 +30,19 @@ export default function GroupMember(props) {
                     <Table.Row>
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
                         <Table.HeaderCell>Apellido</Table.HeaderCell>
-                        <Table.HeaderCell textAling = 'center'>Rol</Table.HeaderCell>
-                        <Table.HeaderCell textAling = 'center'>Acciones</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Rol</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Acciones</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
-                        MemberList.map((member) => <MemberCell key = {member.id} member = {member}/>)
+                        GroupMemberList.map((member) => <MemberCell key = {member.id} member = {member}/>)
                     }
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan = '4' textAlign = 'right'>
-                            <AgregarMiembro />
+                            <AgregarMiembro idGroup = {groupID} idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>

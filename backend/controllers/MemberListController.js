@@ -3,6 +3,8 @@ const db = require("../database/db.js")
 const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
 const Team = require("../models/Team")
+const Sequelize = require('sequelize')
+
 
 exports.createTeam = (req, res) => {
 	const teamData = {
@@ -20,7 +22,14 @@ exports.createTeam = (req, res) => {
 		if(!team){
 			Team.create(teamData)
 			.then(team => {
-				res.json({message: "El team ha sido creado."})
+				Team.findAll({
+					limit: 1,
+				  order: [ [ 'id', 'DESC' ]]
+				})
+				.then (team => {
+					res.json({data: team})
+				})
+
 			})
 			.catch(err => {
 				res.status(400).json({
@@ -33,7 +42,14 @@ exports.createTeam = (req, res) => {
 			if(teamData.project_id == 1){
 				Team.create(teamData)
 				.then(team => {
-					res.json({message: "El team ha sido creado."})
+					Team.findAll({
+						limit: 1,
+					  order: [ [ 'id', 'DESC' ]]
+					})
+					.then (team => {
+						res.json({data: team})
+					})
+
 				})
 				.catch(err => {
 					res.status(400).json({
@@ -128,6 +144,49 @@ exports.readAllTeams = (req, res) => {
 	})
 }
 
+exports.readTeamsByCourse = (req, res) => {
+	Team.findAll({
+		where: {
+			course_id: req.query.course_id
+		}
+	})
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).json({
+			message:
+				err.message || "There was an error while retrieving"
+		})
+	})
+}
+
+
+
+/*exports.readTeamsByCourse = (req, res) => {
+	Team.belongsTo(MemberList, {foreignKey: 'course_id', sourceKey: 'course_id'})
+	MemberList.belongsTo(Team, {foreignKey: 'course_id', sourceKey: 'course_id'})
+	Team.findAll({
+		where: {
+			course_id: req.query.course_id
+		},
+		include: [{
+			model: MemberList,
+			where: {course_id: Sequelize.col('team.course_id')},
+			required: true
+		}]
+	})
+	.then(data => {
+		res.send(data)
+	})
+	.catch(err => {
+		res.status(500).json({
+			message:
+				err.message || "There was an error while retrieving"
+		})
+	})
+}*/
+
 exports.readByUser = (req, res) => {
 
 	MemberList.findAll({
@@ -147,14 +206,15 @@ exports.readByUser = (req, res) => {
 }
 
 exports.readByCourse = (req, res) => {
-
-	MemberList.findAll({
+  /*MemberList.findAll({
 		where: {
 			course_id: req.query.course_id
-		}
-	})
-	.then(data => {
-		res.send(data)
+		}})*/
+	db.sequelize.query(
+		"Select * from memberLists left join users on memberLists.user_email = users.email where memberLists.course_id = " + req.query.course_id
+	)
+	.spread(metadata => {
+		res.send(metadata)
 	})
 	.catch(err => {
 		res.status(500).json({
@@ -164,15 +224,22 @@ exports.readByCourse = (req, res) => {
 	})
 }
 
+//retornar objeto <-
 exports.readByTeam = (req, res) => {
 
-	MemberList.findAll({
+	/*MemberList.findAll({
 		where: {
 			team_id: req.query.team_id,
 		}
 	})
 	.then(data => {
 		res.send(data)
+	})*/
+	db.sequelize.query(
+		"Select * from memberLists left join users on memberLists.user_email = users.email where memberLists.team_id = " + req.query.team_id
+	)
+	.spread(metadata => {
+		res.send(metadata)
 	})
 	.catch(err => {
 		res.status(500).json({
@@ -182,6 +249,8 @@ exports.readByTeam = (req, res) => {
 	})
 }
 
+
+//retornar objeto <-
 exports.updateTeam = (req, res) => {
 	MemberList.findOne({
 		where:{
@@ -202,26 +271,26 @@ exports.updateTeam = (req, res) => {
 				}
 			})
 			.then(result => {
-				console.log(result)
+				memberList.team_id = Number(req.body.team_id)
 				res.json({
-					message: "Se ha modificado el grupo del usuario " + memberList.user_email
+					memberList: memberList
 				})
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema 2 " + err
+					error: "No existe el usuario dentro del tema 2 "
 				})
 			})
 		}
 		else{
 			res.json({
-					error: "No existe el usuario dentro del tema 3 " + err
+					error: "No existe el usuario dentro del tema 3 "
 			})
 		}
 	})
 	.catch(err => {
 		res.json({
-				error: "No existe el usuario dentro del tema 1 " + err
+				error: "No existe el usuario dentro del tema 1 "
 		})
 	})
 }
@@ -251,20 +320,55 @@ exports.updateRole = (req, res) => {
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema"
+					error: err + 'd'
 				})
 			})
 		}
 		else{
 			res.json({
-					error: "No existe el usuario dentro del tema"
+					error: err + 'a'
 			})
 		}
 	})
 	.catch(err => {
 		res.json({
-				error: "No existe el usuario dentro del tema"
+				error: err
 		})
+	})
+}
+
+exports.updateTeamName = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				name: req.body.name
+			},
+			{
+				where:{
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.name = req.body.name
+				res.json({
+					team: team
+				})
+			})
+		}
+		else{
+			res.json({
+				err: true,
+				messageError: "No se encontro un team con esa id"
+			})
+		}
+	})
+	.catch(err => {
+
 	})
 }
 
@@ -350,6 +454,76 @@ exports.disable = (req, res) => {
 	})
 }
 
+exports.enableTeam = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				active: true
+			},
+			{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.active = true
+				res.json({
+					team: team
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err =>{
+
+	})
+}
+
+exports.disableTeam = (req, res) => {
+	Team.findOne({
+		where: {
+			id: req.params.id
+		}
+	})
+	.then(team => {
+		if(team){
+			Team.update({
+				active: false
+			},
+			{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				team.active = false
+				res.json({
+					team: team
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err =>{
+
+	})
+}
+
 //Funcion obtenida para subir un archivo.
 //Deberia de mover este metodo para otro controlador, dado a que se puede usar para otras cosas.
 //Aunque si lo usamos para las imagenes, debería de ser personal para cada proyecto.
@@ -383,16 +557,25 @@ exports.uploadFile = async (req, res) => {
 }
 
 exports.testMassiveCreate = async (req, res) => {
-	var XLSX = require('xlsx');
+
 		try{
+			//console.log(memberListArray)
+			res.json(await cargaArchivo(req))
+	}
+	catch(e){
+		res.json("There was an error on the file. " + e)
+	}
+}
+
+var  cargaArchivo = async (req) =>{
+
+			var XLSX = require('xlsx');
 			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
 			var sheetNames = workbook.SheetNames;
 
 			var sheetIndex = 1;
 
 			var memberListArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
-
-			var contador = 0;
 
 			for(var i = 0; i < memberListArray.length; i++){
 				const dRole = checkRegex(memberListArray[i]["Dirección de correo"])
@@ -404,6 +587,7 @@ exports.testMassiveCreate = async (req, res) => {
 					type: dRole
 
 				}
+
 				MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
@@ -413,6 +597,7 @@ exports.testMassiveCreate = async (req, res) => {
 				})
 				.then(memberList =>{
 					if(!memberList){
+
 							MemberList.create(memberListData)
 							.then(user => {
 								console.log("User " + memberListData.user_email + " linked.")
@@ -420,6 +605,7 @@ exports.testMassiveCreate = async (req, res) => {
 							.catch(err => {
 								console.log('Error: ' + err )
 							})
+
 					}else{
 						console.log("Error")
 					}
@@ -428,16 +614,11 @@ exports.testMassiveCreate = async (req, res) => {
 					console.log('error: ' + err)
 				})
 		}
-		res.json("La operación fue realizada.")
-	}
-	catch(e){
-		res.json("There was an error on the file. " + e)
-	}
+		return("La operación fue realizada.")
 }
 
 var checkRegex = (email) => {
 	var examineRegex = email.match(/@utalca.cl/g)
-	console.log(examineRegex)
 	if(examineRegex != null){
 		return "Profesor"
 	}

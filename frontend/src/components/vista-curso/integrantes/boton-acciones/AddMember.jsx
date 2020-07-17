@@ -7,12 +7,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField} from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     formItem: {
-        marginRight: '12px',
-        marginBottom: '12px'
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
     },
     container: {
         display: 'flex',
@@ -20,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 150,
+        minWidth: 400,
         maxWidth: 330
     },
     root: {
@@ -29,16 +28,23 @@ const useStyles = makeStyles((theme) => ({
             width: '25ch',
         },
     },
+    Button: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1)
+    }
 }));
 
 export default function AgregarGrupo(props) {
 
     const {esEditar} = props;
-    const {member} = props;
+    const {idCurso} = props;
 
     const classes = useStyles();
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
+    const [first_name, setFirstName] = React.useState('');
+    const [last_name, setLastName] = React.useState('');
+    const [email, setEmail] = React.useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -49,8 +55,13 @@ export default function AgregarGrupo(props) {
     }
 
     const handleAccept = () => {
+        console.log(idCurso)
         const newMember = {
-            
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            idCurso: idCurso,
+            idTeam: "1"
         }
         if (esEditar){
             dispatch(editMember(newMember));
@@ -67,6 +78,7 @@ export default function AgregarGrupo(props) {
                 color = 'primary'
                 variant = 'contained'
                 onClick = {handleClickOpen}
+                className = {classes.Button}
             >
                 {esEditar?<EditIcon />: "Agregar Alumno"}
             </Button>
@@ -77,10 +89,26 @@ export default function AgregarGrupo(props) {
                         <form className = {classes.formControl}>
                             <TextField
                                 className = {classes.formItem}
-                                id = "memberName"
-                                fullWidth = {true}
+                                id = "memberFirstName"
                                 label = "Nombre"
                                 defaultValue = ""
+                                onChange = {(e) => setFirstName(e.target.value)}
+                            />
+                            <TextField
+                                className = {classes.formItem}
+                                id = "memberLastName"
+                                label = "Apellido"
+                                defaultValue = ""
+                                onChange = {(e) => setLastName(e.target.value)}
+                            />
+                            <TextField
+                                className = {classes.formItem}
+                                id = "memberEmail"
+                                fullWidth
+                                label = "Correo Electrónico"
+                                style = {{ margin: 8}}
+                                defaultValue = ""
+                                onChange = {(e) => setEmail(e.target.value)}
                             />
                         </form>
                     </div>

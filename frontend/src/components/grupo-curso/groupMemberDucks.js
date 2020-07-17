@@ -1,27 +1,8 @@
+import axios from "axios";
+
 // Constantes
 const dataInicial = {
-    members: [{
-        id: "1",
-        firstName: "Francisco Javier",
-        lastName: "Alvarez Aspee",
-        groupRole: "Programador",
-        teamid: "1"
-    },
-    {
-        id: "2",
-        firstName: "Matías",
-        lastName: "Escobar",
-        groupRole: "Jefe de Proyecto",
-        teamid: "1"
-    },
-    {
-        id: "3",
-        firstName: "Francisco Javier",
-        lastName: "Alvarez Aspee",
-        groupRole: "Programador",
-        teamid: "1"
-    }
-    ]
+    members: []
 }
 
 const apiURL = process.env.REACT_APP_API_URL;
@@ -37,7 +18,7 @@ const SHOW_MEMBERS = 'SHOW_MEMBERS';
 export default function memberReducers(state = dataInicial, action){
     switch(action.type){
         case ADD_MEMBER:
-            return {...state}
+            return {...state, members: state.members.concat(action.payload)}
         case EDIT_MEMBER:
             return {}
         case GET_MEMBER:
@@ -53,10 +34,15 @@ export default function memberReducers(state = dataInicial, action){
 
 // Acciones
 export const agregarIntegrante = (integrante) => async dispatch => {
-    // RUTA BACK
+    const data = {
+        email: integrante.email,
+        course_id: integrante.course_id,
+        team_id: integrante.team_id
+    }
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/updateTeam/' + data.email + '/' + data.course_id, data); 
     dispatch({
         type: ADD_MEMBER,
-        payload: integrante
+        payload: resp.data
     })
 }
 
@@ -75,12 +61,14 @@ export const mostrarIntegrante = (integrante) => async (dispatch, getState) => {
     });
 }
 
-export const fetchIntegrantes = () => async (dispatch, getState) => {
+export const fetchIntegrantes = (idTeam) => async (dispatch, getState) => {
     try{
         //Conectar
+        const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readByTeam', {params: {team_id: idTeam}})
+        console.log(resp.data)
         dispatch({
             type: FETCH_MEMBER,
-            payload: dataInicial.members
+            payload: resp.data
         })
     }catch(error){
         console.log(error);

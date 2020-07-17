@@ -54,11 +54,13 @@ const Users = () => {
     // Carga inicial de usuarios en sistema
     useEffect(() => {
         fetchUsers();
-        console.log("Hola " + carga)
-        console.log(usersList)
     },[carga, dispatch])
 
     const classes = useStyles()
+
+    const toggleCarga = (newValue) => {
+        setCarga(newValue);
+    }
 
     // Dialogo Agregar Usuario
     const handleClickOpen = () => {
@@ -175,7 +177,7 @@ const Users = () => {
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan = '7' textAlign = 'right'>
-                            <MassiveAdd esVincular = {false} action = {setCarga} carga = {carga}/>
+                            <MassiveAdd esVincular = {false} action = {toggleCarga} carga = {carga}/>
                             <Button
                                 variant="contained"
                                 onClick={handleClickOpen}

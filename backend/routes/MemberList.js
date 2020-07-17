@@ -60,13 +60,21 @@ memberList.get('/readByTeam', memberListController.readByTeam)
 
 memberList.get('/readAllTeams', memberListController.readAllTeams)
 
+memberList.get('/readTeamByCourse', memberListController.readTeamsByCourse)
+
 memberList.put('/updateTeam/:user_email/:course_id', memberListController.updateTeam)
 
 memberList.put('/updateRole/:user_email/:course_id/:team_id', memberListController.updateRole)
 
+memberList.put('/updateTeamName/:id', memberListController.updateTeamName)
+
 memberList.put('/enable/:user_email/:course_id', memberListController.enable)
 
 memberList.put('/disable/:user_email/:course_id', memberListController.disable)
+
+memberList.put('/enableTeam/:id', memberListController.enableTeam)
+
+memberList.put('/disableTeam/:id', memberListController.disableTeam)
 
 memberList.post('/uploadFile', memberListController.uploadFile)
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles({
 
@@ -29,13 +29,18 @@ const useStyles = makeStyles({
 
 });
 
-export default function BotonGestionar(){
+export default function BotonGestionar(props){
     const classes = useStyles();
-    return (
-        <div>
-            <Button className={classes.botonGestionar}>Gestionar</Button>
-            {/* Agregar acción de redirección */}
-        </div>
-    )
+    const { idCurso } = props;
+    const { subseccion } = props;
 
+    return (
+        <Button 
+        className={classes.botonGestionar} 
+        component={Link} 
+        to={'/curso/'+idCurso+'/'+subseccion}
+        >
+        Gestionar
+        </Button>
+    );
 }
