@@ -3,19 +3,26 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchMembers } from './membersDucks';
 import MemberListCell from './MemberListCell';
 import AddMember from './boton-acciones/AddMember';
+import MassiveAdd from '../../massive-add/MassiveAdd';
 
 // Semantic Table | Estilos
 import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
+
 export default function CurseGroup(props) {
     
     const {idCurso} = props;
     const dispatch = useDispatch();
+    const [carga, setCarga] = React.useState(false);
 
     useEffect(() => {
         dispatch(fetchMembers(idCurso));
-    }, [dispatch])
+    }, [carga, dispatch])
+
+    const toggleCarga = (newValue) => {
+        setCarga(newValue);
+    }
 
     const courseMemberList = useSelector(store => store.courseMembers.members);
 
@@ -38,7 +45,10 @@ export default function CurseGroup(props) {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '5' textAlign = 'right'>
+                        <Table.HeaderCell colSpan = '4' textAlign = 'right'>
+                            <MassiveAdd idCurso = {idCurso} esVincular = {true} action = {toggleCarga} carga = {carga}/>
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>
                             <AddMember idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>
