@@ -2,7 +2,7 @@ const db = require("../database/db.js")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const User = require("../models/User")
-
+const fs = require('fs')
 const sgMail = require('@sendgrid/mail');
 
 //Es necesario el solicitar la API KEY y declarala como variable de entorno.
