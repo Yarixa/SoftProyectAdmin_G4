@@ -84,8 +84,10 @@ export default function Login() {
 
     useEffect(()=>{}, [logged, loginError, loginErrorMessage]);
 
-    if(logged === true)
-        return <Redirect to={"/home/dashboard"} />
+    if(logged === true){
+        console.log("logged == true");
+        return (<Redirect to={"/home/dashboard"} />)
+    }
 
     return (
         <Grid container component="main" className={classes.root}>

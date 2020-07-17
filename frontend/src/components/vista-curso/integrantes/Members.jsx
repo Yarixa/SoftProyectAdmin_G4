@@ -4,8 +4,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from "@material-ui/core/Grid";
 import { useDispatch } from "react-redux";
-
+import IconButton from '@material-ui/core/IconButton';
 import CardHeader from "@material-ui/core/CardHeader";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import {Link} from "react-router-dom";
+
 import MemberList from './MemberList';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +26,7 @@ export default function Members(props){
     const dispatch = useDispatch();
 
     const {idCurso} = props;
+    const {needsBack} = props;
 
     useEffect(() => {
         // hacer aquí la llamada para fetching de grupos
@@ -35,7 +39,16 @@ export default function Members(props){
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Card className={classes.card}>
-                        <CardHeader title={"Lista de Integrantes"}/>
+                        <CardHeader 
+                            title={"Lista de Integrantes"}
+                            action={
+                                !needsBack
+                                ?<div/>
+                                :<IconButton component={Link} to={'/curso/'+idCurso+'/home'} >
+                                    <ArrowBackIcon />
+                                </IconButton>
+                            }
+                        />
                         <CardContent>
                             <MemberList idCurso = {idCurso}/>
                         </CardContent>

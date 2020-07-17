@@ -26,8 +26,8 @@ export default function ListaCursos(props){
 
     return(
         <TableRow hover >
-            <TableCell component={Link} to={"/home/curso/"+curso.id}>{curso.anio + "-" + curso.semestre}</TableCell>
-            <TableCell component={Link} to={"/home/curso/"+curso.id}>{curso.profesor}</TableCell>
+            <TableCell component={Link} to={"/curso/"+curso.id+"/home"}>{curso.anio + "-" + curso.semestre}</TableCell>
+            <TableCell component={Link} to={"/curso/"+curso.id+"/home"}>{curso.profesor}</TableCell>
             <TableCell>
                 <div className={classes.row} >
                     <FormularioCurso esModoEditar={true} cursoParaEditar={curso} nombreModulo = {nombreModulo}/>
