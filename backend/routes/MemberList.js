@@ -66,9 +66,15 @@ memberList.put('/updateTeam/:user_email/:course_id', memberListController.update
 
 memberList.put('/updateRole/:user_email/:course_id/:team_id', memberListController.updateRole)
 
+memberList.put('/updateTeamName/:id', memberListController.updateTeamName)
+
 memberList.put('/enable/:user_email/:course_id', memberListController.enable)
 
 memberList.put('/disable/:user_email/:course_id', memberListController.disable)
+
+memberList.put('/enableTeam/:id', memberListController.enableTeam)
+
+memberList.put('/disableTeam/:id', memberListController.disableTeam)
 
 memberList.post('/uploadFile', memberListController.uploadFile)
 
