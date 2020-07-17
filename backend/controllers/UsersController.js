@@ -2,7 +2,7 @@ const db = require("../database/db.js")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const User = require("../models/User")
-
+const fs = require('fs')
 const sgMail = require('@sendgrid/mail');
 
 //Es necesario el solicitar la API KEY y declarala como variable de entorno.
@@ -361,7 +361,21 @@ exports.massiveCreate = async (req, res) => {
 					console.log('error: ' + err)
 				})
 			}
+
+		//Metodo para eliminar el archivo subido y cargado.
+		try{
+			const path = "./upload/" + req.params.xlsx_name
+			fs.unlink( path, (err) =>{
+
+			})
+		}
+		catch(err){
+			console.error(err)
+		}
+
 		res.json("All Users registered")
+
+
 	}
 	catch(e){
 		res.json("There was an error on the file.")
