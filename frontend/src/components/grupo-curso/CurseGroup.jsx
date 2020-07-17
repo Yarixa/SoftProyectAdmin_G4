@@ -6,13 +6,14 @@ import { useSelector, useDispatch } from 'react-redux';
 // Semantic Table | Estilos
 import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import { fetchGrupos } from './groupDucks';
 
 export default function CurseGroup(props) {
     const {idCurso} = props;
     const GroupList = useSelector(store => store.groups.groups)
     const dispatch = useDispatch();
     useEffect(() => {
-        
+        dispatch(fetchGrupos(idCurso))
     }, [dispatch])
 
     return(

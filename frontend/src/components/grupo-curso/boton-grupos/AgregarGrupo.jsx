@@ -51,6 +51,7 @@ export default function AgregarGrupo(props) {
 
     const handleAccept = () => {
         const nuevoGrupo = {
+            id: group.id,
             name: nombreGrupo,
             idCurso: idCurso
         }

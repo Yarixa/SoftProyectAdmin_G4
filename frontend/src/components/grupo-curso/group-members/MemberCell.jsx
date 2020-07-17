@@ -13,8 +13,8 @@ export default function GroupCell(props) {
 
     return (
         <Table.Row>
-            <Table.Cell>{member.user_email}</Table.Cell>
-            <Table.Cell>{member.lastName}</Table.Cell>
+            <Table.Cell>{member.first_name}</Table.Cell>
+            <Table.Cell>{member.last_name}</Table.Cell>
             <Table.Cell>{member.type}</Table.Cell>
             <Table.Cell><IconButton><DeleteIcon/></IconButton></Table.Cell>
         </Table.Row>
