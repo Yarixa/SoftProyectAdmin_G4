@@ -300,7 +300,8 @@ exports.updateRole = (req, res) => {
 	MemberList.findOne({
 		where:{
 			user_email: req.params.user_email,
-			course_id: req.params.course_id
+			course_id: req.params.course_id,
+			team_id: req.params.team_id
 		}
 	})
 	.then(memberList => {
@@ -315,8 +316,9 @@ exports.updateRole = (req, res) => {
 				}
 			})
 			.then(result => {
+				memberList.type = req.body.type
 				res.json({
-					message: "Se ha modificado el rol del usuario " + user_email
+					memberlist: memberList
 				})
 			})
 			.catch(err => {
