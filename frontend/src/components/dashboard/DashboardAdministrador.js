@@ -53,9 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DashboardAdministrador() {
     const classes = useStyles();
-
-    const bull = <span className={classes.bullet}>•</span>;
-
+    
     return (
         <div>
             <Grid container spacing={4}>

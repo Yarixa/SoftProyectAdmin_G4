@@ -58,6 +58,10 @@ const Users = () => {
 
     const classes = useStyles()
 
+    const toggleCarga = (newValue) => {
+        setCarga(newValue);
+    }
+
     // Dialogo Agregar Usuario
     const handleClickOpen = () => {
         setOpen(true);
@@ -173,7 +177,7 @@ const Users = () => {
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan = '7' textAlign = 'right'>
-                            <MassiveAdd esVincular = {false} action = {setCarga} carga = {carga}/>
+                            <MassiveAdd esVincular = {false} action = {toggleCarga} carga = {carga}/>
                             <Button
                                 variant="contained"
                                 onClick={handleClickOpen}

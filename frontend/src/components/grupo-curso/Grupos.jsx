@@ -4,6 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from "@material-ui/core/Grid";
 import { useSelector, useDispatch } from "react-redux";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import {Link} from "react-router-dom";
 
 import GroupMember from "./group-members/GroupMember"
 import CardHeader from "@material-ui/core/CardHeader";
@@ -26,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Grupos(props){
     const dispatch = useDispatch();
 
-    const {idCurso} = props;
+    const {idCurso} = props
+    const {needsBack} = props;
 
     useEffect(() => {
         dispatch(fetchGrupos(idCurso));
@@ -41,7 +44,16 @@ export default function Grupos(props){
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={selectedGroup.name?6:12}>
                     <Card className={classes.card}>
-                        <CardHeader title={"Grupos Activos"}/>
+                        <CardHeader 
+                        title={"Grupos Activos"}
+                        action={
+                            !needsBack
+                            ?<div/>
+                            :<IconButton component={Link} to={'/curso/'+idCurso+'/home'} >
+                                <ArrowBackIcon />
+                            </IconButton>
+                        }
+                        />
                         <CardContent>
                             <CurseGroup idCurso = {idCurso}/>
                         </CardContent>
