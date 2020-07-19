@@ -1,22 +1,19 @@
-import React, { useEffect } from 'react'
-import MassiveAdd from '../massive-add/MassiveAdd'
+import React from 'react'
 
 // Hook React Redux
 import {useDispatch, useSelector} from 'react-redux'
-import {getUsers, createUser, disableUser, enableUser, updateUser} from './userDucks'
+import {getUsers, createUser} from './userDucks'
 
 // Semantic Table | Estilos
-import {Table} from 'semantic-ui-react'
+import {Table, Button, Icon} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 
 // Material Dialog
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
-import { TextField, makeStyles, DialogActions, Switch } from '@material-ui/core'
-import EditIcon from "@material-ui/icons/Edit";
+import { TextField, makeStyles, DialogActions } from '@material-ui/core'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,64 +27,23 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: '25ch',
-    },
-    Button: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1)
     }
 }))
 
 const Users = () => {
 
-    const usersList = useSelector(store => store.users.users)
-    const user = useSelector(store => store.users)
-
-    const [open, setOpen] = React.useState(false);
-    const [edit, setEdit] = React.useState(false);
-    const [carga, setCarga] = React.useState(false);
-    
-    const fetchUsers = () => {
-        dispatch(getUsers())
-    }
-
     const dispatch = useDispatch()
-    // Carga inicial de usuarios en sistema
-    useEffect(() => {
-        fetchUsers();
-    },[carga, dispatch])
 
     const classes = useStyles()
 
-    // Dialogo Agregar Usuario
+    const [open, setOpen] = React.useState(false);
+
     const handleClickOpen = () => {
         setOpen(true);
     }
 
     const handleClose = () => {
-        user.first_name = ''
-        user.last_name = ''
-        user.email = ''
         setOpen(false);
-    }
-
-    // Diaglo Editar Usuario
-    const handleCloseEdit = () => {
-        user.first_name = ''
-        user.last_name = ''
-        user.email = ''
-        setEdit(false);
-    }
-
-    const handleOpenEdit = e => {
-        user.first_name = e.currentTarget.attributes['first_name'].value
-        user.last_name = e.currentTarget.attributes['last_name'].value
-        user.email = e.currentTarget.attributes['email'].value
-        setEdit(true);
-    }
-
-    const handleEditar = () => {
-        dispatch(updateUser(user))
-        setEdit(false)
     }
 
     // Obteniendo datos de formulario
@@ -109,15 +65,8 @@ const Users = () => {
         setOpen(false)
     }
 
-    // Deshabilitar Usuario
-    const handleDisable = e => {
-        if (e.currentTarget.attributes['disponible'].value === "true"){
-            dispatch(disableUser({email: e.currentTarget.attributes['email'].value}))
-        }
-        else{
-            dispatch(enableUser({email: e.currentTarget.attributes['email'].value}))
-        }
-    }
+    const usersList = useSelector(store => store.users.users)
+    const user = useSelector(store => store.users)
 
     return (
         <div>
@@ -130,41 +79,31 @@ const Users = () => {
                         <Table.HeaderCell>E-mail</Table.HeaderCell>
                         <Table.HeaderCell>Rol</Table.HeaderCell>
                         <Table.HeaderCell>Registrado</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Editar</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Activo</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Acciones</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {
                         usersList.map(item => (
-                            <Table.Row key = {item.id + "t"}>
+                            <Table.Row>
                                 <Table.Cell key = {item.first_name}>{item.first_name}</Table.Cell>
                                 <Table.Cell key = {item.last_name}>{item.last_name}</Table.Cell>
                                 <Table.Cell key = {item.email}>{item.email}</Table.Cell>
-                                <Table.Cell key = {item.role}>{item.role}</Table.Cell>
+                                <Table.Cell key = {item.created}>{item.role}</Table.Cell>
                                 <Table.Cell key = {item.created}>{item.created}</Table.Cell>
                                 <Table.Cell textAlign = 'center'>
-                                    <Button 
-                                        key = {item.id} 
-                                        variant="contained" 
-                                        color="primary" 
-                                        onClick = {handleOpenEdit}
-                                        first_name = {item.first_name}
-                                        last_name = {item.last_name}
-                                        email = {item.email}
-                                        >
-                                        <EditIcon />
+                                    <Button animated>
+                                        <Button.Content hidden>Editar</Button.Content>
+                                        <Button.Content visible>
+                                            <Icon name = 'edit'/>
+                                        </Button.Content>
                                     </Button>
-                                </Table.Cell>
-                                <Table.Cell textAlign = 'center'>
-                                    <Switch 
-                                        key = {item.id + "s"}
-                                        checked = {item.disponible}
-                                        onClick = {handleDisable}
-                                        name="disable" 
-                                        email = {item.email}
-                                        disponible = {item.disponible.toString()}
-                                    />
+                                    <Button animated color = 'red'>
+                                        <Button.Content hidden>Eliminar</Button.Content>
+                                        <Button.Content visible>
+                                            <Icon name = 'user delete'/>
+                                        </Button.Content>
+                                    </Button>
                                 </Table.Cell>
                             </Table.Row>
                         ))
@@ -172,15 +111,26 @@ const Users = () => {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '7' textAlign = 'right'>
-                            <MassiveAdd esVincular = {false} action = {setCarga} carga = {carga}/>
+                        <Table.HeaderCell colSpan = '6'>
                             <Button
-                                variant="contained"
-                                onClick={handleClickOpen}
-                                color="primary"
-                                className = {classes.Button}
+                                onClick = {() => dispatch(getUsers())}
+                                floated = 'right'
+                                icon
+                                positive
+                                labelPosition = 'left'
+                                size = 'small'
                             >
-                                Nuevo Usuario
+                                <Icon name = 'eye' /> Mostrar Usuarios
+                            </Button>
+                            <Button
+                                onClick = {handleClickOpen}
+                                floated = 'right'
+                                icon
+                                labelPosition = 'left'
+                                primary
+                                size = 'small'
+                            >
+                                <Icon name = 'user'/> Agregar Usuario
                             </Button>
                         </Table.HeaderCell>
                     </Table.Row>
@@ -225,42 +175,6 @@ const Users = () => {
                         </Button>
                         <Button onClick = {handleSubmit} color = "primary">
                             Agregar
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </form>
-            <form className = {classes.root} noValidate autoComplete = "off">
-                <Dialog open = {edit} onClose = {handleCloseEdit} aria-labelledby = "form-dialog-title">
-                    <DialogTitle id = "form-dialog-title">Editar Usuario</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Formulario para editar usuario, complete con la información solicitada.
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            id = "first_name"
-                            label = "Nombres"
-                            type = "nombre"
-                            className = {classes.TextField}
-                            defaultValue = {user.first_name}
-                            onChange = {userName}
-                        />
-                        <TextField
-                            autoFocus
-                            id = "last_name"
-                            label = "Apellidos"
-                            type = "apellido"
-                            className = {classes.TextField}
-                            defaultValue = {user.last_name}
-                            onChange = {userLastName}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button autoFocus onClick = {handleCloseEdit}>
-                            Cancelar
-                        </Button>
-                        <Button onClick = {handleEditar} color = "primary">
-                            Editar
                         </Button>
                     </DialogActions>
                 </Dialog>

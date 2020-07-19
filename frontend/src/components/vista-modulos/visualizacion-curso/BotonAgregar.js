@@ -35,7 +35,7 @@ export default function BotonAgregar(){
     const classes = useStyles();
     return (
         <div>
-            <Button className={classes.botonAgregar}>Agregar</Button>{/* Agregar acción de redirección */}
+            <Button className={classes.botonAgregar}>Agregar</Button>
         </div>
     )
 

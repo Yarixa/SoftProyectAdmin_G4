@@ -29,18 +29,17 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-//Creacion de datos
 function createData(nombre, jefeGrupo, numIntegrantes, Proyecto, Requisitos, Testing,Diseño, Construccion ) {
     return { nombre, jefeGrupo, numIntegrantes, Proyecto, Requisitos, Testing,Diseño, Construccion  };
 }
-//Lista de datos
+
 const rows = [
     createData('Grupo 1', 'Jose Pérez', 3, 'ProyectoX', '12%','12%','12%','12%'),
     createData('Grupo 2', 'Jose Pérez', 5, 'ProyectoX','12%','12%','12%','12%'),
     createData('Grupo 3', 'Jose Pérez', 4, 'ProyectoX','12%','12%','12%','12%'),
     createData('Grupo 4', 'Jose Pérez', 5, 'ProyectoX','12%','12%','12%','12%'),
     createData('Grupo 5', 'Jose Pérez', 6, 'ProyectoX','12%','12%','12%','12%'),
-    createData('Grupo 6', 'Jose Pérez', 5, 'ProyectoX','12%','12%','12%','12%'),
+    createData('Grupo 5', 'Jose Pérez', 5, 'ProyectoX','12%','12%','12%','12%'),
 ];
 
 const useStyles = makeStyles({
@@ -53,7 +52,6 @@ export default function TablaGrupos() {
     const classes = useStyles();
 
     return (
-        //tabla grupos
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>
