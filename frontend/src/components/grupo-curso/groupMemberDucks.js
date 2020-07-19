@@ -20,7 +20,7 @@ export default function memberReducers(state = dataInicial, action){
         case ADD_MEMBER:
             return {...state, members: state.members.concat(action.payload)}
         case EDIT_MEMBER:
-            return {}
+            return {...state, members: state.members.map(member => member.id === action.payload.id ? action.payload: member)}
         case GET_MEMBER:
             return {...state}
         case SHOW_MEMBERS: 
@@ -40,17 +40,32 @@ export const agregarIntegrante = (integrante) => async dispatch => {
         team_id: integrante.team_id
     }
     const resp = await axios.put('http://' + apiURL + ':5000/memberlist/updateTeam/' + data.email + '/' + data.course_id, data); 
+    console.log(resp)
     dispatch({
         type: ADD_MEMBER,
         payload: resp.data
     })
 }
 
-export const editarIntegrante = (integrante) => async dispatch => {
+export const editarIntegrante = (data) => async dispatch => {
     // RUTA BACK
+    const member = {
+        active: data.member.active,
+        course_id: data.member.course_id,
+        disponible: data.member.disponible,
+        user_email: data.member.email,
+        first_name: data.member.first_name,
+        id: data.member.id,
+        last_name: data.member.last_name,
+        team_id: data.member.team_id,
+        type: data.type
+    }
+    console.log(member)
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/updateRole/' + member.user_email + '/' + data.course_id + '/' + data.team_id, data); 
+    console.log(resp)
     dispatch({
         type: EDIT_MEMBER,
-        payload: integrante
+        payload: member
     })
 }
 
@@ -65,7 +80,6 @@ export const fetchIntegrantes = (idTeam) => async (dispatch, getState) => {
     try{
         //Conectar
         const resp = await axios.get('http://' + apiURL + ':5000/memberlist/readByTeam', {params: {team_id: idTeam}})
-        console.log(resp.data)
         dispatch({
             type: FETCH_MEMBER,
             payload: resp.data

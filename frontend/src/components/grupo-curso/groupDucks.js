@@ -14,6 +14,8 @@ const EDIT_GROUP = 'EDIT_GROUP';
 const GET_GROUP = 'GET_GROUP';
 const FETCH_GROUP = 'FETCH_GROUP';
 const SHOW_GROUPS = 'SHOW_GROUPS';
+const ENABLE_TEAM = 'ENABLE_TEAM';
+const DISABLE_TEAM = 'DISABLE_TEAM';
 
 // Reducers
 export default function groupReducers(state = dataInicial, action){
@@ -21,7 +23,7 @@ export default function groupReducers(state = dataInicial, action){
         case ADD_GROUP:
             return {...state, groups: state.groups.concat(action.payload)}
         case EDIT_GROUP:
-            return {}
+            return {...state, groups: state.groups.map(grupo => grupo.id===action.payload.id?action.payload:grupo)}
         case GET_GROUP:
             return {...state, groups: state.groups}
         case SHOW_GROUPS: return {
@@ -32,6 +34,10 @@ export default function groupReducers(state = dataInicial, action){
             ...state,
             groups: action.payload
         };
+        case ENABLE_TEAM:
+            return {...state, groups: state.groups.map(grupo => grupo.id===action.payload.id?action.payload:grupo)}
+        case DISABLE_TEAM:
+            return {...state, groups: state.groups.map(grupo => grupo.id===action.payload.id?action.payload:grupo)}
         default:
             return state
     }
@@ -52,9 +58,10 @@ export const agregarGrupo = (grupo) => async dispatch => {
 
 export const editarGrupo = (grupo) => async dispatch => {
     // RUTA BACK
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/updateTeamName/' + grupo.id, grupo);
     dispatch({
         type: EDIT_GROUP,
-        payload: grupo
+        payload: resp.data.team
     })
 }
 
@@ -73,6 +80,22 @@ export const fetchGrupos = (idCurso) => async (dispatch, getState) => {
             payload: resp.data
         })
     }catch(error){
-        console.log(error);
+        //console.log(error);
     }
+}
+
+export const enableTeam = (groupID) => async dispatch => {
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/enableTeam/' + groupID);
+    dispatch({
+        type: ENABLE_TEAM,
+        payload: resp.data.team
+    })
+}
+
+export const disableTeam = (groupID) =>async dispatch => {
+    const resp = await axios.put('http://' + apiURL + ':5000/memberlist/disableTeam/' + groupID);
+    dispatch({
+        type: DISABLE_TEAM,
+        payload: resp.data.team
+    })
 }

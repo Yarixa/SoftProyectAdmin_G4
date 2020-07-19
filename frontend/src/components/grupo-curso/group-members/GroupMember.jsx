@@ -31,7 +31,8 @@ export default function GroupMember(props) {
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
                         <Table.HeaderCell>Apellido</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Rol</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Acciones</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Editar</Table.HeaderCell>
+                        <Table.HeaderCell textAlign = 'center'>Eliminar</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -41,8 +42,8 @@ export default function GroupMember(props) {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '4' textAlign = 'right'>
-                            <AgregarMiembro idGroup = {groupID} idCurso = {idCurso}/>
+                        <Table.HeaderCell colSpan = '5' textAlign = 'right'>
+                            <AgregarMiembro idGroup = {groupID} idCurso = {idCurso} esEditar = {false}/>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>
