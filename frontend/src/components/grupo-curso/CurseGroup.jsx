@@ -6,13 +6,14 @@ import { useSelector, useDispatch } from 'react-redux';
 // Semantic Table | Estilos
 import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import { fetchGrupos } from './groupDucks';
 
 export default function CurseGroup(props) {
     const {idCurso} = props;
     const GroupList = useSelector(store => store.groups.groups)
     const dispatch = useDispatch();
     useEffect(() => {
-        
+        dispatch(fetchGrupos(idCurso))
     }, [dispatch])
 
     return(
@@ -21,8 +22,6 @@ export default function CurseGroup(props) {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Nombre</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>Jefe de Proyecto</Table.HeaderCell>
-                        <Table.HeaderCell textAlign = 'center'>N° Integrantes</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Editar</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Eliminar</Table.HeaderCell>
                         <Table.HeaderCell textAlign = 'center'>Gestion Integrantes</Table.HeaderCell>
@@ -35,7 +34,7 @@ export default function CurseGroup(props) {
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
-                        <Table.HeaderCell colSpan = '6' textAlign = 'right'>
+                        <Table.HeaderCell colSpan = '4' textAlign = 'right'>
                             <AgregarGrupo esEditar = {false} idCurso = {idCurso}/>
                         </Table.HeaderCell>
                     </Table.Row>

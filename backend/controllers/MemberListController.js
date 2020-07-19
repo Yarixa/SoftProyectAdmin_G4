@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
 const Team = require("../models/Team")
 const Sequelize = require('sequelize')
+const fs = require('fs')
 
 
 exports.createTeam = (req, res) => {
@@ -299,7 +300,8 @@ exports.updateRole = (req, res) => {
 	MemberList.findOne({
 		where:{
 			user_email: req.params.user_email,
-			course_id: req.params.course_id
+			course_id: req.params.course_id,
+			team_id: req.params.team_id
 		}
 	})
 	.then(memberList => {
@@ -314,8 +316,9 @@ exports.updateRole = (req, res) => {
 				}
 			})
 			.then(result => {
+				memberList.type = req.body.type
 				res.json({
-					message: "Se ha modificado el rol del usuario " + user_email
+					memberlist: memberList
 				})
 			})
 			.catch(err => {
@@ -588,6 +591,8 @@ var  cargaArchivo = async (req) =>{
 
 				}
 
+
+
 				MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
@@ -613,6 +618,16 @@ var  cargaArchivo = async (req) =>{
 				.catch(err => {
 					console.log('error: ' + err)
 				})
+		}
+		//Metodo para eliminar el archivo subido y cargado.
+		try{
+			const path = "./upload/" + req.params.xlsx_name
+			fs.unlink( path, (err) =>{
+
+			})
+		}
+		catch(err){
+			console.error(err)
 		}
 		return("La operación fue realizada.")
 }

@@ -18,6 +18,17 @@ export default function documentReducers(state = dataInicial, action){
             return state
     }
 }
+export const getDocumentEsp =(idDocumento)=>async(dispatch,getState)=>{
+    try{
+        const resp = await axios.get('http://'+apiURL+':5000/documents/get/'+idDocumento)
+        dispatch({
+            type : GET_DOCUMENT,
+            payload : resp.data
+        }) 
+    }catch(error){
+        console.log(error)
+    }
+}
 
 
 export const getDocument = ()=> async dispatch =>{
@@ -36,7 +47,7 @@ export const getDocument = ()=> async dispatch =>{
 
 export const createDocument = (documento) => async (dispatch, getState)=>{
     try{
-        await axios.post('http://'+apiURL+':5000/documents/create', documento).then(response=>{
+        await axios.post('http://'+apiURL+':5000/documents/add', documento).then(response=>{
             console.log("recibiendo desde postDocument");
             console.log(response.data);
             dispatch({
@@ -54,7 +65,7 @@ export const createDocument = (documento) => async (dispatch, getState)=>{
 
 export const editarDocumento = (documento)=> async(dispatch, getState)=>{
     try{
-        await axios.putt('http://'+apiURL+':5000/documents/update'+documento.id, documento).then(response=>{
+        await axios.putt('http://'+apiURL+':5000/documents/update/'+documento.id, documento).then(response=>{
             console.log("recibiendo desde editarDocumento"+ response.data.status);
 
             dispatch({
@@ -67,9 +78,9 @@ export const editarDocumento = (documento)=> async(dispatch, getState)=>{
     }
 }
 
-export const disableDocumento=(idDocumento)=>async(dispatch, getState)=>{
+export const eliminarDocumento=(idDocumento)=>async(dispatch, getState)=>{
     try{
-        await axios.putt('http://'+apiURL+':5000/documents/deshabilitar'+idDocumento).then(response=>{
+        await axios.putt('http://'+apiURL+':5000/documents/delete/'+idDocumento).then(response=>{
             console.log("recibiendo desde eliminarDocumento"+ response.data.status);
 
             dispatch({
@@ -82,17 +93,3 @@ export const disableDocumento=(idDocumento)=>async(dispatch, getState)=>{
     }
 }
 
-export const enableDocumento=(idDocumento)=>async(dispatch, getState)=>{
-    try{
-        await axios.putt('http://'+apiURL+':5000/documents/habilitar'+idDocumento).then(response=>{
-            console.log("recibiendo desde habilitarDocumento"+ response.data.status);
-
-            dispatch({
-                type :ENABLE_DOCUMENT,
-                payload : idDocumento,
-            });
-        })
-    }catch(error){
-        console.log("Error! "+ error);
-    }
-}
