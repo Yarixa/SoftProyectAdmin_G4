@@ -50,14 +50,19 @@ export default function AgregarGrupo(props) {
     }
 
     const handleAccept = () => {
-        const nuevoGrupo = {
-            name: nombreGrupo,
-            idCurso: idCurso
-        }
         if (esEditar){
+            const nuevoGrupo = {
+                id: group.id,
+                name: nombreGrupo,
+                idCurso: idCurso
+            }
             dispatch(editarGrupo(nuevoGrupo));
         }
         else{
+            const nuevoGrupo = {
+                name: nombreGrupo,
+                idCurso: idCurso
+            }
             dispatch(agregarGrupo(nuevoGrupo));
             setNombre("");
         }

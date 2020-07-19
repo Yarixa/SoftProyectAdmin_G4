@@ -50,10 +50,7 @@ export default function RouterFacade(props) {
     switch(root){
         case 'home' : return arbolPrincipal(subseccion);
         case 'curso' : return arbolCurso(id, subseccion);
-        default : return (<div> ERROR 404: NO HAY NADA AQUÍ</div>);
+        default : return (<div> ERROR 404: NO HAY NADA AQUÍ </div>);
     }
-
-    
-
    
 }

@@ -5,6 +5,11 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { useSelector, useDispatch } from "react-redux";
+
+import { fetchGrupos } from "../grupo-curso/groupDucks";
+import { fetchMembers } from './integrantes/membersDucks';
+import { fetchProyectos } from "./gestion-proyectos/proyectosDuck";
 
 import BotonAgregar from "./visualizacion-curso/BotonAgregar";
 import BotonGestionar from "./visualizacion-curso/BotonGestionar";
@@ -47,24 +52,31 @@ export default function Curso(props) {
     const classes = useStyles();
     const { idCurso } = props;
 
-    const [cantGrupos, setCantGrupos] = useState(0);
-    const [cantProyectos, setCantProyectos] = useState(0);
-    const [cantIntegrantes, setCantIntegrantes] = useState(0);
+    const dispatch = useDispatch();
+    const listaGrupos = useSelector(store => store.groups.groups);
+    const listadoProyectos = useSelector(store => store.proyectos.listadoProyectos);
+    const listaIntegrantes = useSelector(store => store.courseMembers.members);
 
-    useEffect(() => { }, [cantGrupos, cantProyectos, cantIntegrantes]);
+    
+    useEffect(() => {
+        console.log("dispaching!");
+        dispatch(fetchGrupos(idCurso));
+        dispatch(fetchMembers(idCurso));
+        dispatch(fetchProyectos());
+    }, [dispatch, idCurso]);
 
     return (
         <Grid container spacing={4}>
             <CardSm titulo={"Grupos"} idCurso={idCurso} subseccion={'grupos'} >
-                <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">{cantGrupos}</Typography>
+                <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">{listaGrupos.length}</Typography>
             </CardSm>
 
             <CardSm titulo={"Proyectos"} idCurso={idCurso} subseccion={'proyectos'} >
-                <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">{cantProyectos}</Typography>
+                <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">{listadoProyectos.length}</Typography>
             </CardSm>
 
             <CardSm titulo={"Integrantes"} idCurso={idCurso} subseccion={'integrantes'} >
-                <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">{cantIntegrantes}</Typography>
+                <Typography className={classes.pos} color="textSecondary" variant="h3" component="h2">{listaIntegrantes.length}</Typography>
             </CardSm>
 
             <CardSm titulo={"Ayudante"} idCurso={idCurso} subseccion={'ayudante'} >
@@ -73,25 +85,10 @@ export default function Curso(props) {
             </CardSm>
 
             <div className={classes.tarjetaGrupo}>
-                <Members idCurso={idCurso} needsBack={false}/>
+                <Members idCurso={idCurso} needsBack={false} />
             </div>
         </Grid>
 
-
-        //<div>
-        //    <div><h1 align='center'>Dashboard</h1></div>
-        //    <div>
-        //      <TablaProyectos idCurso={ idCurso }/>
-        //     </div>
-        //     <br></br>
-        //     <div>
-        //         <Members idCurso = {idCurso} />
-        //     </div>
-        //     <br></br>
-        //     <div>
-        //         <Grupos idCurso = {idCurso}/>
-        //     </div>
-        // </div> 
     );
 }
 
