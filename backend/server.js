@@ -1,3 +1,11 @@
+//------Variables mongoDB-------//
+const MongoClient = require("mongodb").MongoClient
+const ObjectId = require("mongodb").ObjectID
+const mongoDBURL = "mongodb://localhost:27017"
+const mongoDBDatabaseName = "mongoDB"
+var mongoDBdatabase, mongoDBcollection
+//------------------------------//
+
 var express = require("express")
 var cors = require("cors")
 var bodyParser = require("body-parser")
@@ -28,26 +36,19 @@ app.use("/memberlist", MemberList)
 app.use("/projects", Projects)
 
 //----------------Conexión mongoDB---------//
-
-const MongoClient = require("mongodb").MongoClient
-const ObjectId = require("mongodb").ObjectID
-const URL = "mongodb://localhost:27017"
-const NOMBREDATABASE = "mongoDB"
-var database, collection
-MongoClient.connect(URL,{ useUnifiedTopology: true }, { useNewUrlParser: true }, (error, client) => {
+MongoClient.connect(mongoDBURL,{ useUnifiedTopology: true }, { useNewUrlParser: true }, (error, client) => {
   if(error) {
       throw error
   }
-  database = client.db(NOMBREDATABASE)
-  collection = database.collection("documents")
-  console.log("Conectado a `" + NOMBREDATABASE + "`!")
+  mongoDBdatabase = client.db(mongoDBDatabaseName)
+  mongoDBcollection = mongoDBdatabase.collection("documents")
+  console.log("Conectado a `" + mongoDBDatabaseName + "`!")
 });
-
-//---------Rutas mongoDB-----------------//
+//----------------Rutas mongoDB-----------------//
 //Agregar documento
 app.post("/documents/add", (request, response) => {
   request.body.disponible = true //se agrega disponibilidad true por defecto
-  collection.insertOne(request.body, (error, result) => {
+  mongoDBcollection.insertOne(request.body, (error, result) => {
     if(error) {
       return response.status(500).send(error)
     }
@@ -58,7 +59,7 @@ app.post("/documents/add", (request, response) => {
 
 //Obtener todos los documentos
 app.get("/documents/readAll", (request, response) => {
-    collection.find({}).toArray((error, result) => {
+    mongoDBcollection.find({}).toArray((error, result) => {
         if(error) {
             return response.status(500).send(error)
         }
@@ -68,7 +69,7 @@ app.get("/documents/readAll", (request, response) => {
 
 //Obtener unico documento según su ID
 app.get("/documents/get/:id", (request, response) => {
-  collection.findOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
+  mongoDBcollection.findOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
       if(error) {
           return response.status(500).send(error)
       }
@@ -78,7 +79,7 @@ app.get("/documents/get/:id", (request, response) => {
 
 //Deshabilitar dococumento según su ID
 app.put("/documents/deshabilitar/:id", (request, response) => {
-  collection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: {disponible: false} },(error, result) => {
+  mongoDBcollection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: {disponible: false} },(error, result) => {
       if(error) {
           return response.status(500).send(error)
       }
@@ -88,7 +89,7 @@ app.put("/documents/deshabilitar/:id", (request, response) => {
 
 //Habilitar dococumento según su ID
 app.put("/documents/habilitar/:id", (request, response) => {
-  collection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: {disponible: true} },(error, result) => {
+  mongoDBcollection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: {disponible: true} },(error, result) => {
       if(error) {
           return response.status(500).send(error)
       }
@@ -98,7 +99,7 @@ app.put("/documents/habilitar/:id", (request, response) => {
 
 //Editar dococumento según su ID
 app.put("/documents/update/:id", (request, response) => {
-  collection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: request.body },(error, result) => {
+  mongoDBcollection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: request.body },(error, result) => {
       if(error) {
           return response.status(500).send(error)
       }
@@ -108,7 +109,7 @@ app.put("/documents/update/:id", (request, response) => {
 
 //Borrar permamentemente documento según su ID
 app.delete("/documents/delete/:id", (request, response) => {
-  collection.deleteOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
+  mongoDBcollection.deleteOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
       if(error) {
           return response.status(500).send(error)
       }
@@ -118,7 +119,7 @@ app.delete("/documents/delete/:id", (request, response) => {
 
 //Borrar permamentemente todos los documentos ¡¡¡PRECAUCIÓN!!!
 app.delete("/documents/deleteAll/", (request, response) => {
-  collection.deleteMany((error, result) => {
+  mongoDBcollection.deleteMany((error, result) => {
       if(error) {
           return response.status(500).send(error)
       }
