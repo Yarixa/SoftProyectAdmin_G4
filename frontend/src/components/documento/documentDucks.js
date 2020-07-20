@@ -14,6 +14,22 @@ const UPDATE_DOCUMENT = 'UPDATE_DOCUMENT'
 
 export default function documentReducers(state = dataInicial, action){
     switch (action.type){
+        case CREATE_DOCUMENT: return {
+            ...state,
+            documents: state.documents.concat(action.payload)
+        };
+        case DISABLE_DOCUMENT: return {
+            ...state,
+            documents: state.documents.filter(documento => documento.id !== action.payload)
+        };
+        case UPDATE_DOCUMENT: return {
+            ...state,
+            documents: state.documents.map(documento => documento.id===action.payload.id?action.payload:documento)
+        };
+        case GET_DOCUMENT: return {
+            ...state,
+            documents: action.payload
+        };
         default:
             return state
     }

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import Modulos from '../components/vista-modulos/Modulos';
@@ -10,24 +10,29 @@ import Members from '../components/vista-curso/integrantes/Members';
 import Grupos from '../components/grupo-curso/Grupos';
 import TablaProyectos from '../components/vista-curso/gestion-proyectos';
 
+import { useSelector, useDispatch } from 'react-redux';
+import {fetchProyectos} from "../components/vista-curso/gestion-proyectos/proyectosDuck";
+import {Documento} from "../components/documento/Documento";
+
+
 export default function RouterFacade(props) {
     const { root } = props;
     const { subseccion } = props;
+    const { idSubseccion } = props;
     const { id } = props;
-    
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log('---> root: ' + root);
         console.log('---> subseccion: ' + subseccion);
-        console.log('---> id: ' + id);        
+        console.log('---> id: ' + id);
     }, [root, subseccion, id]);
 
-    if(sessionStorage.getItem('logged') === 'false'){
+    if (sessionStorage.getItem('logged') === 'false') {
         console.log("redirecting to login from RouterFacade!!")
-        return (<Redirect to="/"/>)
+        return (<Redirect to="/" />)
     }
 
-    const arbolPrincipal = (subseccion)=>{
+    const arbolPrincipal = (subseccion) => {
         switch (subseccion) {
             case 'modulos': return (<Modulos />);
             case 'usuarios': return (<Users />);
@@ -37,20 +42,41 @@ export default function RouterFacade(props) {
         }
     }
 
-    const arbolCurso = (idCurso, subseccion)=>{
+    const arbolCurso = (idCurso, subseccion, idSubseccion) => {
         switch (subseccion) {
-            case 'home': return (<Curso idCurso={ idCurso }/>);
-            case 'integrantes' : return (<Members idCurso = { idCurso } needsBack={true} />);
-            case 'proyectos' : return (<TablaProyectos idCurso={ idCurso } needsBack={true}/>);
-            case 'grupos' : return (<Grupos idCurso={ idCurso } needsBack={true}/>);
+            case 'home': return (<Curso idCurso={idCurso} />);
+            case 'integrantes': return (<Members idCurso={idCurso} needsBack={true} />);
+            case 'proyectos': return (<TablaProyectos idCurso={idCurso} needsBack={true} />);
+            case 'proyecto': return (<DashProyecto idCurso={idCurso} idProyecto={idSubseccion} />);
+            case 'grupos': return (<Grupos idCurso={idCurso} needsBack={true} />);
             default: return (<div> ERROR 404: NO HAY NADA AQUÍ</div>);
         }
     }
 
-    switch(root){
-        case 'home' : return arbolPrincipal(subseccion);
-        case 'curso' : return arbolCurso(id, subseccion);
-        default : return (<div> ERROR 404: NO HAY NADA AQUÍ </div>);
+    switch (root) {
+        case 'home': return arbolPrincipal(subseccion);
+        case 'curso': return arbolCurso(id, subseccion, idSubseccion);
+        default: return (<div> ERROR 404: NO HAY NADA AQUÍ </div>);
     }
-   
+
 }
+
+function DashProyecto(props) {
+    //const {idCurso} = props;
+    const { idProyecto } = props;
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchProyectos());
+    }, [dispatch]);
+    
+    const listadoProyectos = useSelector(store => store.proyectos.listadoProyectos);
+    const proyectoActual = listadoProyectos.find(proyecto => idProyecto == proyecto.id);
+
+    return (
+        <div>
+            <h1>proyecto: {proyectoActual?proyectoActual.nombre:"cargando..."}</h1>
+            <Documentos />
+        </div>
+    );
+} 

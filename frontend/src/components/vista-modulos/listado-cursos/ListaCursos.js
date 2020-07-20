@@ -1,5 +1,5 @@
 import React from 'react';
-//import { Table } from 'semantic-ui-react';
+
 import DeshabilitarCurso from './botones-dialogos/DeshabilitarCurso';
 import {Link} from "react-router-dom";
 import TableCell from '@material-ui/core/TableCell';
