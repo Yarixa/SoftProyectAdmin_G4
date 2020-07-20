@@ -31,16 +31,16 @@ app.use("/projects", Projects)
 
 const MongoClient = require("mongodb").MongoClient
 const ObjectId = require("mongodb").ObjectID
-const URL = "mongodb://localhost:27017/mongoDB";
-const NOMBREDATABASE = "mongoDB";
+const URL = "mongodb://localhost:27017"
+const NOMBREDATABASE = "mongoDB"
 var database, collection
 MongoClient.connect(URL,{ useUnifiedTopology: true }, { useNewUrlParser: true }, (error, client) => {
   if(error) {
-      throw error;
+      throw error
   }
-  database = client.db(NOMBREDATABASE);
-  collection = database.collection("documents");
-  console.log("Conectado a `" + NOMBREDATABASE + "`!");
+  database = client.db(NOMBREDATABASE)
+  collection = database.collection("documents")
+  console.log("Conectado a `" + NOMBREDATABASE + "`!")
 });
 
 //---------Rutas mongoDB-----------------//
@@ -49,10 +49,10 @@ app.post("/documents/add", (request, response) => {
   request.body.disponible = true //se agrega disponibilidad true por defecto
   collection.insertOne(request.body, (error, result) => {
     if(error) {
-      return response.status(500).send(error);
+      return response.status(500).send(error)
     }
     //response.send(request.id)
-    response.send(result["ops"][0]["_id"]);
+    response.send(result["ops"][0]["_id"])
   });
 });
 
@@ -60,9 +60,9 @@ app.post("/documents/add", (request, response) => {
 app.get("/documents/readAll", (request, response) => {
     collection.find({}).toArray((error, result) => {
         if(error) {
-            return response.status(500).send(error);
+            return response.status(500).send(error)
         }
-        response.send(result);
+        response.send(result)
     });
 });
 
@@ -70,9 +70,39 @@ app.get("/documents/readAll", (request, response) => {
 app.get("/documents/get/:id", (request, response) => {
   collection.findOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
       if(error) {
-          return response.status(500).send(error);
+          return response.status(500).send(error)
       }
-      response.send(result);
+      response.send(result)
+  });
+});
+
+//Deshabilitar dococumento según su ID
+app.put("/documents/deshabilitar/:id", (request, response) => {
+  collection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: {disponible: false} },(error, result) => {
+      if(error) {
+          return response.status(500).send(error)
+      }
+      response.send(result)
+  });
+});
+
+//Habilitar dococumento según su ID
+app.put("/documents/habilitar/:id", (request, response) => {
+  collection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: {disponible: true} },(error, result) => {
+      if(error) {
+          return response.status(500).send(error)
+      }
+      response.send(result)
+  });
+});
+
+//Editar dococumento según su ID
+app.put("/documents/update/:id", (request, response) => {
+  collection.updateOne({ "_id": new ObjectId(request.params.id) },  { $set: request.body },(error, result) => {
+      if(error) {
+          return response.status(500).send(error)
+      }
+      response.send(result)
   });
 });
 
@@ -80,9 +110,9 @@ app.get("/documents/get/:id", (request, response) => {
 app.delete("/documents/delete/:id", (request, response) => {
   collection.deleteOne({ "_id": new ObjectId(request.params.id) }, (error, result) => {
       if(error) {
-          return response.status(500).send(error);
+          return response.status(500).send(error)
       }
-      response.send(result);
+      response.send(result)
   });
 });
 
@@ -90,9 +120,9 @@ app.delete("/documents/delete/:id", (request, response) => {
 app.delete("/documents/deleteAll/", (request, response) => {
   collection.deleteMany((error, result) => {
       if(error) {
-          return response.status(500).send(error);
+          return response.status(500).send(error)
       }
-      response.send(result);
+      response.send(result)
   });
 });
 //--------------Final rutas mongoDB--------//
