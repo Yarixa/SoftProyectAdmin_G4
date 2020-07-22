@@ -45,6 +45,9 @@ const Users = () => {
     const [open, setOpen] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
     const [carga, setCarga] = React.useState(false);
+    const [firstNameError, setFirstNameError] = React.useState(false);
+    const [lastNameError, setLastNameError] = React.useState(false);
+    const [emailError, setEmailError] = React.useState(false);
     
     const fetchUsers = () => {
         dispatch(getUsers())
@@ -97,10 +100,12 @@ const Users = () => {
     // Obteniendo datos de formulario
     const userName = e => {
         user.first_name = e.target.value
+        setFirstNameError(simpleValidator(e.target.value))
     }
 
     const userLastName = e => {
         user.last_name = e.target.value
+        setLastNameError(simpleValidator(e.target.value))
     }
 
     const userEmail = e => {
@@ -120,6 +125,36 @@ const Users = () => {
         }
         else{
             dispatch(enableUser({email: e.currentTarget.attributes['email'].value}))
+        }
+    }
+
+    //Funcion para validar datos (true si encuentra error, false si no encuentra error)
+    const simpleValidator = (text) => {
+        //en caso de que no se haya escrito nada, no se valida
+        //console.log(text)
+        if(text!==''){ 
+            //valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
+            if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        else{
+            return false
+        }
+    };
+
+    //Funcion para habilitar/deshabilitar boton de aceptar formulario
+    //Se vuelve a validar cada valor y además descrimina si se ha escrito algo en los campos del formulario
+    const buttonAcceptCheck = () =>{
+        if( (!simpleValidator(user.first_name) && !simpleValidator(user.last_name)) && 
+        (user.last_name && user.first_name)!==''){
+            return false
+        }
+        else{
+            return true
         }
     }
 
@@ -204,6 +239,8 @@ const Users = () => {
                             type = "nombre"
                             className = {classes.TextField}
                             onChange = {userName}
+                            error={firstNameError}
+                            helperText={firstNameError ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                         />
                         <TextField
                             autoFocus
@@ -212,6 +249,8 @@ const Users = () => {
                             type = "apellido"
                             className = {classes.TextField}
                             onChange = {userLastName}
+                            error={lastNameError}
+                            helperText={lastNameError  ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                         />
                         <TextField
                             autoFocus
@@ -227,7 +266,7 @@ const Users = () => {
                         <Button autoFocus onClick = {handleClose}>
                             Cancelar
                         </Button>
-                        <Button onClick = {handleSubmit} color = "primary">
+                        <Button onClick = {handleSubmit} color = "primary" disabled={buttonAcceptCheck()}>
                             Agregar
                         </Button>
                     </DialogActions>

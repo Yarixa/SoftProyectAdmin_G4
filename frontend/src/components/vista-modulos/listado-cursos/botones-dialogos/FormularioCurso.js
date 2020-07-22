@@ -103,26 +103,29 @@ export default function FormularioCurso(props) {
     const simpleValidator = (text) => {
 
         //en caso de que no se haya escrito nada, no se valida
-        if(text!==''){ 
+        if(text!==''&&text!==undefined){ 
+            console.log("texto ingresado: "+text)
             if(text===anio){ //si la variable a validar es anio...
                 var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
                 if(!isNum){ 
                     return true 
                 }
             }
-            else if (text===semestre){ //Por defecto, si no se selecciona algún semestre, el valor de la variable es un espacio
+            else if(text===semestre){ //Por defecto, si no se selecciona algún semestre, el valor de la variable es un espacio
                 if(semestre===' '){
                     return true
                 }
             }
-            else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
-                // if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
-                //     return true
-                // }
-                // else{
-                //     return false
-                // }
+            //valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
+            else if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
+                return true
             }
+            else{
+                return false
+            }
+        }
+        else{
+            return false
         }
         //console.log(buttonAcceptCheck)
     };
@@ -176,7 +179,7 @@ export default function FormularioCurso(props) {
                                 onChange={(e) => setAnio(e.target.value)}
                                 defaultValue={esModoEditar?anio:''}
                                 error={simpleValidator(anio)}
-                                helperText={ simpleValidator(anio) ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
+                                helperText={ simpleValidator(anio) ? 'Por favor, ingrese sólo numeros' : ' '}
                             />
                             <InputLabel
                                 className={classes.formItem}
@@ -184,12 +187,12 @@ export default function FormularioCurso(props) {
                             <Select
                                 labelId="selecionar-semestre"
                                 id="dropwdown-list"
-                                value={semestre}
+                                //value={semestre}
                                 defaultValue={esModoEditar?semestre:" "}
                                 onChange={handleChange}
                                 input={<Input />}
                                 error={semestre===' '}
-                                helperText={ semestre===' ' ? 'Por favor, seleccione un semestre' : ' '}
+                                helperText={semestre===' ' ? 'Por favor, seleccione un semestre' : ' '}
                             >
                                 <MenuItem value={" "}>
                                     <em>Ninguno</em>
