@@ -60,7 +60,7 @@ export default function TablaProyectos(props){
                     :<IconButton component={Link} to={'/curso/'+idCurso+'/home'}>
                         <ArrowBackIcon/>
                     </IconButton>
-                }></CardHeader>
+                }/>
                 <CardContent>
                     <TableContainer>
                         <Table stickyHeader aria-label="sticky table">

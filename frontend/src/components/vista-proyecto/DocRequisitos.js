@@ -3,18 +3,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Grid from '@material-ui/core/Grid';
+import {Link} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
     media: {
         height: 0,
-        paddingTop: '50%', // 16:9
+        paddingTop: '100%', // 16:9
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -34,45 +34,45 @@ const useStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
-
-    avatarC: {
-        backgroundColor: '#007EDC',
+    avatarR: {
+        backgroundColor: red[500],
     },
+
 }));
 
-export default function RecipeReviewCard() {
+export default function RecipeReviewCard(props) {
+    const {idProyecto} = props;
+
     const classes = useStyles();
-    const [expandedC, setExpandedC] = React.useState(false);
-
-    const handleExpandClickC = () => {
-        setExpandedC(!expandedC);
+    const [expandedR, setExpandedR] = React.useState(false);
+    const handleExpandClickR = () => {
+        setExpandedR(!expandedR);
     };
-
 
     return (
         <div>
-                {/* Construcción */}
+                {/* Requisitos */}
                 <Card className={classes.root}>
                     <CardHeader
                         avatar={
-                            <Avatar aria-label="recipe" className={classes.avatarC}>
-                                C
+                            <Avatar aria-label="recipe" className={classes.avatarR}>
+                                R
                             </Avatar>
                         }
-                        title="Documento de Construcción de Software"
-                        subheader="última modificación: 18 Julio 2020 "
+                        title="Documento de Requisitos de Software"
+                        subheader="Última modificación: 18 Julio 2020 "
                     />
                     <CardContent>
                         <Typography paragraph>Avance:</Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            80%
+                            30%
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton aria-label="ver">
                             <VisibilityIcon/>
                         </IconButton>
-                        <IconButton aria-label="editar">
+                        <IconButton component={Link} to={"/proyecto/"+idProyecto+"/req"} aria-label="editar">
                             <EditIcon />
                         </IconButton>
                         <IconButton aria-label="descargar">
@@ -80,25 +80,29 @@ export default function RecipeReviewCard() {
                         </IconButton>
                         <IconButton
                             className={clsx(classes.expand, {
-                                [classes.expandOpen]: expandedC,
+                                [classes.expandOpen]: expandedR,
                             })}
-                            onClick={handleExpandClickC}
-                            aria-expanded={expandedC}
+                            onClick={handleExpandClickR}
+                            aria-expanded={expandedR}
                         >
                             <ExpandMoreIcon />
                         </IconButton>
                     </CardActions>
-                    <Collapse in={expandedC} timeout="auto" unmountOnExit>
+                    <Collapse in={expandedR} timeout="auto" unmountOnExit>
                         <CardContent>
                             <Typography paragraph>Descripción:</Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
-                                se refiere a la creación de software productivo y significativo a través
-                                de los procesos de codificación,verificación, pruebas unitarias,
-                                pruebas de integración y depuración de errores.
+                                El documento de requerimientos de software, es el lugar donde se da
+                                descripción a las características y requisitos de un software, producto, programa
+                                o conjunto de programas. Los requisitos se expresan en lenguaje natural, sin
+                                consideraciones ni términos técnicos.
+                                La especificación de requisitos de software es el resultado del levantamiento
+                                de información con el usuario o cliente del producto.
                             </Typography>
                         </CardContent>
                     </Collapse>
                 </Card>
+
 
         </div>
 

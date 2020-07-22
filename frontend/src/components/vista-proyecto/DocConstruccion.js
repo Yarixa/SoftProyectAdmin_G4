@@ -10,12 +10,12 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,41 +36,45 @@ const useStyles = makeStyles((theme) => ({
         transform: 'rotate(180deg)',
     },
 
-    avatarT: {
-        backgroundColor:'#ffd600',
+    avatarC: {
+        backgroundColor: '#007EDC',
     },
 }));
 
-export default function RecipeReviewCard() {
+export default function RecipeReviewCard(props) {
+    const {idProyecto} = props;
     const classes = useStyles();
-    const [expandedT, setExpandedT] = React.useState(false);
-    const handleExpandClickT = () => {
-        setExpandedT(!expandedT);
+    const [expandedC, setExpandedC] = React.useState(false);
+
+    const handleExpandClickC = () => {
+        setExpandedC(!expandedC);
     };
+
 
     return (
         <div>
+                {/* Construcción */}
                 <Card className={classes.root}>
                     <CardHeader
                         avatar={
-                            <Avatar aria-label="recipe" className={classes.avatarT}>
-                                T
+                            <Avatar aria-label="recipe" className={classes.avatarC}>
+                                C
                             </Avatar>
                         }
-                        title="Documento de Testeo de Software"
+                        title="Documento de Construcción de Software"
                         subheader="última modificación: 18 Julio 2020 "
                     />
                     <CardContent>
                         <Typography paragraph>Avance:</Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            20%
+                            80%
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton aria-label="ver">
                             <VisibilityIcon/>
                         </IconButton>
-                        <IconButton aria-label="editar">
+                        <IconButton component={Link} to={"/proyecto/"+idProyecto+"/mod"} aria-label="editar">
                             <EditIcon />
                         </IconButton>
                         <IconButton aria-label="descargar">
@@ -78,26 +82,28 @@ export default function RecipeReviewCard() {
                         </IconButton>
                         <IconButton
                             className={clsx(classes.expand, {
-                                [classes.expandOpen]: expandedT,
+                                [classes.expandOpen]: expandedC,
                             })}
-                            onClick={handleExpandClickT}
-                            aria-expanded={expandedT}
+                            onClick={handleExpandClickC}
+                            aria-expanded={expandedC}
                         >
                             <ExpandMoreIcon />
                         </IconButton>
                     </CardActions>
-                    <Collapse in={expandedT} timeout="auto" unmountOnExit>
+                    <Collapse in={expandedC} timeout="auto" unmountOnExit>
                         <CardContent>
                             <Typography paragraph>Descripción:</Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
-                                El documento de Testeo de software, se desarrolla la evaluación de la calidad del producto,
-                                con el fin de identificar los defectos y problemas de este, para posteriormente mejorarlo.
+                                se refiere a la creación de software productivo y significativo a través
+                                de los procesos de codificación,verificación, pruebas unitarias,
+                                pruebas de integración y depuración de errores.
                             </Typography>
                         </CardContent>
                     </Collapse>
                 </Card>
 
         </div>
+
 
 
     );

@@ -3,22 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import EditIcon from '@material-ui/icons/Edit';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Grid from "@material-ui/core/Grid";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
-import GetAppIcon from "@material-ui/icons/GetApp";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,43 +33,43 @@ const useStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
-    avatarD: {
-        backgroundColor: '#2DA64E',
+
+    avatarT: {
+        backgroundColor:'#ffd600',
     },
 }));
 
-export default function RecipeReviewCard() {
+export default function RecipeReviewCard(props) {
+    const {idProyecto} = props;
     const classes = useStyles();
-    const [expandedD, setExpandedD] = React.useState(false);
-
-    const handleExpandClickD = () => {
-        setExpandedD(!expandedD);
+    const [expandedT, setExpandedT] = React.useState(false);
+    const handleExpandClickT = () => {
+        setExpandedT(!expandedT);
     };
 
     return (
         <div>
-                {/* Diseño */}
                 <Card className={classes.root}>
                     <CardHeader
                         avatar={
-                            <Avatar aria-label="recipe" className={classes.avatarD}>
-                                D
+                            <Avatar aria-label="recipe" className={classes.avatarT}>
+                                T
                             </Avatar>
                         }
-                        title="Documento de Diseño de Software"
+                        title="Documento de Testeo de Software"
                         subheader="última modificación: 18 Julio 2020 "
                     />
                     <CardContent>
                         <Typography paragraph>Avance:</Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            50%
+                            20%
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton aria-label="ver">
                             <VisibilityIcon/>
                         </IconButton>
-                        <IconButton aria-label="editar">
+                        <IconButton component={Link} to={"/proyecto/"+idProyecto+"/test"} aria-label="editar">
                             <EditIcon />
                         </IconButton>
                         <IconButton aria-label="descargar">
@@ -82,26 +77,27 @@ export default function RecipeReviewCard() {
                         </IconButton>
                         <IconButton
                             className={clsx(classes.expand, {
-                                [classes.expandOpen]: expandedD,
+                                [classes.expandOpen]: expandedT,
                             })}
-                            onClick={handleExpandClickD}
-                            aria-expanded={expandedD}
+                            onClick={handleExpandClickT}
+                            aria-expanded={expandedT}
                         >
                             <ExpandMoreIcon />
                         </IconButton>
                     </CardActions>
-                    <Collapse in={expandedD} timeout="auto" unmountOnExit>
+                    <Collapse in={expandedT} timeout="auto" unmountOnExit>
                         <CardContent>
                             <Typography paragraph>Descripción:</Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
-                                El documento de diseño de software, es una descripción escrita del un producto de software,
-                                en donde un diseñador de software escribe con el fin de dar un equipo de desarrollo de software orientado,
-                                generalmente, a la arquitectura de un proyecto.
+                                El documento de Testeo de software, se desarrolla la evaluación de la calidad del producto,
+                                con el fin de identificar los defectos y problemas de este, para posteriormente mejorarlo.
                             </Typography>
                         </CardContent>
                     </Collapse>
                 </Card>
 
         </div>
-);
+
+
+    );
 }

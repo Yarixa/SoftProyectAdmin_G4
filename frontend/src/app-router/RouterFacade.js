@@ -13,6 +13,11 @@ import TablaProyectos from '../components/vista-curso/gestion-proyectos';
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchProyectos} from "../components/vista-curso/gestion-proyectos/proyectosDuck";
 import {Documento} from "../components/documento/Documento";
+import DashboardProyecto from "../components/vista-proyecto/VistaProyectos";
+import VistaRequisitos from "../components/documento/vista-requisitos";
+import VistaDisenio from "../components/documento/vista-diseño";
+import VistaTesting from "../components/documento/vista-testing";
+import VistaModulos from "../components/documento/vista-modulos";
 
 
 export default function RouterFacade(props) {
@@ -47,8 +52,18 @@ export default function RouterFacade(props) {
             case 'home': return (<Curso idCurso={idCurso} />);
             case 'integrantes': return (<Members idCurso={idCurso} needsBack={true} />);
             case 'proyectos': return (<TablaProyectos idCurso={idCurso} needsBack={true} />);
-            case 'proyecto': return (<DashProyecto idCurso={idCurso} idProyecto={idSubseccion} />);
+            case 'proyecto': return (<DashboardProyecto idCurso={idCurso} idProyecto={idSubseccion} />);
             case 'grupos': return (<Grupos idCurso={idCurso} needsBack={true} />);
+            default: return (<div> ERROR 404: NO HAY NADA AQUÍ</div>);
+        }
+    }
+
+    const arbolProyecto = (idProyecto, subseccion) => {
+        switch (subseccion) {
+            case 'req': return (<VistaRequisitos idProyecto={idProyecto}/>);
+            case 'dis': return (<VistaDisenio idProyecto={idProyecto}/>);
+            case 'test': return (<VistaTesting idProyecto={idProyecto}/>);
+            case 'mod': return (<VistaModulos idProyecto={idProyecto}/>);
             default: return (<div> ERROR 404: NO HAY NADA AQUÍ</div>);
         }
     }
@@ -56,27 +71,8 @@ export default function RouterFacade(props) {
     switch (root) {
         case 'home': return arbolPrincipal(subseccion);
         case 'curso': return arbolCurso(id, subseccion, idSubseccion);
+        case 'proyecto': return arbolProyecto(id, subseccion, idSubseccion);
         default: return (<div> ERROR 404: NO HAY NADA AQUÍ </div>);
     }
 
 }
-
-function DashProyecto(props) {
-    //const {idCurso} = props;
-    const { idProyecto } = props;
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchProyectos());
-    }, [dispatch]);
-    
-    const listadoProyectos = useSelector(store => store.proyectos.listadoProyectos);
-    const proyectoActual = listadoProyectos.find(proyecto => idProyecto == proyecto.id);
-
-    return (
-        <div>
-            <h1>proyecto: {proyectoActual?proyectoActual.nombre:"cargando..."}</h1>
-            <Documentos />
-        </div>
-    );
-} 
