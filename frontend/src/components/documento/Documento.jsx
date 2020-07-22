@@ -24,18 +24,6 @@ export default function Documentos(){
         console.log('hizo clic',contenido)
     }
 
-    const agregarRequisitoSoftware=(contenido)=>{
-        return contenido
-    }
-    const agregarRequisitoUsuario=(contenido)=>{
-        return contenido
-    }
-    const cargarRequisitoSoftware=(contenido){
-        requisito_software=contenido
-    }
-    const cargarRequisitoUsuario=(contenido){
-        requisito_usuario=contenido
-    }
     return (
         <div>
             <Card>
@@ -60,30 +48,6 @@ export default function Documentos(){
                   <Button type="submit">Agregar</Button>
             </Card>   
 
-        </div>
-        <div>
-        <Card>
-            <CardHeader title={nombreProyecto}/>
-            <CardContent>
-                <h3>Requisito de Software</h3>
-            </CardContent>
-            <CKEditor 
-                editor = {ClassicEditor}
-                data = "<p>Requisitos</p>"
-                onChange = {(event, editor)=>{
-                }}
-                config ={{   
-                    autosave:{
-                        guardar(editor){
-                            console.log("Guardado")
-                            return guardarDato(editor.getData())
-                        }
-                    }
-                }}       
-            />
-              <Button type="submit">Agregar</Button>
-        </Card>   
-        
     </div>
     );
 }
