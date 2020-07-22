@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../database/db.js')
 
 module.exports = db.sequelize.define(
-	'memberList',
+	'teamList',
 	{
 		id: {
 			type: Sequelize.INTEGER,
@@ -16,10 +16,10 @@ module.exports = db.sequelize.define(
 				key: 'email'
 			}
 		},
-		course_id: {
+		team_id: {
 			type: Sequelize.INTEGER,
 			references: {
-				model: 'courses',
+				model: 'teams',
 				key: 'id'
 			}
 		},

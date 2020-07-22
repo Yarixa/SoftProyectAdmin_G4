@@ -77,21 +77,22 @@ exports.create = (req, res) => {
 	const memberListData = {
 		user_email: req.body.user_email,
 		course_id: req.body.course_id,
-		team_id: req.body.team_id,
 		type: req.body.type
 	}
 	MemberList.findOne({
 		where: {
 			user_email: memberListData.user_email,
 			course_id: memberListData.course_id,
-			team_id: memberListData.team_id
 		}
 	})
 	.then(memberList => {
 		if(!memberList){
 			MemberList.create(memberListData)
 			.then(memberList => {
-				res.json({message: "El usuario ha sido integrado al curso."})
+				res.json({
+						memberList: memberListData,
+						message: "Usuario agregado con exito"
+					})
 			})
 			.catch(err => {
 				res.status(400).json({
@@ -563,7 +564,7 @@ exports.testMassiveCreate = async (req, res) => {
 
 		try{
 			//console.log(memberListArray)
-			res.json(await cargaArchivo(req))
+			res.json({memberListArray: await cargaArchivo(req)})
 	}
 	catch(e){
 		res.json("There was an error on the file. " + e)
@@ -571,6 +572,10 @@ exports.testMassiveCreate = async (req, res) => {
 }
 
 var  cargaArchivo = async (req) =>{
+
+			var usuariosAceptados = []
+
+			var numero = 0
 
 			var XLSX = require('xlsx');
 			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
@@ -586,26 +591,24 @@ var  cargaArchivo = async (req) =>{
 
 					user_email: memberListArray[i]["Dirección de correo"],
 					course_id: req.params.course_id,
-					team_id: 1,
 					type: dRole
 
 				}
-
-
-
 				MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
 						course_id: memberListData.course_id,
-						team_id: 1
-					}
+					},
 				})
-				.then(memberList =>{
+				.then((memberList) =>{
 					if(!memberList){
-
+							usuariosAceptados.push(memberListData)
 							MemberList.create(memberListData)
-							.then(user => {
+							.then(memberList => {
 								console.log("User " + memberListData.user_email + " linked.")
+								//usuariosAceptados.push(memberListData)
+								console.log(usuariosAceptados + "D")
+								numero = 1
 							})
 							.catch(err => {
 								console.log('Error: ' + err )
@@ -613,6 +616,9 @@ var  cargaArchivo = async (req) =>{
 
 					}else{
 						console.log("Error")
+					}
+					return {
+						usuariosAceptados
 					}
 				})
 				.catch(err => {
@@ -629,7 +635,8 @@ var  cargaArchivo = async (req) =>{
 		catch(err){
 			console.error(err)
 		}
-		return("La operación fue realizada.")
+		return
+
 }
 
 var checkRegex = (email) => {
