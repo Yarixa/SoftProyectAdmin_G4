@@ -21,6 +21,7 @@ export default function DocumentDesign(){
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <h3>Nombre</h3>
+                    
                 </Grid>
                 <Grid item xs={12}>
                     <Button variant="container" color="primary" disableElevation>
