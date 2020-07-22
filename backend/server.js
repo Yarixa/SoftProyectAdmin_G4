@@ -18,30 +18,11 @@ app.use(fileUpload({
 var Users = require("./routes/Users")
 var Modulos = require("./routes/Modulo")
 var Courses = require("./routes/Courses")
-var MemberList = require("./routes/MemberList")
-var Projects = require("./routes/Project")
-var Documents = require("./routes/Documents")
 
-app.use("/courses", Courses)
+app.use("/courses", Courses) //ruta de cursos
 app.use("/modulos", Modulos)
 app.use("/users", Users)
-app.use("/memberlist", MemberList)
-app.use("/projects", Projects)
-app.use("/documents", Documents)
 
-//Conexión con mongoDB
-const db = require("./models/mongoDB");
-db.mongoose.connect(db.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    console.log("Conectado a mongoDB");
-  })
-  .catch(err => {
-    console.log("No se puedo conectar a mongoDB", err);
-    process.exit();
-  });
 
 app.listen(port, () => {
 	console.log("Server is running on port: " + port)

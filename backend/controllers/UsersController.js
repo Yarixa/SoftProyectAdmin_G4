@@ -2,7 +2,7 @@ const db = require("../database/db.js")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const User = require("../models/User")
-const fs = require('fs')
+
 const sgMail = require('@sendgrid/mail');
 
 //Es necesario el solicitar la API KEY y declarala como variable de entorno.
@@ -66,40 +66,23 @@ exports.login = (req, res) => {
 	})
 	.then(user => {
 		if(user){
-			if(user.disponible){
-				//Funcion encargada para verificar el hash de password.
-				if(bcrypt.compareSync(req.body.password, user.password)){
-					let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
-						expiresIn: 60
-					})
-					res.send(token)
-				}
-				else{
-					res.status(400).json({
-						error: true,
-						errorMessage: "password invalida"
-					})
-				}
+			//Funcion encargada para verificar el hash de password.
+			if(bcrypt.compareSync(req.body.password, user.password)){
+				let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
+					expiresIn: 60
+				})
+				res.send(token)
 			}
 			else{
-				res.status(400).json({
-					error: true,
-					errorMessage: "El usuario se encuentra deshabilitado"
-				})
+				res.end()
 			}
 		}else{
-			res.status(400).json({
-				error: true,
-				errorMessage: "User does not exists"
-			})
+			res.status(400).json({error: 'User does not exist'})
 			res.end()
 		}
 	})
 	.catch(err => {
-		res.status(400).json({
-			error: true,
-			errorMessage: err
-		})
+		res.status(400).json({error: err})
 	})
 }
 
@@ -115,7 +98,8 @@ exports.disable = (req, res) => {
 		if(user){
 			User.update(
 				{disponible: false},
-				{where: {email: req.params.email}}
+				{where:
+						{email: req.params.email}	}
 			)
 			.then(user => {
 				res.json({status: req.params.email + ' disabled'})
@@ -218,17 +202,20 @@ exports.updateUser = (req, res) => {
 	.then(user => {
 		if(user){
 				User.update(
-					{first_name: req.body.first_name,
-					last_name: req.body.last_name},
-					{where: {email: req.params.email}}
-				).then(result => {
-					res.json({status: req.params.email + ' updated'}
-				)}).catch(err =>{
-					res.json({error: err})
+					{first_name: req.params.first_name},
+					{last_name: req.params.last_name},
+					{where: { email: req.params.email } }
+				).then(result =>{
+							res.json({status: req.params.email + ' updated'})
+							res.send()
+				})
+				.catch(err =>{
+						res.json({error: err})
 				})
 			}
-		else{
+			else{
 				res.json({error: 'Wrong password'})
+				res.end()
 			}
 		})
 	.catch(err => {
@@ -361,21 +348,7 @@ exports.massiveCreate = async (req, res) => {
 					console.log('error: ' + err)
 				})
 			}
-
-		//Metodo para eliminar el archivo subido y cargado.
-		try{
-			const path = "./upload/" + req.params.xlsx_name
-			fs.unlink( path, (err) =>{
-
-			})
-		}
-		catch(err){
-			console.error(err)
-		}
-
 		res.json("All Users registered")
-
-
 	}
 	catch(e){
 		res.json("There was an error on the file.")

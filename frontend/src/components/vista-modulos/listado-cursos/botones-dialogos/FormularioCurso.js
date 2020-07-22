@@ -42,28 +42,31 @@ export default function FormularioCurso(props) {
 
     const { cursoParaEditar } = props;
     const { esModoEditar } = props;
-    const { nombreModulo } = props; 
-    const { idModulo } = props;
 
     const [open, setOpen] = React.useState(false);
-    const [profesor, setProfesor] = React.useState(esModoEditar?cursoParaEditar.profesor:"");
-    const [anio, setAnio] = React.useState(esModoEditar?cursoParaEditar.anio:"");
-    const [semestre, setSemestre] = React.useState(esModoEditar?cursoParaEditar.semestre:"");
+    const [nombreCurso, setNombreCurso] = React.useState(esModoEditar?cursoParaEditar.nombre:'');
+    const [profesor, setProfesor] = React.useState(esModoEditar?cursoParaEditar.profesor:'');
+    const [anio, setAnio] = React.useState(esModoEditar?cursoParaEditar.anio:'');
+    const [semestre, setSemestre] = React.useState(esModoEditar?cursoParaEditar.semestre:" ");
+
+    //borrar!! variable solo para uso preliminar... o debería venir de la api
+    var idAux = esModoEditar?cursoParaEditar.id:nombreCurso;
 
     const dispatch = useDispatch();
+
 
     const handleChange = (event) => {
         setSemestre(Number(event.target.value) || " ");
     };
 
     const handleClickOpen = () => {
-        console.log("this shit: " + nombreModulo);
         setOpen(true);
     };
 
     const handleClose = () => {
         if(!esModoEditar){
-            setSemestre("");
+            setNombreCurso('');
+            setSemestre(" ");
             setAnio('');
             setProfesor('');
         }
@@ -71,27 +74,22 @@ export default function FormularioCurso(props) {
     };
 
     const handleAccept = () => {
-        if(esModoEditar) {
-            const nuevoCurso = {
-                id : cursoParaEditar.id,
-                subject_id : idModulo,
-                profesor : profesor,
-                semestre : semestre,
-                anio : anio,
-                anioSemestre : anio + "-" + semestre
-            }
-            dispatch(editarCurso(nuevoCurso));
-        }else{
-            const nuevoCurso = {
-                subject_id : idModulo,
-                profesor : profesor,
-                semestre : semestre,
-                anio : anio,
-                anioSemestre : anio + "-" + semestre
-            }
+        const nuevoCurso = {
+            id : idAux,
+            nombre : nombreCurso,
+            profesor : profesor,
+            semestre : semestre,
+            anio : anio,
+            anioSemestre : anio + "-" + semestre
+        }
 
+        if(esModoEditar) {
+            dispatch(editarCurso(nuevoCurso));
+        }
+        else   {
             dispatch(agregarCurso(nuevoCurso));
 
+            setNombreCurso('');
             setSemestre(" ");
             setAnio('');
             setProfesor('');
@@ -99,46 +97,6 @@ export default function FormularioCurso(props) {
 
         setOpen(false);
     };
-    //Funcion para validar datos  (true si encuentra error, false si no encuentra error)
-    const simpleValidator = (text) => {
-
-        //en caso de que no se haya escrito nada, no se valida
-        if(text!==''){ 
-            if(text===anio){ //si la variable a validar es anio...
-                var isNum = /^\d+$/.test(text) //valida que solamente hayan numeros
-                if(!isNum){ 
-                    return true 
-                }
-            }
-            else if (text===semestre){ //Por defecto, si no se selecciona algún semestre, el valor de la variable es un espacio
-                if(semestre===' '){
-                    return true
-                }
-            }
-            else{//valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
-                // if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
-                //     return true
-                // }
-                // else{
-                //     return false
-                // }
-            }
-        }
-        //console.log(buttonAcceptCheck)
-    };
-
-    //Funcion para habilitar/deshabilitar boton de aceptar formulario
-    //Se vuelve a validar cada valor y además descrimina si se ha escrito algo en los campos del formulario
-    const buttonAcceptCheck = () =>{
-        if(!simpleValidator(profesor) &&
-        !simpleValidator(semestre) && !simpleValidator(anio) &&
-        (profesor && semestre && anio)!==''){    
-            return false
-        }
-        else{
-            return true
-        }
-    }
 
     return (
         <div>
@@ -152,13 +110,11 @@ export default function FormularioCurso(props) {
                         <form className={classes.formControl}>
                             <TextField
                                 className={classes.formItem}
-                                id="nombre-modulo"
+                                id="NombreCurso"
                                 fullWidth={true}
-                                label="Modulo"
-                                defaultValue={nombreModulo}
-                                InputProps={{
-                                    readOnly: true,
-                                  }}
+                                label="Nombre Curso"
+                                onChange={(e) => setNombreCurso(e.target.value)}
+                                defaultValue={esModoEditar?nombreCurso:''}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -166,8 +122,6 @@ export default function FormularioCurso(props) {
                                 label="Profesor"
                                 onChange={(e) => setProfesor(e.target.value)}
                                 defaultValue={esModoEditar?profesor:''}
-                                error={simpleValidator(profesor)}
-                                helperText={simpleValidator(profesor) ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                             />
                             <TextField
                                 className={classes.formItem}
@@ -175,8 +129,6 @@ export default function FormularioCurso(props) {
                                 label="Año"
                                 onChange={(e) => setAnio(e.target.value)}
                                 defaultValue={esModoEditar?anio:''}
-                                error={simpleValidator(anio)}
-                                helperText={ simpleValidator(anio) ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                             />
                             <InputLabel
                                 className={classes.formItem}
@@ -188,8 +140,6 @@ export default function FormularioCurso(props) {
                                 defaultValue={esModoEditar?semestre:" "}
                                 onChange={handleChange}
                                 input={<Input />}
-                                error={semestre===' '}
-                                helperText={ semestre===' ' ? 'Por favor, seleccione un semestre' : ' '}
                             >
                                 <MenuItem value={" "}>
                                     <em>Ninguno</em>
@@ -204,7 +154,7 @@ export default function FormularioCurso(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={handleAccept} color="primary" disabled={buttonAcceptCheck()}>
+                    <Button onClick={handleAccept} color="primary">
                         {esModoEditar?"Guardar":"Agregar"}
                     </Button>
                 </DialogActions>

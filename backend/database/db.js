@@ -2,7 +2,7 @@ const Sequelize = require("sequelize")
 const db = {}
 const sequelize = new Sequelize("firstApp", "administrador",
 	"abnormalize", {
-	host: '192.168.0.6',
+	host: 'localhost',
 	dialect: 'mysql',
 	operatorAliases: false,
 

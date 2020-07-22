@@ -8,16 +8,15 @@ const cors = require("cors")
 
 users.use(cors())
 
-//Metodos deshabilitados hasta que encuentre como evadir dnsbl-1.uceprotect.net
-/*//Bloque deshabilitado dado a que contiene el envio de correos.
+/* Bloque deshabilitado dado a que contiene el envio de correos.
 //Permite registrar al usuario. Hasta el momento no se ha tomado en cuenta el apartado de roles.
 users.post('/create', userController.create)
 
 //Funcion usada para cargar el archivo ubicado en ./upload.
 //Para dejar el archivo en dicha direccion se debe usar /uploadFile.
 //Deshabilitado hasta que usemos correos reales.
-users.post('/massiveCreate/:xlsx_name', userController.massiveCreate)*/
-
+users.post('/massiveCreate/:xlsx_name', userController.massiveCreate)
+*/
 
 //Permite listar todos los usuarios en la base de datos.
 users.get('/readAll', userController.readAll)

@@ -1,5 +1,6 @@
 import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -14,9 +15,7 @@ import {updateTitleAction} from '../appBarDuck';
 import BookIcon from '@material-ui/icons/Book';
 import WorkIcon from '@material-ui/icons/Work';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import PeopleIcon from '@material-ui/icons/People';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 
 
@@ -46,12 +45,12 @@ export default function RListItems() {
     return (
         <div className={classes.root}>
 
-            <ListItem button component={Link} to="/home/dashboard" onClick={() => dispatch(updateTitleAction('Dashboard'))}>
-                <ListItemIcon>
-                    <DashboardIcon style={{ color: '#FFFFFF' }} />
-                </ListItemIcon >
-                <ListItemText primary={buildLabel('Dashboard')} />
-            </ListItem>
+                <ListItem button component={Link} to="/" onClick={() => dispatch(updateTitleAction('Dashboard'))}>
+                    <ListItemIcon>
+                        <DashboardIcon style={{ color: '#FFFFFF' }} />
+                    </ListItemIcon >
+                    <ListItemText primary={buildLabel('Dashboard')} />
+                </ListItem>
 
             <ListItem button onClick={handleClick}>
                 <ListItemIcon>
@@ -62,24 +61,32 @@ export default function RListItems() {
             </ListItem>
 
             <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItem button className={classes.nested} component={Link} to="/home/modulos" onClick={() => dispatch(updateTitleAction('Módulos'))}>
-                        <ListItemText primary={buildLabel("Todos los módulos")} />
-                    </ListItem>
 
-                    <ListItem button className={classes.nested} component={Link} to="/home/modulos/nuevo-modulo" onClick={() => dispatch(updateTitleAction('Nuevo Módulo'))}>
-                        <ListItemText primary={buildLabel("Agregar módulo")} />
-                    </ListItem>
+                <List component="div" disablePadding>
+                        <ListItem button className={classes.nested} component={Link} to="/modulos" onClick={() => dispatch(updateTitleAction('Módulos'))}>
+                            <ListItemText primary={buildLabel("Todos los módulos")} />
+                        </ListItem>
+
+                        <ListItem button className={classes.nested} component={Link} to="/modulos/nuevo-modulo" onClick={() => dispatch(updateTitleAction('Nuevo Módulo'))}>
+                            <ListItemText primary={buildLabel("Agregar módulo")} />
+                        </ListItem>
 
                 </List>
             </Collapse>
 
-            <ListItem button component={Link} to="/home/usuarios" onClick={() => dispatch(updateTitleAction('Usuarios'))}>
-                <ListItemIcon>
-                    <SupervisedUserCircleIcon style={{ color: '#FFFFFF' }}/>
-                </ListItemIcon>
-                <ListItemText primary={buildLabel('Usuarios')} />
-            </ListItem>
+                <ListItem button component={Link} to="/modulosApi" onClick={() => dispatch(updateTitleAction('Cursos'))}>
+                    <ListItemIcon>
+                        <PeopleIcon style={{ color: '#FFFFFF' }}/>
+                    </ListItemIcon>
+                    <ListItemText primary={buildLabel('Cursos')} />
+                </ListItem>
+
+            <ListItem button component={Link} to="/proyectos" onClick={() => dispatch(updateTitleAction('Proyectos'))}>
+                    <ListItemIcon>
+                        <WorkIcon style={{ color: '#FFFFFF' }}/>
+                    </ListItemIcon>
+                    <ListItemText primary={buildLabel('Proyectos')} />
+                </ListItem>
         </div>
-    );
+        );
 }
