@@ -117,7 +117,7 @@ export default function FormularioCurso(props) {
                 }
             }
             //valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
-            else if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
+            else if(/[^a-zA-Z\s/ñ/]/.test(text) || !text.replace(/\s/g, '').length){
                 return true
             }
             else{

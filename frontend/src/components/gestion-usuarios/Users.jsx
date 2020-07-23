@@ -45,9 +45,14 @@ const Users = () => {
     const [open, setOpen] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
     const [carga, setCarga] = React.useState(false);
+
     const [firstNameError, setFirstNameError] = React.useState(false);
     const [lastNameError, setLastNameError] = React.useState(false);
     const [emailError, setEmailError] = React.useState(false);
+
+    const [disableAcceptButton, setDisableAcceptButton] = React.useState(true);
+    const [disableAcceptButtonEdit, setDisableAcceptButtonEdit] = React.useState(false);
+
     
     const fetchUsers = () => {
         dispatch(getUsers())
@@ -100,16 +105,22 @@ const Users = () => {
     // Obteniendo datos de formulario
     const userName = e => {
         user.first_name = e.target.value
-        setFirstNameError(simpleValidator(e.target.value))
+        setFirstNameError(simpleValidator(user.first_name))
+        buttonAcceptCheck()
+        buttonAcceptCheckEdit()
     }
 
     const userLastName = e => {
         user.last_name = e.target.value
-        setLastNameError(simpleValidator(e.target.value))
+        setLastNameError(simpleValidator(user.last_name))
+        buttonAcceptCheck()
+        buttonAcceptCheckEdit()
     }
 
     const userEmail = e => {
         user.email = e.target.value
+        setEmailError(emailValidator(user.email))
+        buttonAcceptCheck()
     }
 
     const handleSubmit = () => {
@@ -134,27 +145,56 @@ const Users = () => {
         //console.log(text)
         if(text!==''){ 
             //valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
-            if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
+            if(/[^a-zA-Z\s/ñ/]/.test(text) || !text.replace(/\s/g, '').length){
                 return true
             }
             else{
                 return false
             }
         }
-        else{
-            return false
-        }
     };
+
+    //Funcion para validar el email ingresado. Ésta discriminda si el dominio es "utalca.cl" o "alumnos.utalca.cl"
+    //false si concuerda, true si no concuerda
+    const emailValidator = (email) => {
+        if(email!==''){
+            var aux = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if(aux.test(email)){
+                if(email.indexOf("@alumnos.utalca.cl", email.length - "@alumnos.utalca.cl".length) !== -1){
+                    return false
+                }
+                else if(email.indexOf("@utalca.cl", email.length - "@utalca.cl".length) !== -1){
+                    return false
+                }
+                else{
+                    return true
+                }
+            }
+            else{
+                return true
+            }
+        }
+    }
 
     //Funcion para habilitar/deshabilitar boton de aceptar formulario
     //Se vuelve a validar cada valor y además descrimina si se ha escrito algo en los campos del formulario
     const buttonAcceptCheck = () =>{
-        if( (!simpleValidator(user.first_name) && !simpleValidator(user.last_name)) && 
-        (user.last_name && user.first_name)!==''){
-            return false
+        if((!simpleValidator(user.first_name) && !simpleValidator(user.last_name) && !emailValidator(user.email)) && 
+        user.first_name!=='' && user.last_name!=='' && user.email!==''){
+            setDisableAcceptButton(false)
         }
         else{
-            return true
+            setDisableAcceptButton(true)
+        }
+    }
+    //Funcion para habilitar/deshabilitar boton de editar (aceptar edición)
+    const buttonAcceptCheckEdit = () =>{
+        if((!simpleValidator(user.first_name) && !simpleValidator(user.last_name)) && 
+        user.first_name!=='' && user.last_name!==''){
+            setDisableAcceptButtonEdit(false)
+        }
+        else{
+            setDisableAcceptButtonEdit(true)
         }
     }
 
@@ -260,13 +300,15 @@ const Users = () => {
                             fullWidth
                             style = {{ margin: 8}}
                             onChange = {userEmail}
+                            error={emailError}
+                            helperText={emailError ? 'Solo se aceptan correos de la Universidad de Talca' : ' '}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button autoFocus onClick = {handleClose}>
                             Cancelar
                         </Button>
-                        <Button onClick = {handleSubmit} color = "primary" disabled={buttonAcceptCheck()}>
+                        <Button onClick = {handleSubmit} color = "primary" disabled={disableAcceptButton}>
                             Agregar
                         </Button>
                     </DialogActions>
@@ -287,6 +329,8 @@ const Users = () => {
                             className = {classes.TextField}
                             defaultValue = {user.first_name}
                             onChange = {userName}
+                            error={firstNameError}
+                            helperText={firstNameError ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                         />
                         <TextField
                             autoFocus
@@ -296,13 +340,15 @@ const Users = () => {
                             className = {classes.TextField}
                             defaultValue = {user.last_name}
                             onChange = {userLastName}
+                            error={lastNameError}
+                            helperText={lastNameError ? 'Por favor, rellene el campo con los datos solicitados' : ' '}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button autoFocus onClick = {handleCloseEdit}>
                             Cancelar
                         </Button>
-                        <Button onClick = {handleEditar} color = "primary">
+                        <Button onClick = {handleEditar} color = "primary" disabled={disableAcceptButtonEdit}>
                             Editar
                         </Button>
                     </DialogActions>
