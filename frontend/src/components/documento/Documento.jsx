@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from "@material-ui/core/Button";
 import Card from '@material-ui/core/Card'
 import CardContent  from "@material-ui/core/CardContent";
-import { createDocument, disableDocumento, enableDocumento, editarDocumento, getDocument} from './documentDucks';
 
 export default function Documentos(){
     const documento = "hola "
@@ -34,16 +33,15 @@ export default function Documentos(){
                 <CKEditor 
                     editor = {ClassicEditor}
                     data = "<p>Ingresar Dato</p>"
-                    onChange = {(event, editor)=>{
-                    }}
-                    config ={{   
+                    config ={{
                         autosave:{
                             guardar(editor){
                                 console.log("Guardado")
                                 return guardarDato(editor.getData())
                             }
                         }
-                    }}       
+                    }}
+
                 />
                   <Button type="submit">Agregar</Button>
             </Card>   
