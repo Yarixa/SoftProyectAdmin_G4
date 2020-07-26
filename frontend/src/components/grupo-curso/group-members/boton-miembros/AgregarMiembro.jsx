@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import { useDispatch } from 'react-redux';
 import EditIcon from '@material-ui/icons/Edit';
 import { agregarIntegrante, editarIntegrante } from '../../groupMemberDucks';
+import SelectMember from '../../select-member/SelectMember';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -83,51 +84,7 @@ export default function AgregarGrupo(props) {
         <Dialog disableBackdropClick disableEscapeKeyDown open = {open}>
             <DialogTitle>{esEditar?"Editando Miembro":"Agrega Miembro"}</DialogTitle>
             <DialogContent>
-                <div className = {classes.container}>
-                    <form className = {classes.formControl}>
-                        {esEditar?<div><TextField
-                            className = {classes.formItem}
-                            id = "first_name"
-                            fullWidth = {false}
-                            label = "Nombre"
-                            value = {member.first_name}
-                        />
-                        <TextField
-                            className = {classes.formItem}
-                            id = "last_name"
-                            fullWidth = {false}
-                            label = "Apellido"
-                            value = {member.last_name}
-                        />
-                        <InputLabel className = {classes.formItem} id = 'Rol'>Seleccionar Rol</InputLabel>
-                        <Select
-                            labelID = 'Rol'
-                            id = 'dropdown-rolelist'
-                            value = {role}
-                            defaultValue = {member.type}
-                            onChange = {(e) => setRole(e.target.value)}
-                            input = {<Input />}
-                            error = {role === 'Alumno'}
-                            helperText = {role === 'Alumno' ? 'Ingresar un rol distinto de Alumno' : ''}
-                        >
-                            <MenuItem value = "Alumno"><em>Alumno</em></MenuItem>
-                            <MenuItem value = "Jefe"><em>Jefe</em></MenuItem>
-                            <MenuItem value = "Analista"><em>Analista</em></MenuItem>
-                            <MenuItem value = "Diseñador"><em>Diseñador</em></MenuItem>
-                            <MenuItem value = "Desarrollador"><em>Desarrollador</em></MenuItem>
-                            <MenuItem value = "Tester"><em>Tester</em></MenuItem>
-                        </Select>
-                        </div>
-                        :<TextField
-                        className = {classes.formItem}
-                        id = "email"
-                        fullWidth = {true}
-                        label = "Correo Electronico"
-                        defaultValue = ""
-                        onChange = {(e) => setEmail(e.target.value)}
-                        />}
-                    </form>
-                </div>
+                <SelectMember/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
