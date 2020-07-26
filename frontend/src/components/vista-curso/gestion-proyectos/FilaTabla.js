@@ -1,37 +1,58 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Link } from "react-router-dom";
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+
 import EliminarProyecto from './botones-dialogos/EliminarProyecto';
 import FormularioProyecto from "./botones-dialogos/FormularioProyecto";
-import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch } from 'react-redux';
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     row: {
         display: 'flex',
-        justifyContent: 'space-around'
+        justifyContent: 'space-evenly'
     },
     button: {
         padding: '12px'
     }
 }));
 
+const StyledTableRow = withStyles((theme) => ({
+    root: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+    },
+}))(TableRow);
 
-export default function FilaTabla(props){
-//    const dispatch = useDispatch();
-    const{ proyecto } = props;
+const StyledTableCell = withStyles((theme) => ({
+    head: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    body: {
+        fontSize: 14,
+    },
+}))(TableCell);
+
+export default function FilaTabla(props) {
+    //    const dispatch = useDispatch();
+    const { proyecto } = props;
+    const { idCurso } = props;
+    const { key } = props;
     const classes = useStyles();
 
-    return(
-        <Table.Row>
-            <Table.Cell onClick={()=>{}}>{proyecto.nombre}</Table.Cell>
-            <Table.Cell onClick={()=>{}}>{proyecto.descripcion}</Table.Cell>
-            <Table.Cell>
+    return (
+        <StyledTableRow>
+            <StyledTableCell component={Link} to={"/curso/"+idCurso+"/proyecto/"+proyecto.id}>{proyecto.nombre}</StyledTableCell>
+            <StyledTableCell component={Link} to={"/curso/"+idCurso+"/proyecto/"+proyecto.id}>{proyecto.descripcion}</StyledTableCell>
+            <StyledTableCell>
                 <div className={classes.row}>
-                    <FormularioProyecto esModoEditar={true} proyectoParaEditar={proyecto}/>
+                    <FormularioProyecto esModoEditar={true} proyectoParaEditar={proyecto} />
                     <EliminarProyecto id={proyecto.id} />
                 </div>
-            </Table.Cell>
-        </Table.Row>
+            </StyledTableCell>
+        </StyledTableRow>
     )
 }
 

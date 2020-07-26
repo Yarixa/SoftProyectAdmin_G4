@@ -29,32 +29,59 @@ export default function AppRouter() {
                         return (
                             <div>
                                 <RAppBar />
-                                <MainBox>
-                                    <RouterFacade root={"home"} subseccion={renderProps.match.params.subseccion}/>
-                                </MainBox>
+                                    <MainBox>
+                                        <RouterFacade root={"home"} subseccion={renderProps.match.params.subseccion}/>
+                                    </MainBox>
                                 <RDrawer />
                             </div>
                         )
                     }}
                 />  
                 <Route
-                    path="/curso/:id/:subseccion"
+                    path="/curso/:idCurso/:subseccion/:idSubseccion?"
                     render={renderProps => {
                         if(sessionStorage.getItem('logged')==='false'){
-                            console.log("redirecting to login from AppRouter")
+                            console.log("redirecting to login from AppRouter!")
                             return (<Redirect to={'/'}/>)
                         }
                         return (
                             <div>
                                 <RAppBar />
-                                <MainBox>
-                                    <RouterFacade root={"curso"} id={renderProps.match.params.id} subseccion={renderProps.match.params.subseccion}/>
-                                </MainBox>
+                                    <MainBox>
+                                        <RouterFacade 
+                                            root={"curso"} 
+                                            id={renderProps.match.params.idCurso} 
+                                            subseccion={renderProps.match.params.subseccion} 
+                                            idSubseccion={renderProps.match.params.idSubseccion}
+                                        />
+                                    </MainBox>
                                 <RDrawer />
                             </div>
                         )
                     }}
-                /> 
+                />
+                <Route
+                    path="/proyecto/:idProyecto/:tipoDocumento"
+                    render={renderProps => {
+                        if(sessionStorage.getItem('logged')==='false'){
+                            console.log("redirecting to login from AppRouter!")
+                            return (<Redirect to={'/'}/>)
+                        }
+                        return (
+                            <div>
+                                <RAppBar />
+                                    <MainBox>
+                                        <RouterFacade
+                                            root={"proyecto"}
+                                            id={renderProps.match.params.idProyecto}
+                                            subseccion={renderProps.match.params.tipoDocumento}
+                                        />
+                                    </MainBox>
+                                <RDrawer />
+                            </div>
+                        )
+                    }}
+                />
                 <Redirect to={'/home/error'} />
             </Switch>
         </Router>
