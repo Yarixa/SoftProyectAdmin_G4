@@ -8,7 +8,8 @@ import Users from './components/gestion-usuarios/Users';
 import generateStore from "./components/store";
 // *** Components ***
 import RAppBar from "./components/navigation/RAppBar/RAppBar.jsx";
-
+import RDrawer from "./components/navigation/RDrawer/RDrawer.jsx";
+import VistaDocumento from "./components/documento-requisitos/VistaDocumento";
 class App extends Component {
     constructor(props) {
         super(props);
@@ -26,6 +27,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/">
                             <MainBox>
+                                <VistaDocumento/>
                             </MainBox>
                         </Route>
                         <Route exact path="/modulos">

@@ -13,12 +13,22 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import TextField from "@material-ui/core/TextField";
+import {Container} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import SaveIcon from "@material-ui/icons/Save";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: "1em",
-        minWidth: "250px",
+        minWidth: "1000px",
         boxSizing: "border-box"
+    },
+    TextField: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '100%',
+        },
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -29,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     },
     expandOpen: {
         transform: 'rotate(180deg)',
+    },
+    button: {
+        margin: theme.spacing(1),
     },
     avatar: {
         backgroundColor: '#2DA64E',
@@ -56,13 +69,7 @@ export default function RecipeReviewCard() {
                     subheader="Última modificación: 18 Julio 2020 "
                 />
                 <CardActions disableSpacing>
-                    <IconButton aria-label="ver">
-                        <VisibilityIcon/>
-                    </IconButton>
-                    <IconButton aria-label="editar">
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton
+                     <IconButton
                         className={clsx(classes.expand, {
                             [classes.expandOpen]: expandedR,
                         })}
@@ -74,9 +81,32 @@ export default function RecipeReviewCard() {
                 </CardActions>
                 <Collapse in={expandedR} timeout="auto" unmountOnExit>
                     <CardContent>
-                        <Typography paragraph>Alcance:</Typography>
+
                         <Typography variant="body2" color="textSecondary" component="p">
-                            Descripción del Alcance del Proyecto.
+                            <form className={classes.TextField} noValidate autoComplete="off">
+                                <div>
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        label="Alcance"
+                                        multiline
+                                        rows={10}
+                                        defaultValue="Escribe aquí el alcance del proyecto"
+                                        variant="outlined"
+                                    />
+                                </div>
+                            </form>
+                            <Container>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    className={classes.button}
+                                    startIcon={<SaveIcon />}
+                                >
+                                    Guardar
+
+                                </Button>
+                            </Container>
                         </Typography>
                     </CardContent>
                 </Collapse>

@@ -9,11 +9,11 @@ import SupYDep from './SupYDep';
 import Restricciones from './Restricciones';
 import Usuarios from './Usuarios';
 import Requisitos from './Requisitos';
-export default function RecipeReviewCard() {
+export default function VistaDocumento() {
 
     return (
      <div>
-        <Grid container spacing={4}>
+        <Grid container spacing={1}>
             <Proposito/>
             <Alcance/>
             <Contexto/>
