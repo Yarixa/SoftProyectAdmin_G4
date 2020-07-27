@@ -8,7 +8,12 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 
 
-import { Table } from 'semantic-ui-react';
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import { useSelector, useDispatch } from 'react-redux';
 
 
@@ -29,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
+
 export default function TablaProyectos(props){
     const { idCurso } = props; 
     const {needsBack} = props;
@@ -45,31 +52,34 @@ export default function TablaProyectos(props){
     return (
         <div>
             <Card className={classes.card}> 
-                        <CardHeader 
-                        title={'Listado Proyectos'} 
-                        action={
-                            !needsBack
-                            ?<div/>
-                            :<IconButton component={Link} to={'/curso/'+idCurso+'/home'}>
-                                <ArrowBackIcon/>
-                            </IconButton>
-                        }></CardHeader>
-            
-            <Table striped selectable>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Nombre proyecto</Table.HeaderCell>
-                        <Table.HeaderCell>Descripción</Table.HeaderCell>
-                        <Table.HeaderCell>Acciones</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {
-                        listadoProyectos.map((proyecto) => <FilaTabla key={ proyecto.id } proyecto={ proyecto }/>)
-                    }
-                </Table.Body>
-            </Table>
-            <FormularioProyecto idCurso = { idCurso } esModoEditar={ false } proyectoParaEditar={{}} />
+                <CardHeader 
+                title={'Listado Proyectos'} 
+                action={
+                    !needsBack
+                    ?<div/>
+                    :<IconButton component={Link} to={'/curso/'+idCurso+'/home'}>
+                        <ArrowBackIcon/>
+                    </IconButton>
+                }/>
+                <CardContent>
+                    <TableContainer>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Nombre proyecto</TableCell>
+                                    <TableCell>Descripción</TableCell>
+                                    <TableCell>Acciones</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                listadoProyectos.map((proyecto) => <FilaTabla key={ proyecto.id } proyecto={ proyecto } idCurso={ idCurso }/>)                                       
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <FormularioProyecto idCurso = { idCurso } esModoEditar={ false } proyectoParaEditar={{}} />
+                </CardContent>
             </Card>
         </div>
     )
