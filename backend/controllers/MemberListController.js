@@ -2,6 +2,7 @@ const db = require("../database/db.js")
 //const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
+const TeamList = require("../models/TeamList")
 const Team = require("../models/Team")
 const Sequelize = require('sequelize')
 const fs = require('fs')
@@ -89,10 +90,18 @@ exports.create = (req, res) => {
 		if(!memberList){
 			MemberList.create(memberListData)
 			.then(memberList => {
-				res.json({
-						memberList: memberListData,
-						message: "Usuario agregado con exito"
+				MemberList.findAll({
+					limit: 1,
+				  order: [ [ 'id', 'DESC' ]]
+				})
+				.then (memberList => {
+					res.json({memberList: memberList})
+				})
+				.catch(err => {
+					res.status(400).json({
+						error: "Ha ocurrido un error al momento de ingresar el memberList a la base de datos."
 					})
+				})
 			})
 			.catch(err => {
 				res.status(400).json({
@@ -251,12 +260,25 @@ exports.readByTeam = (req, res) => {
 	})
 }
 
+var contarMiembros = async (team_id) => {
+	return TeamList.count({
+		where: {
+			team_id: team_id
+		}
+	})
+	.then(count => {
+		return count
+	})
+	.catch(err => {
+		return 0
+	})
+}
 
 //retornar objeto <-
 exports.updateTeam = (req, res) => {
 	const teamListData = {
-		user_email: req.body.user_email,
-		team_id: req.body.team_id,
+		user_email: req.params.user_email,
+		team_id: req.params.team_id,
 		type: req.body.type
 	}
 	TeamList.findOne({
@@ -269,13 +291,24 @@ exports.updateTeam = (req, res) => {
 		if(!teamList){
 			TeamList.create(teamListData)
 			.then(result => {
-				res.json({
-					teamList: teamListData
+				TeamList.findAll({
+					limit: 1,
+				  order: [ [ 'id', 'DESC' ]]
 				})
+				.then (teamList => {
+					res.json({data: teamList})
+				})
+
+			})
+			.catch(err => {
+				res.status(400).json({
+					error: err
+				})
+
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema 2 "
+					error: err
 				})
 			})
 		}
@@ -451,6 +484,74 @@ exports.disable = (req, res) => {
 	})
 }
 
+exports.enableTeamMember = (req, res) => {
+	TeamList.findOne({
+		where:{
+			id: req.params.id
+		}
+	})
+	.then(teamList => {
+		if(teamList){
+			TeamList.update({
+				active: true
+			},{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				teamList.active = true
+				res.json({
+					teamList: teamList
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err => {
+
+	})
+}
+
+exports.disableTeamMember = (req, res) => {
+	TeamList.findOne({
+		where:{
+			id: req.params.id
+		}
+	})
+	.then(teamList => {
+		if(teamList){
+			TeamList.update({
+				active: false
+			},{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				teamList.active = false
+				res.json({
+					teamList: teamList
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err => {
+
+	})
+}
+
 exports.enableTeam = (req, res) => {
 	Team.findOne({
 		where: {
@@ -582,11 +683,15 @@ var  cargaArchivo = async (req) =>{
 				const memberListData = {
 
 					user_email: memberListArray[i]["Dirección de correo"],
+					first_name: memberListArray[i].Nombre,
+					last_name: memberListArray[i]["Apellido(s)"],
 					course_id: req.params.course_id,
 					type: dRole
 
 				}
-				usuariosAceptados.push(await almacenarUsuario(memberListData))
+
+			const resultado = await almacenarUsuario(memberListData)
+			usuariosAceptados.push(resultado)
 
 		}
 		//Metodo para eliminar el archivo subido y cargado.
@@ -600,6 +705,67 @@ var  cargaArchivo = async (req) =>{
 			console.error(err)
 		}
 		return usuariosAceptados
+}
+
+var crearJSONUsuario = async (resultado, memberListData) =>{
+	var resultado = JSON.stringify(resultado)
+	console.log(resultado)
+	const UsuarioJSON = {
+		id: resultado["id"],
+		first_name: memberListData.first_name,
+		last_name: memberListData.last_name,
+		course_id: memberListData.course_id,
+		type: memberListData.type,
+		active: true
+	}
+	return UsuarioJSON;
+}
+
+exports.modificarRolCurso = async (req, res) =>{
+
+	MemberList.findOne({
+		where: {
+			user_email: req.params.user_email,
+			course_id: req.params.course_id
+		}
+	})
+	.then(memberList => {
+		if(memberList){
+			var resBusqueda = memberList
+			if(memberList.type.localeCompare("Profesor") != 0){
+				MemberList.update({
+					type: req.body.type
+				},{
+					where:{
+						user_email: req.params.user_email,
+						course_id: req.params.course_id
+					}
+				})
+				.then(memberList => {
+					resBusqueda.type = req.body.type;
+					res.json({
+						memberList: resBusqueda
+					})
+				})
+				.catch(err => {
+					res.json({
+						errorMessage: "Hubo un error al actualizar el usuario"
+					})
+				})
+			}
+			else{
+				res.json({
+					errorMessage: "El usuario es un profesor"
+				})
+			}
+		}
+		else{
+			res.json({
+				errorMessage: "El usuario no existe dentro del curso"
+			})
+		}
+	})
+
 }
 
 var almacenarUsuario = async (memberListData) => {
@@ -622,7 +788,16 @@ var almacenarUsuario = async (memberListData) => {
   								order: [ [ 'user_email', 'DESC' ]]
 								})
 								.then(memberList =>{
-									return memberList
+									var member = JSON.stringify(memberList)
+									var memberZone = JSON.parse(member)
+									return {
+										id: memberZone.map(x => x.id)[0],
+										first_name: memberListData.first_name,
+										last_name: memberListData.last_name,
+										course_id: memberListData.course_id,
+										type: memberListData.type,
+										active: true
+									}
 								})
 								.catch(err => {
 									return {
@@ -651,7 +826,7 @@ var almacenarUsuario = async (memberListData) => {
 				.catch(err => {
 					console.log('error: ' + err)
 		})
-}
+
 		//Metodo para eliminar el archivo subido y cargado.
 		try{
 			const path = "./upload/" + req.params.xlsx_name
@@ -661,7 +836,9 @@ var almacenarUsuario = async (memberListData) => {
 		}
 		catch(err){
 			console.error(err)
-		}
+	}
+}
+
 var checkRegex = (email) => {
 	var examineRegex = email.match(/@utalca.cl/g)
 	if(examineRegex != null){
