@@ -83,7 +83,7 @@ export default function FormularioModulo(props) {
         //en caso de que no se haya escrito nada, no se valida
         if(text!==''){ 
             //valida que hayan solo letras y espacios / valida que el string no tenga sólo espacios
-            if(/[^a-zA-Z\s]/.test(text) || !text.replace(/\s/g, '').length){
+            if(/[^a-zA-Z\s/ñ/]/.test(text) || !text.replace(/\s/g, '').length){
                 return true
             }
             else{

@@ -68,6 +68,13 @@ export default function AgregarGrupo(props) {
         }
         setOpen(false);
     }
+    //Funcion para activar/desactivar botón de confirmar
+    const buttonAcceptCheck = () => {
+        //Discrimina que el campo no esté vacío || que no contenga solo espacios vacíos
+        if(nombreGrupo==='' || !nombreGrupo.replace(/\s/g, '').length){
+            return true
+        }
+    }
 
     return (
         <div>
@@ -94,7 +101,7 @@ export default function AgregarGrupo(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={handleAccept} color="primary">
+                    <Button onClick={handleAccept} color="primary" disabled={buttonAcceptCheck()}>
                         {esEditar?"Guardar":"Agregar"}
                     </Button>
                 </DialogActions>
