@@ -9,6 +9,8 @@ import CardContent  from "@material-ui/core/CardContent";
 import IconButton from "@material-ui/core/IconButton";
 import SaveIcon from "@material-ui/icons/Save";
 import Paper from "@material-ui/core/Paper";
+import DocumentDesign from "../../documento_diseño/documentDesign";
+import Documentos from "../Documento";
 
 const estilo = makeStyles((theme)=>({
     root :{
@@ -51,12 +53,7 @@ export default function VistaDisenio(props){
                 </Grid>
             </Grid>
             <Grid item xs>
-                <CKEditor 
-                        editor = {ClassicEditor}
-                        data = "<p>Ingresar Descripcion del documento</p>"
-                        
-    
-                    />
+                <Documentos />
             </Grid>
 
             <Grid>

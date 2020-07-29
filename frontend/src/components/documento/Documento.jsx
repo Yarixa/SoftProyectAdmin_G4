@@ -13,14 +13,26 @@ export default function Documentos(){
     const curso = "curso1"
     const requisito_software=""
     const requisito_usuario = ""
-    /**
-     * 
-     * @param {text} contenido 
-     * contenido del texto enriquecido 
-     * 
-     */
+
+    const editorConfig = {
+        autosave:{
+            guardar(editor){
+                console.log("Guardado")
+                return guardarDato(editor.getData())
+            }
+        },
+        removePlugins: [ 'MediaEmbed', 'insert', 'Table'],
+        image : {}
+    }
+
     const guardarDato =(contenido)=>{
         console.log('hizo clic',contenido)
+        /**
+         *
+         * @param {text} contenido
+         * contenido del texto enriquecido
+         *
+         */
     }
 
     return (
@@ -33,14 +45,7 @@ export default function Documentos(){
                 <CKEditor 
                     editor = {ClassicEditor}
                     data = "<p>Ingresar Dato</p>"
-                    config ={{
-                        autosave:{
-                            guardar(editor){
-                                console.log("Guardado")
-                                return guardarDato(editor.getData())
-                            }
-                        }
-                    }}
+                    config ={editorConfig}
 
                 />
                   <Button type="submit">Agregar</Button>
