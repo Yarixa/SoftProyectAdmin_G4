@@ -12,10 +12,10 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { red } from '@material-ui/core/colors';
-import TextField from "@material-ui/core/TextField";
 import {Container} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
+import TablaRequisitos from "./Listado-Requisitos/TablaRequisitos";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,9 +69,6 @@ export default function RecipeReviewCard() {
                     subheader="Última modificación: 18 Julio 2020 "
                 />
                 <CardActions disableSpacing>
-                    <IconButton aria-label="mas">
-                        <AddIcon />
-                    </IconButton>
                     <IconButton
                         className={clsx(classes.expand, {
                             [classes.expandOpen]: expandedR,
@@ -85,18 +82,7 @@ export default function RecipeReviewCard() {
                 <Collapse in={expandedR} timeout="auto" unmountOnExit>
                     <CardContent>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            <form className={classes.TextField} noValidate autoComplete="off">
-                                <div>
-                                    <TextField
-                                        id="outlined-multiline-static"
-                                        label="Requisitos"
-                                        multiline
-                                        rows={10}
-                                        defaultValue="Escribe aquí los requisitos del proyecto"
-                                        variant="outlined"
-                                    />
-                                </div>
-                            </form>
+                            <TablaRequisitos />
                             <Container>
                                 <Button
                                     variant="contained"
