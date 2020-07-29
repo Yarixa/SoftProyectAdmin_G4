@@ -74,20 +74,6 @@ export default function RListItems() {
                 </List>
             </Collapse>
 
-            <ListItem button component={Link} to="/home/cursos" onClick={() => dispatch(updateTitleAction('Cursos'))}>
-                <ListItemIcon>
-                    <PeopleIcon style={{ color: '#FFFFFF' }}/>
-                </ListItemIcon>
-                <ListItemText primary={buildLabel('Cursos')} />
-            </ListItem>
-
-            <ListItem button component={Link} to="/home/proyectos" onClick={() => dispatch(updateTitleAction('Proyectos'))}>
-                <ListItemIcon>
-                    <WorkIcon style={{ color: '#FFFFFF' }}/>
-                </ListItemIcon>
-                <ListItemText primary={buildLabel('Proyectos')} />
-            </ListItem>
-
             <ListItem button component={Link} to="/home/usuarios" onClick={() => dispatch(updateTitleAction('Usuarios'))}>
                 <ListItemIcon>
                     <SupervisedUserCircleIcon style={{ color: '#FFFFFF' }}/>

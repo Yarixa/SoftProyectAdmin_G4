@@ -50,18 +50,30 @@ export default function AgregarGrupo(props) {
     }
 
     const handleAccept = () => {
-        const nuevoGrupo = {
-            name: nombreGrupo,
-            idCurso: idCurso
-        }
         if (esEditar){
+            const nuevoGrupo = {
+                id: group.id,
+                name: nombreGrupo,
+                idCurso: idCurso
+            }
             dispatch(editarGrupo(nuevoGrupo));
         }
         else{
+            const nuevoGrupo = {
+                name: nombreGrupo,
+                idCurso: idCurso
+            }
             dispatch(agregarGrupo(nuevoGrupo));
             setNombre("");
         }
         setOpen(false);
+    }
+    //Funcion para activar/desactivar botón de confirmar
+    const buttonAcceptCheck = () => {
+        //Discrimina que el campo no esté vacío || que no contenga solo espacios vacíos
+        if(nombreGrupo==='' || !nombreGrupo.replace(/\s/g, '').length){
+            return true
+        }
     }
 
     return (
@@ -89,7 +101,7 @@ export default function AgregarGrupo(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={handleAccept} color="primary">
+                    <Button onClick={handleAccept} color="primary" disabled={buttonAcceptCheck()}>
                         {esEditar?"Guardar":"Agregar"}
                     </Button>
                 </DialogActions>

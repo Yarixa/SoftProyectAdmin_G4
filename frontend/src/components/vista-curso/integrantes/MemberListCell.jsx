@@ -6,7 +6,7 @@ import {Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 // Material | Estilos
-import { Switch } from '@material-ui/core'
+import { Switch } from '@material-ui/core';
 import { disableMember, enableMember, fetchMembers} from './membersDucks';
 
 export default function GroupCell(props) {
