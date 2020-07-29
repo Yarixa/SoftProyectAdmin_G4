@@ -394,8 +394,10 @@ exports.testMassiveCreate = async (req, res) => {
 
 			var sheetIndex = 1;
 
-			var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+			var usuariosAceptados = []
 
+			var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+			console.log(userArray)
 			for(var i = 0; i < userArray.length; i++){
 				const today = new Date()
 				const dPassword =  "1234"
@@ -408,36 +410,65 @@ exports.testMassiveCreate = async (req, res) => {
 					password: dPassword,
 					created: today
 				}
-				User.findOne({
+				console.log(userData)
+				usuariosAceptados.push(await almacenarUsuario(userData))
+			}
+		res.json({
+			usuariosAlmacenados: usuariosAceptados
+		})
+	}
+	catch(e){
+		res.json({
+			error: "There was an error"
+		})
+	}
+}
+
+var almacenarUsuario = async (userData) => {
+		return User.findOne({
 					where: {
-						email: req.body.email
+						email: userData.email
 					}
 				})
 				.then(user =>{
+					console.log(user)
 					if(!user){
-						const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
-							userData.password = hash
-							User.create(userData)
-							.then(user => {
-								console.log("User " + userData.email + " created.")
+						let hash = bcrypt.hashSync(userData.password, 10)
+						console.log(hash)
+						userData.password = hash
+						return User.create(userData)
+						.then(user => {
+								console.log("Dea")
+								return User.findOne({
+									where: {
+										email: userData.email
+									}
+								})
+								.then (user => {
+									return user
+								})
+								.catch(err => {
+									return {
+										error: err
+									}
+								})
 							})
 							.catch(err => {
-								console.log('Error: ' + err + " User already created.")
+								return {
+									error: err
+								}
 							})
-						})
 					}else{
-						console.log("User already exist")
+						return {
+							error: "Usuario ya creado"
+						}
 					}
 				})
 				.catch(err => {
-					console.log('error: ' + err)
+					return {
+						error: err
+					}
 				})
-			}
-		res.json("All Users registered")
-	}
-	catch(e){
-		res.json("There was an error on the file.")
-	}
 }
 
 //Declaramos la funcion create. Esta funcion esta encargada de crear un usuario si y solo si no existe un usuario con el mismo email.
@@ -471,7 +502,21 @@ exports.testCreate = (req, res) => {
 					*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
 					*/
 					//sendPasswordEmail(dPassword, userData.email, userData.first_name);
-					res.json({status: user.email + ' registered'})
+					User.findOne({
+						where:{
+							email: user.email
+						}
+					})
+					.then(user => {
+						res.json({
+							user: user
+						})
+					})
+					.catch(err => {
+						res.json({
+							error: err
+						})
+					})
 				})
 				.catch(err => {
 					res.json({error: err})
