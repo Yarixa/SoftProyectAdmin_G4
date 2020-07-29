@@ -158,4 +158,21 @@ documents.delete("/deleteAll/", (request, response) => {
 });
 //--------------Final rutas mongoDB--------//
 
+const pdf = require('html-pdf')
+const pdfTemplate = require(`${process.cwd()}/documents/requisitos/template.js`)
+
+documents.post('/create-pdf', (req, res) => {
+    pdf.create(pdfTemplate(req.body), {}).toFile(`${process.cwd()}/documents/requisitos/Documento-Requisitos.pdf`, (err) => {
+        if(err) {
+            res.send(Promise.reject());
+        }
+
+        res.send(Promise.resolve());
+    });
+});
+
+documents.get('/obtener-pdf', (req, res) => {
+    res.sendFile(`${process.cwd()}/documents/requisitos/Documento-Requisitos.pdf`)
+})
+
 module.exports = documents;
