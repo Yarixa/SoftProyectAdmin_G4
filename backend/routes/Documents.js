@@ -33,7 +33,7 @@ if(request.body.projectID!==null || request.body.tipo!==null){ //Valida que se i
     })
 } 
 else{
-    response.send("Se debe ingresar el ID del proyecto y el tipo de documento a ingresar (req/test/dis/imp)")
+    response.send("Se debe ingresar el ID del proyecto y el tipo de documento a ingresar (req/test/dis/imp/desc)")
 }
 })
 
@@ -159,10 +159,10 @@ documents.delete("/deleteAll/", (request, response) => {
 //--------------Final rutas mongoDB--------//
 
 //--------------Rutas para la generación de documentos--------//
-
 const pdf = require('html-pdf')
-const pdfTemplate = require(`${process.cwd()}/documents/requisitos/template.js`)
 
+//--------------Documento Requisitos-----------------//
+const reqTemplate = require(`${process.cwd()}/documents/requisitos/template.js`)
 documents.post('/requisitos/crear-documento/:projectID', (req, res) => {
     //Primero se obtienen todos los requisitos de usuario, y se almacenan en result1
     mongoDBcollection.find({"projectID": req.params.projectID, tipo: "req"}).toArray((error1, result1) => {
@@ -175,7 +175,7 @@ documents.post('/requisitos/crear-documento/:projectID', (req, res) => {
                 return response.status(500).send(error2)
             }
             //Se pasan los parámetros al template. Éste devuelve el codigo html para ser escrito en el documento pdf
-            pdf.create(pdfTemplate(result1, result2), {}).toFile(`${process.cwd()}/documents/requisitos/Documento-Requisitos.pdf`, (err) => {
+            pdf.create(reqTemplate(result1, result2), {}).toFile(`${process.cwd()}/documents/requisitos/Documento-Requisitos.pdf`, (err) => {
                 if(err) {
                     res.send(Promise.reject());
                 }
@@ -185,9 +185,92 @@ documents.post('/requisitos/crear-documento/:projectID', (req, res) => {
         });
     });
 });
-
 documents.get('/documento-requisitos', (req, res) => { //Ruta para obtener el documento de requisitos
     res.sendFile(`${process.cwd()}/documents/requisitos/Documento-Requisitos.pdf`)
+})
+
+//-----------------Documento de diseño----------//
+const disTemplate = require(`${process.cwd()}/documents/disenio/template.js`)
+documents.post('/disenio/crear-documento/:projectID', (req, res) => {
+    //Primero se obtienen todos los documentos asociados al documento de diseño, y se almacenan en result1
+    mongoDBcollection.find({"projectID": req.params.projectID, tipo: "dis"}).toArray((error1, result1) => {
+        if(error1) {
+            return response.status(500).send(error1)
+        }
+        //Luego se obtiene la entrada con la información general del documento, y se almacena en result2
+        mongoDBcollection.find({"projectID": req.params.projectID, tipo: "desc"}).toArray((error2, result2) => {
+            if(error2) {
+                return response.status(500).send(error2)
+            }
+            //Se pasan los parámetros al template. Éste devuelve el codigo html para ser escrito en el documento pdf
+            pdf.create(disTemplate(result1, result2), {}).toFile(`${process.cwd()}/documents/disenio/Documento-Disenio.pdf`, (err) => {
+                if(err) {
+                    res.send(Promise.reject());
+                }
+                res.send("Documento de diseño creado exitosamente")
+                //res.send(Promise.resolve());
+            });
+        });
+    });
+});
+documents.get('/documento-disenio', (req, res) => { //Ruta para obtener el documento de diseño
+    res.sendFile(`${process.cwd()}/documents/disenio/Documento-Disenio.pdf`)
+})
+
+//-----------------Documento de Implementacón----------//
+const impTemplate = require(`${process.cwd()}/documents/implementacion/template.js`)
+documents.post('/implementacion/crear-documento/:projectID', (req, res) => {
+    //Primero se obtienen todos los documentos asociados al documento de implemetacion, y se almacenan en result1
+    mongoDBcollection.find({"projectID": req.params.projectID, tipo: "imp"}).toArray((error1, result1) => {
+        if(error1) {
+            return response.status(500).send(error1)
+        }
+        //Luego se obtiene la entrada con la información general del documento, y se almacena en result2
+        mongoDBcollection.find({"projectID": req.params.projectID, tipo: "desc"}).toArray((error2, result2) => {
+            if(error2) {
+                return response.status(500).send(error2)
+            }
+            //Se pasan los parámetros al template. Éste devuelve el codigo html para ser escrito en el documento pdf
+            pdf.create(impTemplate(result1, result2), {}).toFile(`${process.cwd()}/documents/implementacion/Documento-Implementacion.pdf`, (err) => {
+                if(err) {
+                    res.send(Promise.reject());
+                }
+                res.send("Documento de implementacion creado exitosamente")
+                //res.send(Promise.resolve());
+            });
+        });
+    });
+});
+documents.get('/documento-implementacion', (req, res) => { //Ruta para obtener el documento de implementacion
+    res.sendFile(`${process.cwd()}/documents/implementacion/Documento-Implementacion.pdf`)
+})
+
+//-----------------Documento de Pruebas----------//
+const testTemplate = require(`${process.cwd()}/documents/pruebas/template.js`)
+documents.post('/pruebas/crear-documento/:projectID', (req, res) => {
+    //Primero se obtienen todos los documentos asociados al documento de implemetacion, y se almacenan en result1
+    mongoDBcollection.find({"projectID": req.params.projectID, tipo: "test"}).toArray((error1, result1) => {
+        if(error1) {
+            return response.status(500).send(error1)
+        }
+        //Luego se obtiene la entrada con la información general del documento, y se almacena en result2
+        mongoDBcollection.find({"projectID": req.params.projectID, tipo: "desc"}).toArray((error2, result2) => {
+            if(error2) {
+                return response.status(500).send(error2)
+            }
+            //Se pasan los parámetros al template. Éste devuelve el codigo html para ser escrito en el documento pdf
+            pdf.create(testTemplate(result1, result2), {}).toFile(`${process.cwd()}/documents/pruebas/Documento-Pruebas.pdf`, (err) => {
+                if(err) {
+                    res.send(Promise.reject());
+                }
+                res.send("Documento de pruebas creado exitosamente")
+                //res.send(Promise.resolve());
+            });
+        });
+    });
+});
+documents.get('/documento-pruebas', (req, res) => { //Ruta para obtener el documento de pruebas
+    res.sendFile(`${process.cwd()}/documents/pruebas/Documento-Pruebas.pdf`)
 })
 
 module.exports = documents;
