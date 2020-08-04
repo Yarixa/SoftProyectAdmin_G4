@@ -318,7 +318,7 @@ var uploadFile = async (req) => {
             //Use the mv() method to place the file in upload directory (i.e. "upload")
             file.mv('./upload/' + file.name);
 
-            //send response
+			//send response
             return true
         }
     } catch (err) {
@@ -411,7 +411,8 @@ exports.massiveCreate = async (req, res) => {
 
 exports.tMassive = async(req, res) => {
 	try{
-		if(await uploadFile(req)){
+		var flag = true
+		if(flag){
 			res.json({
 				usuariosAceptados: await testMassiveCreate(req, res)
 			})
@@ -435,30 +436,41 @@ var testMassiveCreate = async (req, res) => {
 
 		var XLSX = require('xlsx');
 			try{
-				var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
-				console.log(workbook)
-				var sheetNames = workbook.SheetNames;
+				if(!req.files) {
+					//ERROR
+				} else {
+					//Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+					let file = req.files.file;
+		
+					//Use the mv() method to place the file in upload directory (i.e. "upload")
+					var x = await file.mv('./upload/' + file.name);
+		
+					//send response			
 
-				var sheetIndex = 1;
+					var workbook = await XLSX.readFile("./upload/" + req.params.xlsx_name);
+					var sheetNames = workbook.SheetNames;
 
-				var usuariosAceptados = []
+					var sheetIndex = 1;
 
-				var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
-				console.log(userArray)
-				for(var i = 0; i < userArray.length; i++){
-					const today = new Date()
-					const dPassword =  "1234"
-					const dRole = checkRegex(userArray[i]["Dirección de correo"])
-					const userData = {
-						first_name: userArray[i].Nombre,
-						last_name: userArray[i]["Apellido(s)"],
-						email: userArray[i]["Dirección de correo"],
-						role: dRole,
-						password: dPassword,
-						created: today
+					var usuariosAceptados = []
+
+					var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+					console.log(userArray)
+					for(var i = 0; i < userArray.length; i++){
+						const today = new Date()
+						const dPassword =  "1234"
+						const dRole = checkRegex(userArray[i]["Dirección de correo"])
+						const userData = {
+							first_name: userArray[i].Nombre,
+							last_name: userArray[i]["Apellido(s)"],
+							email: userArray[i]["Dirección de correo"],
+							role: dRole,
+							password: dPassword,
+							created: today
+						}
+						console.log(userData)
+						usuariosAceptados.push(await almacenarUsuario(userData))
 					}
-					console.log(userData)
-					usuariosAceptados.push(await almacenarUsuario(userData))
 				}
 			return usuariosAceptados
 		}
