@@ -62,7 +62,7 @@ memberList.get('/readAllTeams', memberListController.readAllTeams)
 
 memberList.get('/readTeamByCourse', memberListController.readTeamsByCourse)
 
-memberList.put('/updateTeam/:user_email/:course_id', memberListController.updateTeam)
+memberList.put('/updateTeam/:user_email/:team_id', memberListController.updateTeam)
 
 memberList.put('/updateRole/:user_email/:course_id/:team_id', memberListController.updateRole)
 
@@ -72,9 +72,15 @@ memberList.put('/enable/:user_email/:course_id', memberListController.enable)
 
 memberList.put('/disable/:user_email/:course_id', memberListController.disable)
 
+memberList.put('/disableTeamMember/:id', memberListController.disableTeamMember)
+
+memberList.put('/enableTeamMember/:id', memberListController.enableTeamMember)
+
 memberList.put('/enableTeam/:id', memberListController.enableTeam)
 
 memberList.put('/disableTeam/:id', memberListController.disableTeam)
+
+memberList.put('/modificarRolCurso/:user_email/:course_id', memberListController.modificarRolCurso)
 
 memberList.post('/uploadFile', memberListController.uploadFile)
 

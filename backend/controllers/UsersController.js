@@ -307,78 +307,123 @@ exports.uploadFile = async (req, res) => {
     }
 }
 
+var uploadFile = async (req) => {
+	try {
+        if(!req.files) {
+            return false
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let file = req.files.file;
+
+            //Use the mv() method to place the file in upload directory (i.e. "upload")
+            file.mv('./upload/' + file.name);
+
+            //send response
+            return true
+        }
+    } catch (err) {
+        return false
+    }
+}
 
 //Funcion que carga un archivo .xlsx para luego crear una cantidad n de usuario
 //donde n es la cantidad de usuarios no repetidos.
 exports.massiveCreate = async (req, res) => {
-	var XLSX = require('xlsx');
-		try{
-			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
-			var sheetNames = workbook.SheetNames;
 
-			var sheetIndex = 1;
+	if(await uploadFile(req)){
 
-			var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+		var XLSX = require('xlsx');
+			try{
+				var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
+				var sheetNames = workbook.SheetNames;
 
-			for(var i = 0; i < userArray.length; i++){
-				const today = new Date()
-				const dPassword =  Math.random().toString(36).substr(2, 5)
-				const dRole = checkRegex(userArray[i]["Dirección de correo"])
-				const userData = {
-					first_name: userArray[i].Nombre,
-					last_name: userArray[i]["Apellido(s)"],
-					email: userArray[i]["Dirección de correo"],
-					role: dRole,
-					password: dPassword,
-					created: today
+				var sheetIndex = 1;
+
+				var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+
+				for(var i = 0; i < userArray.length; i++){
+					const today = new Date()
+					const dPassword =  "1234"//Math.random().toString(36).substr(2, 5)
+					const dRole = checkRegex(userArray[i]["Dirección de correo"])
+					const userData = {
+						first_name: userArray[i].Nombre,
+						last_name: userArray[i]["Apellido(s)"],
+						email: userArray[i]["Dirección de correo"],
+						role: dRole,
+						password: dPassword,
+						created: today
+					}
+					User.findOne({
+						where: {
+							email: req.body.email
+						}
+					})
+					.then(user =>{
+						if(!user){
+							const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
+								userData.password = hash
+								User.create(userData)
+								.then(user => {
+									/*Llama a la funcino encargada de enviar el correo con la nueva contraseña
+									*No se esta haciendo tratamiento para los correos enviados con email invalido,
+									*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
+									*/
+									//sendPasswordEmail(dPassword, userData.email, userData.first_name);
+								})
+								.catch(err => {
+									console.log('error' + err)
+								})
+							})
+						}else{
+							console.log("User already exist")
+						}
+					})
+					.catch(err => {
+						console.log('error: ' + err)
+					})
 				}
-				User.findOne({
-					where: {
-						email: req.body.email
-					}
-				})
-				.then(user =>{
-					if(!user){
-						const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
-							userData.password = hash
-							User.create(userData)
-							.then(user => {
-								/*Llama a la funcino encargada de enviar el correo con la nueva contraseña
-								*No se esta haciendo tratamiento para los correos enviados con email invalido,
-								*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
-								*/
-								sendPasswordEmail(dPassword, userData.email, userData.first_name);
-							})
-							.catch(err => {
-								console.log('error' + err)
-							})
-						})
-					}else{
-						console.log("User already exist")
-					}
-				})
-				.catch(err => {
-					console.log('error: ' + err)
+
+			//Metodo para eliminar el archivo subido y cargado.
+			try{
+				const path = "./upload/" + req.params.xlsx_name
+				fs.unlink( path, (err) =>{
+
 				})
 			}
+			catch(err){
+				console.error(err)
+			}
 
-		//Metodo para eliminar el archivo subido y cargado.
-		try{
-			const path = "./upload/" + req.params.xlsx_name
-			fs.unlink( path, (err) =>{
+			res.json("All Users registered")
 
+
+		}
+		catch(e){
+			res.json("There was an error on the file.")
+		}
+	}
+	else{
+		res.json({
+			f: "F"
+		})
+	}
+}
+
+exports.tMassive = async(req, res) => {
+	try{
+		if(await uploadFile(req)){
+			res.json({
+				usuariosAceptados: await testMassiveCreate(req, res)
 			})
 		}
-		catch(err){
-			console.error(err)
+		else{
+			res.json({
+				d: "D"
+			})
 		}
-
-		res.json("All Users registered")
-
-
 	}
-	catch(e){
-		res.json("There was an error on the file.")
+	catch(err){
+
 	}
 }
 
@@ -386,58 +431,87 @@ exports.massiveCreate = async (req, res) => {
 //donde n es la cantidad de usuarios no repetidos.
 //dicha funcion se encarga de crear usuarios de test, los cuales no reciben correo
 //y tienen contraseña fija "1234"
-exports.testMassiveCreate = async (req, res) => {
-	var XLSX = require('xlsx');
-		try{
-			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
-			var sheetNames = workbook.SheetNames;
+var testMassiveCreate = async (req, res) => {
 
-			var sheetIndex = 1;
+		var XLSX = require('xlsx');
+			try{
+				var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
+				console.log(workbook)
+				var sheetNames = workbook.SheetNames;
 
-			var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+				var sheetIndex = 1;
 
-			for(var i = 0; i < userArray.length; i++){
-				const today = new Date()
-				const dPassword =  "1234"
-				const dRole = checkRegex(userArray[i]["Dirección de correo"])
-				const userData = {
-					first_name: userArray[i].Nombre,
-					last_name: userArray[i]["Apellido(s)"],
-					email: userArray[i]["Dirección de correo"],
-					role: dRole,
-					password: dPassword,
-					created: today
+				var usuariosAceptados = []
+
+				var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+				console.log(userArray)
+				for(var i = 0; i < userArray.length; i++){
+					const today = new Date()
+					const dPassword =  "1234"
+					const dRole = checkRegex(userArray[i]["Dirección de correo"])
+					const userData = {
+						first_name: userArray[i].Nombre,
+						last_name: userArray[i]["Apellido(s)"],
+						email: userArray[i]["Dirección de correo"],
+						role: dRole,
+						password: dPassword,
+						created: today
+					}
+					console.log(userData)
+					usuariosAceptados.push(await almacenarUsuario(userData))
 				}
-				User.findOne({
+			return usuariosAceptados
+		}
+		catch(e){
+			return e
+		}
+}
+
+var almacenarUsuario = async (userData) => {
+		return User.findOne({
 					where: {
-						email: req.body.email
+						email: userData.email
 					}
 				})
 				.then(user =>{
+					console.log(user)
 					if(!user){
-						const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
-							userData.password = hash
-							User.create(userData)
-							.then(user => {
-								console.log("User " + userData.email + " created.")
+						let hash = bcrypt.hashSync(userData.password, 10)
+						console.log(hash)
+						userData.password = hash
+						return User.create(userData)
+						.then(user => {
+								console.log("Dea")
+								return User.findOne({
+									where: {
+										email: userData.email
+									}
+								})
+								.then (user => {
+									return user
+								})
+								.catch(err => {
+									return {
+										error: err
+									}
+								})
 							})
 							.catch(err => {
-								console.log('Error: ' + err + " User already created.")
+								return {
+									error: err
+								}
 							})
-						})
 					}else{
-						console.log("User already exist")
+						return {
+							error: "Usuario ya creado"
+						}
 					}
 				})
 				.catch(err => {
-					console.log('error: ' + err)
+					return {
+						error: err
+					}
 				})
-			}
-		res.json("All Users registered")
-	}
-	catch(e){
-		res.json("There was an error on the file.")
-	}
 }
 
 //Declaramos la funcion create. Esta funcion esta encargada de crear un usuario si y solo si no existe un usuario con el mismo email.
@@ -445,7 +519,7 @@ exports.testMassiveCreate = async (req, res) => {
 //Version de prueba, tiene contraseña fija "1234" y no envia correo al nuevo usuario.
 exports.testCreate = (req, res) => {
 	const today = new Date()
-	const dPassword = "1234"
+	const dPassword = "1234" //Math.random().toString(36).substr(2, 5)
 	const dRole = checkRegex(req.body.email)
 	const userData = {
 		first_name: req.body.first_name,
@@ -471,7 +545,21 @@ exports.testCreate = (req, res) => {
 					*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
 					*/
 					//sendPasswordEmail(dPassword, userData.email, userData.first_name);
-					res.json({status: user.email + ' registered'})
+					User.findOne({
+						where:{
+							email: user.email
+						}
+					})
+					.then(user => {
+						res.json({
+							user: user
+						})
+					})
+					.catch(err => {
+						res.json({
+							error: err
+						})
+					})
 				})
 				.catch(err => {
 					res.json({error: err})
@@ -519,5 +607,6 @@ var sendPasswordEmail = (password, email, first_name) =>{
 	  if (error.response) {
 	    console.error(error.response.body)
 	  }
+	  res.json({error: error})
 	  });
   }

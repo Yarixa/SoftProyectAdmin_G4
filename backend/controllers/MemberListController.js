@@ -2,6 +2,7 @@ const db = require("../database/db.js")
 //const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
+const TeamList = require("../models/TeamList")
 const Team = require("../models/Team")
 const Sequelize = require('sequelize')
 const fs = require('fs')
@@ -77,21 +78,30 @@ exports.create = (req, res) => {
 	const memberListData = {
 		user_email: req.body.user_email,
 		course_id: req.body.course_id,
-		team_id: req.body.team_id,
 		type: req.body.type
 	}
 	MemberList.findOne({
 		where: {
 			user_email: memberListData.user_email,
 			course_id: memberListData.course_id,
-			team_id: memberListData.team_id
 		}
 	})
 	.then(memberList => {
 		if(!memberList){
 			MemberList.create(memberListData)
 			.then(memberList => {
-				res.json({message: "El usuario ha sido integrado al curso."})
+				MemberList.findAll({
+					limit: 1,
+				  order: [ [ 'id', 'DESC' ]]
+				})
+				.then (memberList => {
+					res.json({memberList: memberList})
+				})
+				.catch(err => {
+					res.status(400).json({
+						error: "Ha ocurrido un error al momento de ingresar el memberList a la base de datos."
+					})
+				})
 			})
 			.catch(err => {
 				res.status(400).json({
@@ -237,7 +247,7 @@ exports.readByTeam = (req, res) => {
 		res.send(data)
 	})*/
 	db.sequelize.query(
-		"Select * from memberLists left join users on memberLists.user_email = users.email where memberLists.team_id = " + req.query.team_id
+		"Select * from teamLists left join users on teamLists.user_email = users.email where teamLists.team_id = " + req.query.team_id
 	)
 	.spread(metadata => {
 		res.send(metadata)
@@ -250,36 +260,55 @@ exports.readByTeam = (req, res) => {
 	})
 }
 
+var contarMiembros = async (team_id) => {
+	return TeamList.count({
+		where: {
+			team_id: team_id
+		}
+	})
+	.then(count => {
+		return count
+	})
+	.catch(err => {
+		return 0
+	})
+}
 
 //retornar objeto <-
 exports.updateTeam = (req, res) => {
-	MemberList.findOne({
+	const teamListData = {
+		user_email: req.params.user_email,
+		team_id: req.params.team_id,
+		type: req.body.type
+	}
+	TeamList.findOne({
 		where:{
 			user_email: req.params.user_email,
-			course_id: req.params.course_id,
-			team_id: 1
+			team_id: req.params.team_id
 		}
 	})
-	.then(memberList => {
-		if(memberList){
-			MemberList.update({
-					team_id: req.body.team_id
-				},
-				{where:{
-					user_email: req.params.user_email,
-					course_id: req.params.course_id,
-					team_id: 1
-				}
-			})
+	.then(teamList => {
+		if(!teamList){
+			TeamList.create(teamListData)
 			.then(result => {
-				memberList.team_id = Number(req.body.team_id)
-				res.json({
-					memberList: memberList
+				TeamList.findAll({
+					limit: 1,
+				  order: [ [ 'id', 'DESC' ]]
 				})
+				.then (teamList => {
+					res.json({data: teamList})
+				})
+
+			})
+			.catch(err => {
+				res.status(400).json({
+					error: err
+				})
+
 			})
 			.catch(err => {
 				res.json({
-					error: "No existe el usuario dentro del tema 2 "
+					error: err
 				})
 			})
 		}
@@ -297,28 +326,26 @@ exports.updateTeam = (req, res) => {
 }
 
 exports.updateRole = (req, res) => {
-	MemberList.findOne({
+	TeamList.findOne({
 		where:{
 			user_email: req.params.user_email,
-			course_id: req.params.course_id,
 			team_id: req.params.team_id
 		}
 	})
-	.then(memberList => {
-		if(memberList){
-			MemberList.update({
+	.then(teamList => {
+		if(teamList){
+			TeamList.update({
 					type: req.body.type
 				},
 				{where:{
 					user_email: req.params.user_email,
-					course_id: req.params.course_id,
 					team_id: req.params.team_id
 				}
 			})
 			.then(result => {
-				memberList.type = req.body.type
+				teamList.type = req.body.type
 				res.json({
-					memberlist: memberList
+					teamlist: teamList
 				})
 			})
 			.catch(err => {
@@ -457,6 +484,74 @@ exports.disable = (req, res) => {
 	})
 }
 
+exports.enableTeamMember = (req, res) => {
+	TeamList.findOne({
+		where:{
+			id: req.params.id
+		}
+	})
+	.then(teamList => {
+		if(teamList){
+			TeamList.update({
+				active: true
+			},{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				teamList.active = true
+				res.json({
+					teamList: teamList
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err => {
+
+	})
+}
+
+exports.disableTeamMember = (req, res) => {
+	TeamList.findOne({
+		where:{
+			id: req.params.id
+		}
+	})
+	.then(teamList => {
+		if(teamList){
+			TeamList.update({
+				active: false
+			},{
+				where: {
+					id: req.params.id
+				}
+			})
+			.then(result => {
+				teamList.active = false
+				res.json({
+					teamList: teamList
+				})
+			})
+			.catch(err => {
+				res.json({
+					error: true,
+					messageError: "Existe un error"
+				})
+			})
+		}
+	})
+	.catch(err => {
+
+	})
+}
+
 exports.enableTeam = (req, res) => {
 	Team.findOne({
 		where: {
@@ -563,7 +658,7 @@ exports.testMassiveCreate = async (req, res) => {
 
 		try{
 			//console.log(memberListArray)
-			res.json(await cargaArchivo(req))
+			res.json({memberListArray: await cargaArchivo(req)})
 	}
 	catch(e){
 		res.json("There was an error on the file. " + e)
@@ -572,6 +667,7 @@ exports.testMassiveCreate = async (req, res) => {
 
 var  cargaArchivo = async (req) =>{
 
+			var usuariosAceptados = []
 			var XLSX = require('xlsx');
 			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
 			var sheetNames = workbook.SheetNames;
@@ -580,45 +676,157 @@ var  cargaArchivo = async (req) =>{
 
 			var memberListArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
 
+
+
 			for(var i = 0; i < memberListArray.length; i++){
 				const dRole = checkRegex(memberListArray[i]["Dirección de correo"])
 				const memberListData = {
 
 					user_email: memberListArray[i]["Dirección de correo"],
+					first_name: memberListArray[i].Nombre,
+					last_name: memberListArray[i]["Apellido(s)"],
 					course_id: req.params.course_id,
-					team_id: 1,
 					type: dRole
 
 				}
 
+			const resultado = await almacenarUsuario(memberListData)
+			usuariosAceptados.push(resultado)
 
+		}
+		//Metodo para eliminar el archivo subido y cargado.
+		try{
+			const path = "./upload/" + req.params.xlsx_name
+			//fs.unlink( path, (err) =>{
 
-				MemberList.findOne({
+			//})
+		}
+		catch(err){
+			console.error(err)
+		}
+		return usuariosAceptados
+}
+
+var crearJSONUsuario = async (resultado, memberListData) =>{
+	var resultado = JSON.stringify(resultado)
+	console.log(resultado)
+	const UsuarioJSON = {
+		id: resultado["id"],
+		first_name: memberListData.first_name,
+		last_name: memberListData.last_name,
+		course_id: memberListData.course_id,
+		type: memberListData.type,
+		active: true
+	}
+	return UsuarioJSON;
+}
+
+exports.modificarRolCurso = async (req, res) =>{
+
+	MemberList.findOne({
+		where: {
+			user_email: req.params.user_email,
+			course_id: req.params.course_id
+		}
+	})
+	.then(memberList => {
+		if(memberList){
+			var resBusqueda = memberList
+			if(memberList.type.localeCompare("Profesor") != 0){
+				MemberList.update({
+					type: req.body.type
+				},{
+					where:{
+						user_email: req.params.user_email,
+						course_id: req.params.course_id
+					}
+				})
+				.then(memberList => {
+					resBusqueda.type = req.body.type;
+					res.json({
+						memberList: resBusqueda
+					})
+				})
+				.catch(err => {
+					res.json({
+						errorMessage: "Hubo un error al actualizar el usuario"
+					})
+				})
+			}
+			else{
+				res.json({
+					errorMessage: "El usuario es un profesor"
+				})
+			}
+		}
+		else{
+			res.json({
+				errorMessage: "El usuario no existe dentro del curso"
+			})
+		}
+	})
+
+}
+
+var almacenarUsuario = async (memberListData) => {
+		return MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
 						course_id: memberListData.course_id,
-						team_id: 1
-					}
+					},
 				})
-				.then(memberList =>{
+				.then((memberList) =>{
 					if(!memberList){
-
-							MemberList.create(memberListData)
-							.then(user => {
-								console.log("User " + memberListData.user_email + " linked.")
+							return MemberList.create(memberListData)
+							.then(memberList => {
+								return MemberList.findAll({
+									limit: 1,
+  								where: {
+  									user_email: memberListData.user_email,
+   									course_id: memberListData.course_id
+ 									},
+  								order: [ [ 'user_email', 'DESC' ]]
+								})
+								.then(memberList =>{
+									var member = JSON.stringify(memberList)
+									var memberZone = JSON.parse(member)
+									return {
+										id: memberZone.map(x => x.id)[0],
+										first_name: memberListData.first_name,
+										last_name: memberListData.last_name,
+										course_id: memberListData.course_id,
+										type: memberListData.type,
+										active: true
+									}
+								})
+								.catch(err => {
+									return {
+										user_email: memberListData.user_email,
+										course_id: memberListData.course_id,
+										errorMessage: "El usuario no ha podido ser agregado al curso"
+									}
+								})
 							})
 							.catch(err => {
-								console.log('Error: ' + err )
+								return {
+									user_email: memberListData.user_email,
+									course_id: memberListData.course_id,
+									errorMessage: "El usuario no ha podido ser agregado al curso"
+								}
 							})
 
 					}else{
-						console.log("Error")
+						return {
+									user_email: memberListData.user_email,
+									course_id: memberListData.course_id,
+									errorMessage: "El usuario no ha podido ser agregado al curso"
+						}
 					}
 				})
 				.catch(err => {
 					console.log('error: ' + err)
-				})
-		}
+		})
+
 		//Metodo para eliminar el archivo subido y cargado.
 		try{
 			const path = "./upload/" + req.params.xlsx_name
@@ -628,8 +836,7 @@ var  cargaArchivo = async (req) =>{
 		}
 		catch(err){
 			console.error(err)
-		}
-		return("La operación fue realizada.")
+	}
 }
 
 var checkRegex = (email) => {

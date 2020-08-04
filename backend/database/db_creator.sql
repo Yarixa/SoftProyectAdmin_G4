@@ -61,11 +61,19 @@ create table memberLists(
 	id int primary key auto_increment,
 	user_email varchar(40) not null,
 	course_id int not null,
-	team_id int not null,
-	type varchar(15) not null default 'Alumno',
+	type varchar(40) not null default 'Alumno',
 	active boolean not null default true,
 	foreign key (user_email) references users(email) on delete restrict,
-	foreign key (course_id) references courses(id) on delete restrict,
+	foreign key (course_id) references courses(id) on delete restrict
+);
+
+create table teamLists(
+	id int primary key auto_increment,
+	user_email varchar(40) not null,
+	team_id int not null,
+	type varchar(40) not null default 'Alumno',
+	active boolean not null default true,
+	foreign key (user_email) references users(email) on delete restrict,
 	foreign key (team_id) references teams(id) on delete restrict
 );
 
