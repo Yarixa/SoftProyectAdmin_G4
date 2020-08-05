@@ -54,7 +54,7 @@ users.post('/create', userController.testCreate)
 
 //FileUploader para poder meter los archivos .xlsx dentro de una carpeta especifica (./upload)
 //Puede ser usado para subir otro tipo de archivos. No he restringido esto.
-users.post('/uploadFile', userController.uploadFile)
+//users.post('/uploadFile', userController.uploadFile)
 
 //users.post('/sendPasswordEmail', userController.recoverPassword)
 
