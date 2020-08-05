@@ -29,6 +29,20 @@ app.use("/memberlist", MemberList)
 app.use("/projects", Projects)
 app.use("/documents", Documents)
 
+//Conexión con mongoDB
+const db = require("./models/mongoDB");
+db.mongoose.connect(db.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Conectado a mongoDB");
+  })
+  .catch(err => {
+    console.log("No se puedo conectar a mongoDB", err);
+    process.exit();
+  });
+
 app.listen(port, () => {
 	console.log("Server is running on port: " + port)
 })

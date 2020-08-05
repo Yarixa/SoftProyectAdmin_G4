@@ -11,6 +11,7 @@ import memberReducers from './grupo-curso/groupMemberDucks';
 import courseMembersReducers from './vista-curso/integrantes/membersDucks';
 import proyectosReducer from './vista-curso/gestion-proyectos/proyectosDuck';
 import documentReducers from './documento/documentDucks';
+import selectMemberReducers from './grupo-curso/selectMemberDucks';
 
 
 const rootReducer = combineReducers({
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     members : memberReducers,
     courseMembers : courseMembersReducers,
     proyectos : proyectosReducer,
-    documents : documentReducers
+    documents : documentReducers,
+    selectMembers : selectMemberReducers
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // para la extensión redux_devtools de chrome

@@ -10,65 +10,39 @@ export default function MassiveAdd (props) {
     const {idCurso} = props;
     const {carga} = props;
     const dispatch = useDispatch();
-    const [fileName, setFileName] = React.useState('');
 
     const handleFile = e => {
-        if (esVincular){
-            setFileName(e.target.files[0].name)
-            /* Subir Archivo */
-            dispatch(uploadFile(e.target.files[0]));
-            props.action(true);
-        }
-        else{
-            setFileName(e.target.files[0].name)
-            dispatch(uploadFile(e.target.files[0]));
-            props.action(true);
+        if (e.target.files[0] != null){
+            const file = {
+                file: e.target.files[0],
+                name: e.target.files[0].name
+            }
+            if (esVincular){
+                /* Subir Archivo */
+                dispatch(uploadFile(e.target.files[0]));
+                props.action(true);
+            }
+            else{
+                dispatch(uploadFile(file));
+                props.action(true);
+            }
         }
     }
 
-    const handleLoad = e => {
-        if (esVincular){
-            /* Vincular Usuarios */
-            const file = {
-                name: fileName,
-                idCurso: idCurso
-            }
-            dispatch(vinculate(file));
-            setFileName('');
-            props.action(false);
-        }
-        else{
-            /* Registrar Usuarios */
-            dispatch(loadFile(fileName));
-            setFileName('');
-            props.action(false);
-        }
-    }
-    if (carga){
-        return (
-            <Button
-                variant="contained"
-                component="label"
-                color="secondary"
-                onClick={handleLoad}
-            >Ejecutar Carga</Button>
-        )
-    }
-    else{
-        return (
-            <Button
-                variant="contained"
-                component="label"
-            >
-            Cargar Archivo
-            <input
-                type="file"
-                autoFocus = {false}
-                style={{display: "none"}}
-                accept = ".xlsx"
-                onChange = {handleFile}
-            />
-            </Button>
-        )
-    } 
+    return (
+        <Button
+            variant="contained"
+            component="label"
+        >
+        Cargar Archivo
+        <input
+            type="file"
+            autoFocus = {false}
+            style={{display: "none"}}
+            accept = ".xlsx"
+            onChange = {handleFile}
+            onClick = {(event) => {event.target.value = null}}
+        />
+        </Button>
+    )
 }
