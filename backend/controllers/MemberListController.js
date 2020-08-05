@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt")
 const MemberList = require("../models/MemberList")
 const TeamList = require("../models/TeamList")
 const Team = require("../models/Team")
+const User = require("../models/User")
 const Sequelize = require('sequelize')
 const fs = require('fs')
 
@@ -75,6 +76,7 @@ exports.createTeam = (req, res) => {
 }
 
 exports.create = (req, res) => {
+
 	const memberListData = {
 		user_email: req.body.user_email,
 		course_id: req.body.course_id,
@@ -83,7 +85,7 @@ exports.create = (req, res) => {
 	MemberList.findOne({
 		where: {
 			user_email: memberListData.user_email,
-			course_id: memberListData.course_id,
+			course_id: memberListData.course_id
 		}
 	})
 	.then(memberList => {
@@ -659,9 +661,10 @@ exports.uploadFile = async (req, res) => {
 exports.testMassiveCreate = async (req, res) => {
 
 		try{
-			if(await uploadFile(req))
-			//console.log(memberListArray)
+			if(await uploadFile(req)){
+
 				res.json({memberListArray: await cargaArchivo(req)})
+			}
 	}
 	catch(e){
 		res.json("There was an error on the file. " + e)
@@ -687,8 +690,94 @@ var uploadFile = async (req) => {
     }
 }
 
-var  cargaArchivo = async (req) =>{
+var crearNuevoUsuario = async (req) => {
+		var XLSX = require('xlsx');
+			try{
+				var workbook = await XLSX.readFile("./upload/" + req.params.xlsx_name);
+				//console.log(workbook)
+				var sheetNames = workbook.SheetNames;
 
+				var usuariosAceptados = []
+
+				var sheetIndex = 1;
+
+				var userArray = await XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+				console.log(userArray)
+				for(var i = 0; i < userArray.length; i++){
+					const today = new Date()
+					const dPassword =  "1234"
+					const dRole = checkRegex(userArray[i]["Dirección de correo"])
+					const userData = {
+						first_name: userArray[i].Nombre,
+
+						last_name: userArray[i]["Apellido(s)"],
+						email: userArray[i]["Dirección de correo"],
+						role: dRole,
+						password: dPassword,
+						created: today
+					}
+					console.log(userData)
+					usuariosAceptados.push(await almacenarNuevoUsuario(userData))
+				}
+			return usuariosAceptados
+		}
+		catch(e){
+			return e
+		}
+}
+
+
+var almacenarNuevoUsuario = async (userData) => {
+		console.log("DE")
+		return User.findOne({
+					where: {
+						email: userData.email
+					}
+				})
+				.then(user =>{
+					//console.log(user)
+					if(!user){
+						let hash = bcrypt.hashSync(userData.password, 10)
+						//console.log(hash)
+						userData.password = hash
+						return User.create(userData)
+						.then(user => {
+								console.log("Dea")
+								return User.findOne({
+									where: {
+										email: userData.email
+									}
+								})
+								.then (user => {
+									return user
+								})
+								.catch(err => {
+									return {
+										error: err
+									}
+								})
+							})
+							.catch(err => {
+								return {
+									error: err
+								}
+							})
+					}else{
+						return {
+							error: "Usuario ya creado"
+						}
+					}
+				})
+				.catch(err => {
+					return {
+						error: err
+					}
+				})
+}
+
+
+var  cargaArchivo = async (req) =>{
+			await crearNuevoUsuario(req)
 			var usuariosAceptados = []
 			var XLSX = require('xlsx');
 			var workbook = await XLSX.readFile("./upload/" + req.params.xlsx_name);
@@ -791,6 +880,7 @@ exports.modificarRolCurso = async (req, res) =>{
 }
 
 var almacenarUsuario = async (memberListData) => {
+
 		return MemberList.findOne({
 					where: {
 						user_email: memberListData.user_email,
