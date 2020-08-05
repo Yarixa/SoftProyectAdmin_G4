@@ -15,7 +15,6 @@ import Snackbar from "@material-ui/core/Snackbar";
 import {TransformComponent,TransformWrapper} from "react-zoom-pan-pinch";
 
 
-
 const useStyle = makeStyles((theme)=>({
     root: {
         maxWidth:"100%",
@@ -128,6 +127,12 @@ export default function VistaDisenio(props){
                 <CKEditor 
                         editor = {ClassicEditor}
                         data = "<p>Ingresar Descripcion del documento</p>"
+                        config ={
+                            {
+                                tootlbar : [ 'imageUpload'],
+                                
+                            }
+                        }
                     />
                 </Grid>
                 
