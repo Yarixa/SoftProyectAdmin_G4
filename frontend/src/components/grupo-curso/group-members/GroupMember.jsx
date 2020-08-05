@@ -16,8 +16,9 @@ export default function GroupMember(props) {
     const {idCurso} = props;
 
     useEffect(()=>{
-        console.log("member",groupID);
-        dispatch(fetchIntegrantes(groupID));
+        if (groupID != null){
+            dispatch(fetchIntegrantes(groupID));
+        }
         // hacer aquí el fetching de los integrantes
     },[groupID, dispatch]);
     

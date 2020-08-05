@@ -62,7 +62,9 @@ export const addMember = (member) => async dispatch => {
         team_id: member.idTeam,
         type: newUser.data.role
     }
+    console.log(data2)
     const resp2 = await axios.post('http://' + apiURL + ':5000/memberlist/create', data2);
+    console.log(resp2)
     const allUsers = await axios.get('http://' + apiURL + ':5000/memberlist/readByCourse', {params: {course_id: data2.course_id}});
 
     dispatch({

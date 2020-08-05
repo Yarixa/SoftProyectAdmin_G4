@@ -43,7 +43,7 @@ export const unselectIntegrante = (integrante) => dispatch => {
 }
 
 export const getTeamMembers = () => dispatch => {
-    //BACK
+    /* Conectar con Back */
     console.log("A")
     const list = [{
         id: "1",
@@ -51,28 +51,10 @@ export const getTeamMembers = () => dispatch => {
         last_name: "Alvarez Aspee",
         email: "falvarez16@alumnos.utalca.cl"
     }]
-    //Agregar parámetro de selección
+    /* Agrega parámetro de selección */
     const aux_list = list.map(member => ({...member, selected: false}))
     dispatch({
         type: FETCH_LIST,
         payload: aux_list
-    })
-}
-
-export const getCourseMembers = () => dispatch => {
-    console.log("B")
-    //BACK
-    //Agregar parámetro de selección
-    dispatch({
-        type: FETCH_LIST
-    })
-}
-
-export const getProfesors = () => dispatch => {
-    console.log("C")
-    //BACK
-    //Agregar parámetro de selección
-    dispatch({
-        type: FETCH_LIST
     })
 }

@@ -9,23 +9,17 @@ import 'semantic-ui-css/semantic.min.css';
 import Checkbox from '@material-ui/core/Checkbox';
 
 // Reducers
-import { getTeamMembers, getCourseMembers, getProfesors } from '../selectMemberDucks';
+import { getTeamMembers } from '../selectMemberDucks';
 
 export default function SelectMember(props){
 
-    const {type} = props // 1: TeamMembers 2: CourseMember 3: Profesors
+    const {type} = props
+    const {idCurso} = props
     const dispatch = useDispatch();
 
     useEffect(() => {
-        switch (type){
-            case "1":
-                return (dispatch(getTeamMembers()))
-            case "2":
-                return (dispatch(getCourseMembers()))
-            case "3":
-                return (dispatch(getProfesors()))
-            default:
-                //NOTHING
+        if (type == "1"){
+            dispatch(getTeamMembers());
         }
     }, [dispatch])
 

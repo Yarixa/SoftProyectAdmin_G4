@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 
 import Button from '@material-ui/core/Button';
-import { uploadFile, loadFile, vinculate } from './massiveAddDucks';
+import { uploadFile, vinculate } from './massiveAddDucks';
 
 export default function MassiveAdd (props) {
     
@@ -13,16 +13,21 @@ export default function MassiveAdd (props) {
 
     const handleFile = e => {
         if (e.target.files[0] != null){
-            const file = {
-                file: e.target.files[0],
-                name: e.target.files[0].name
-            }
+            
             if (esVincular){
-                /* Subir Archivo */
-                dispatch(uploadFile(e.target.files[0]));
+                const file = {
+                    file: e.target.files[0],
+                    name: e.target.files[0].name,
+                    course_id: idCurso
+                }
+                dispatch(vinculate(file));
                 props.action(true);
             }
             else{
+                const file = {
+                    file: e.target.files[0],
+                    name: e.target.files[0].name
+                }
                 dispatch(uploadFile(file));
                 props.action(true);
             }

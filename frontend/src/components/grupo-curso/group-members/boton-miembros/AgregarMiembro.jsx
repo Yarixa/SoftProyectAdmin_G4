@@ -84,7 +84,7 @@ export default function AgregarGrupo(props) {
         <Dialog disableBackdropClick disableEscapeKeyDown open = {open}>
             <DialogTitle>{esEditar?"Editando Miembro":"Agrega Miembro"}</DialogTitle>
             <DialogContent>
-                <SelectMember type = "1"/>
+                <SelectMember type = "1" idCurso = {idCurso}/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
