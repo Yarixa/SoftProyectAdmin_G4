@@ -1,6 +1,7 @@
 module.exports = (result1, result2) => {
     const today = new Date();
 return `
+<div style="margin:30px">
 <p style="text-align: left;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Utalca.svg/300px-Utalca.svg.png" width="70" height="70" /><strong><br /></strong><strong>FACULTAD DE INGENIERÍA<br /></strong><strong>UNIVERSIDAD DE TALCA<br /></strong>DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN (DCC)&nbsp;&nbsp;</p>
 <div style="text-align: center;">&nbsp;</div>
 <div style="text-align: center;">&nbsp;</div>
@@ -72,54 +73,44 @@ return `
 <p style="text-align: center;">1.2&nbsp;&nbsp;&nbsp; Alcance del Proyecto................................................................................................................ 1</p>
 <p style="text-align: center;">1.3&nbsp;&nbsp;&nbsp; Contexto.................................................................................................................................. 1</p>
 <p style="text-align: center;">1.4&nbsp;&nbsp;&nbsp; Referencias............................................................................................................................... 1</p>
-<p style="text-align: center;"><strong>2&nbsp;&nbsp;&nbsp; Descripción General...................................................................................................................... 2</strong></p>
-<p style="text-align: center;">2.1&nbsp;&nbsp;&nbsp; Suposiciones y Dependencias......................................................................................................... 2</p>
-<p style="text-align: center;">2.2&nbsp;&nbsp;&nbsp; Restricciones Generales.................................................................................................................. 2</p>
-<p style="text-align: center;"><strong>3&nbsp;&nbsp;&nbsp; Implementación del Proyecto.......................................................................................................... 3</strong></p>
-<p style="text-align: center;">3.1&nbsp;&nbsp;&nbsp; Interfaces generales de módulos implementadas................................................................................... 3</p>
-<p style="text-align: center;">3.2&nbsp;&nbsp;&nbsp; Interfaces de principales funcionalidades implementadas..................................................................... 3</p>
-<p style="text-align: center;"><strong>4&nbsp;&nbsp;&nbsp; Manual de instalación del Software.......................................................................................... 4</strong></p>
-<p style="text-align: center;">4.1&nbsp;&nbsp;&nbsp; Requerimineots técnicos......................................................................................................... 4</p>
-<p style="text-align: center;">4.2&nbsp;&nbsp;&nbsp; Instalación paso a paso......................................................................................................... 4</p>
+<p style="text-align: center;"><strong>2&nbsp;&nbsp;&nbsp; Implementación del Proyecto.......................................................................................................... 2</strong></p>
+<p style="text-align: center;">2.1&nbsp;&nbsp;&nbsp; Interfaces generales de módulos implementadas......................................................................... 2</p>
+<p style="text-align: center;">2.2&nbsp;&nbsp;&nbsp; Interfaces de principales funcionalidades implementadas............................................................. 2</p>
+<p style="text-align: center;"><strong>3&nbsp;&nbsp;&nbsp; Manual de instalación del Software............................................................................................... 3</strong></p>
+<p style="text-align: center;">3.1&nbsp;&nbsp;&nbsp; Requerimineots técnicos........................................................................................................... 3</p>
+<p style="text-align: center;">3.2&nbsp;&nbsp;&nbsp; Instalación paso a paso............................................................................................................. 3</p>
 <div style="page-break-after: always;">&nbsp;</div>
 <p>&nbsp;</p>
 <h1><a name="_Toc353436287"></a>&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Introducci&oacute;n</h1>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.1&nbsp;&nbsp;&nbsp; Prop&oacute;sito del Sistema</h2>
-<p>&nbsp; &nbsp;${result2[0].proposito}</p>
+<p>${result2[0].proposito}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.2&nbsp;&nbsp;&nbsp; Alcance del Proyecto</h2>
-<p>&nbsp; &nbsp;${result2[0].alcance}</p>
+<p>${result2[0].alcance}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.3&nbsp;&nbsp;&nbsp; Contexto</h2>
-<p>&nbsp; &nbsp;${result2[0].contexto}</p>
+<p>${result2[0].contexto}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.4&nbsp;&nbsp;&nbsp; Referencias</h2>
-<p>&nbsp; &nbsp;${result2[0].referencias}</p>
+<p>${result2[0].referencias}</p>
 <div style="page-break-after: always;">&nbsp;</div>
 <p>&nbsp;</p>
-<h1><a name="_Toc353436287"></a>&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Descripci&oacute;n general</h1>
-<h2><a name="_Toc353436288"></a>&nbsp; 2.1&nbsp;&nbsp;&nbsp; Suposiciones y Dependencias</h2>
-<p>&nbsp; &nbsp;${result2[0].suposiciones}</p>
+<h1><a name="_Toc353436287"></a>&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementación del Proyecto</h1>
+<h2><a name="_Toc353436288"></a>&nbsp; 2.1&nbsp;&nbsp;&nbsp; Interfaces generales de módulos implementadas</h2>
+<p>test</p>
 <p>&nbsp;</p>
-<h2><a name="_Toc353436288"></a>&nbsp; 2.2&nbsp;&nbsp;&nbsp; Restricciones Generales</h2>
-<p>&nbsp; &nbsp;${result2[0].restricciones}</p>
-<div style="page-break-after: always;">&nbsp;</div>
-<p>&nbsp;</p>
-<h1><a name="_Toc353436287"></a>&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementación del Proyecto</h1>
-<h2><a name="_Toc353436288"></a>&nbsp; 3.1&nbsp;&nbsp;&nbsp; Interfaces generales de módulos implementadas</h2>
-<p>&nbsp; &nbsp;test</p>
-<p>&nbsp;</p>
-<h2><a name="_Toc353436288"></a>&nbsp; 3.2&nbsp;&nbsp;&nbsp; Interfaces de principales funcionalidades implementadas</h2>
-<p>&nbsp; &nbsp;test</p>
+<h2><a name="_Toc353436288"></a>&nbsp; 2.2&nbsp;&nbsp;&nbsp; Interfaces de principales funcionalidades implementadas</h2>
+<p>test</p>
 <p>&nbsp;</p>
 <div style="page-break-after: always;">&nbsp;</div>
 <p>&nbsp;</p>
-<h1><a name="_Toc353436287"></a>&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Manual de instalación del Software</h1>
-<h2><a name="_Toc353436288"></a>&nbsp; 4.1&nbsp;&nbsp;&nbsp; Requerimientos técnicos</h2>
-<p>&nbsp; &nbsp;test</p>
+<h1><a name="_Toc353436287"></a>&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Manual de instalación del Software</h1>
+<h2><a name="_Toc353436288"></a>&nbsp; 3.1&nbsp;&nbsp;&nbsp; Requerimientos técnicos</h2>
+<p>test</p>
 <p>&nbsp;</p>
-<h2><a name="_Toc353436288"></a>&nbsp; 4.1&nbsp;&nbsp;&nbsp; Instalación paso a paso</h2>
-<p>&nbsp; &nbsp;test</p>
+<h2><a name="_Toc353436288"></a>&nbsp; 3.2&nbsp;&nbsp;&nbsp; Instalación paso a paso</h2>
+<p>test</p>
 <p>&nbsp;</p>
+</div>
 `;
 };

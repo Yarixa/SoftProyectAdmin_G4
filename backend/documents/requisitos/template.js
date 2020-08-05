@@ -20,6 +20,7 @@ module.exports = (result1, result2) => {
     }
     const today = new Date();
 return `
+<div style="margin:30px">
 <p style="text-align: left;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Utalca.svg/300px-Utalca.svg.png" width="70" height="70" /><strong><br /></strong><strong>FACULTAD DE INGENIER&Iacute;A<br /></strong><strong>UNIVERSIDAD DE TALCA<br /></strong>DEPARTAMENTO DE CIENCIAS DE LA COMPUTACION (DCC)&nbsp;&nbsp;</p>
 <div style="text-align: center;">&nbsp;</div>
 <div style="text-align: center;">&nbsp;</div>
@@ -42,7 +43,7 @@ return `
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p style="text-align: right;"><strong>Fecha: ${`${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`}</strong></p>
-<p style="text-align: right;"><strong>Versi&oacute;n:</strong></p>
+<p style="text-align: right;"><strong>Versión:</strong></p>
 <br />
 <div style="page-break-after: always;">&nbsp;</div>
 <p style="text-align: left;">&nbsp;</p>
@@ -92,39 +93,40 @@ return `
 <p style="text-align: center;">1.3&nbsp;&nbsp;&nbsp; Contexto.................................................................................................................................. 1</p>
 <p style="text-align: center;">1.4&nbsp;&nbsp;&nbsp; Referencias............................................................................................................................... 1</p>
 <p style="text-align: center;"><strong>2&nbsp;&nbsp;&nbsp; Descripci&oacute;n General...................................................................................................................... 2</strong></p>
-<p style="text-align: center;">2.1&nbsp;&nbsp;&nbsp; Suposiciones y Dependencias......................................................................................................... 2</p>
-<p style="text-align: center;">2.2&nbsp;&nbsp;&nbsp; Restricciones Generales.................................................................................................................. 2</p>
-<p style="text-align: center;">2.3&nbsp;&nbsp;&nbsp; Usuarios........................................................................................................................................ 2</p>
+<p style="text-align: center;">2.1&nbsp;&nbsp;&nbsp; Suposiciones y Dependencias....................................................................................................... 2</p>
+<p style="text-align: center;">2.2&nbsp;&nbsp;&nbsp; Restricciones Generales................................................................................................................. 2</p>
+<p style="text-align: center;">2.3&nbsp;&nbsp;&nbsp; Usuarios....................................................................................................................................... 2</p>
 <p style="text-align: center;"><strong>3&nbsp;&nbsp;&nbsp; Requisitos del Usuario................................................................................................................... 3</strong></p>
 <div style="page-break-after: always;">&nbsp;</div>
 <p>&nbsp;</p>
 <h1><a name="_Toc353436287"></a>&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Introducci&oacute;n</h1>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.1&nbsp;&nbsp;&nbsp; Prop&oacute;sito del Sistema</h2>
-<p>&nbsp; &nbsp;${result2[0].proposito}</p>
+<p>${result2[0].proposito}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.2&nbsp;&nbsp;&nbsp; Alcance del Proyecto</h2>
-<p>&nbsp; &nbsp;${result2[0].alcance}</p>
+<p>${result2[0].alcance}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.3&nbsp;&nbsp;&nbsp; Contexto</h2>
-<p>&nbsp; &nbsp;${result2[0].contexto}</p>
+<p>${result2[0].contexto}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 1.4&nbsp;&nbsp;&nbsp; Referencias</h2>
-<p>&nbsp; &nbsp;${result2[0].referencias}</p>
+<p>${result2[0].referencias}</p>
 <div style="page-break-after: always;">&nbsp;</div>
 <p>&nbsp;</p>
 <h1><a name="_Toc353436287"></a>&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Descripci&oacute;n general</h1>
 <h2><a name="_Toc353436288"></a>&nbsp; 2.1&nbsp;&nbsp;&nbsp; Suposiciones y Dependencias</h2>
-<p>&nbsp; &nbsp;${result2[0].suposiciones}</p>
+<p>${result2[0].suposiciones}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 2.2&nbsp;&nbsp;&nbsp; Restricciones Generales</h2>
-<p>&nbsp; &nbsp;${result2[0].restricciones}</p>
+<p>${result2[0].restricciones}</p>
 <p>&nbsp;</p>
 <h2><a name="_Toc353436288"></a>&nbsp; 2.3&nbsp;&nbsp;&nbsp; Usuarios</h2>
-<p>&nbsp; &nbsp;${result2[0].usuarios}</p>
+<p>${result2[0].usuarios}</p>
 <div style="page-break-after: always;">&nbsp;</div>
 <p>&nbsp;</p>
 <h1><a name="_Toc353436287"></a>&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Requisitos de Usuario</h1>
 <p>&nbsp;</p>
 ${lista_requisitos}
+</div>
 `;
 };
