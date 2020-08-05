@@ -1,4 +1,5 @@
 import React from 'react';
+import VistaDocumento from "../../documento-requisitos/VistaDocumento";
 
 
 export default function VistaRequisitos(props){
@@ -6,7 +7,7 @@ export default function VistaRequisitos(props){
 
     return (
         <div>
-            <h1>Documento de requisitos para el proyecto id={idProyecto}</h1>
+            <VistaDocumento/>
         </div>
     );
 }
