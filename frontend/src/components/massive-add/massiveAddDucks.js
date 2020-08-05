@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getUsers } from '../gestion-usuarios/userDucks';
 
 // Constantes
 const dataInicial = {
@@ -28,9 +29,8 @@ export const uploadFile = (file) => async dispatch => {
     let formData = new FormData();
 
     formData.append('file', file.file)
-    console.log(file.name + "Ducks")
     const resp = await axios.post('http://' + apiURL + ':5000/users/massivecreate/'+file.name, formData);
-    console.log(resp)
+    dispatch(getUsers())
     dispatch({
         type: FILE_LOAD,
         name: file.name

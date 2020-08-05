@@ -12,18 +12,20 @@ export default function MassiveAdd (props) {
     const dispatch = useDispatch();
 
     const handleFile = e => {
-        const file = {
-            file: e.target.files[0],
-            name: e.target.files[0].name
-        }
-        if (esVincular){
-            /* Subir Archivo */
-            dispatch(uploadFile(e.target.files[0]));
-            props.action(true);
-        }
-        else{
-            dispatch(uploadFile(file));
-            props.action(true);
+        if (e.target.files[0] != null){
+            const file = {
+                file: e.target.files[0],
+                name: e.target.files[0].name
+            }
+            if (esVincular){
+                /* Subir Archivo */
+                dispatch(uploadFile(e.target.files[0]));
+                props.action(true);
+            }
+            else{
+                dispatch(uploadFile(file));
+                props.action(true);
+            }
         }
     }
 
@@ -39,6 +41,7 @@ export default function MassiveAdd (props) {
             style={{display: "none"}}
             accept = ".xlsx"
             onChange = {handleFile}
+            onClick = {(event) => {event.target.value = null}}
         />
         </Button>
     )
