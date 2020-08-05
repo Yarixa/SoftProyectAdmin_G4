@@ -300,8 +300,7 @@ var uploadFile = async (req) => {
 
 exports.tMassive = async(req, res) => {
 	try{
-		var flag = true
-		if(flag){
+		if(await uploadFile(req)){
 			res.json({
 				usuariosAceptados: await testMassiveCreate(req, res)
 			})
@@ -328,10 +327,9 @@ var testMassiveCreate = async (req, res) => {
 				console.log(workbook)
 				var sheetNames = workbook.SheetNames;
 
-					var workbook = await XLSX.readFile("./upload/" + req.params.xlsx_name);
-					var sheetNames = workbook.SheetNames;
+				var usuariosAceptados = []
 
-					var sheetIndex = 1;
+				var sheetIndex = 1;
 
 				var userArray = await XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
 				console.log(userArray)
@@ -347,6 +345,7 @@ var testMassiveCreate = async (req, res) => {
 						password: dPassword,
 						created: today
 					}
+					usuariosAceptados.push(await almacenarUsuario(userData))
 				}
 
 			//Metodo para eliminar el archivo subido y cargado.
