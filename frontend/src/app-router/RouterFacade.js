@@ -5,14 +5,14 @@ import Modulos from '../components/vista-modulos/Modulos';
 import Users from '../components/gestion-usuarios/Users';
 import DashboardAdministrador from '../components/dashboard/DashboardAdministrador';
 import Curso from '../components/vista-curso';
-import Documentos from '../components/documento/Documento';
+import Editor from '../components/documento/Editor';
 import Members from '../components/vista-curso/integrantes/Members';
 import Grupos from '../components/grupo-curso/Grupos';
 import TablaProyectos from '../components/vista-curso/gestion-proyectos';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchProyectos} from "../components/vista-curso/gestion-proyectos/proyectosDuck";
-import {Documento} from "../components/documento/Documento";
+import {Documento} from "../components/documento/Editor";
 import DashboardProyecto from "../components/vista-proyecto/VistaProyectos";
 import VistaRequisitos from "../components/documento/vista-requisitos";
 import VistaDisenio from "../components/documento/vista-diseño";
@@ -42,7 +42,7 @@ export default function RouterFacade(props) {
             case 'modulos': return (<Modulos />);
             case 'usuarios': return (<Users />);
             case 'dashboard': return (<DashboardAdministrador />);
-            case 'proyectos': return (<Documentos />);
+            case 'proyectos': return (<Editor />);
             default: return (<div> ERROR 404: NO HAY NADA AQUÍ</div>);
         }
     }
