@@ -22,8 +22,8 @@ MongoClient.connect(mongoDBURL,{ useUnifiedTopology: true }, { useNewUrlParser: 
 //----------------Rutas mongoDB-----------------//
 
 //Agregar documento
-documents.post("/add", (request, response) => {
-if(request.body.projectID!==null || request.body.tipo!==null){ //Valida que se ingresen atributos importantes
+documents.post("/documents/add", (request, response) => {
+if(request.body.projectID!==null || request.body.tipo!==null){//Valida que se ingresen atributos importantes
     request.body.disponible = true //se agrega disponibilidad true por defecto
     mongoDBcollection.insertOne(request.body, (error, result) => {
     if(error) {
@@ -157,37 +157,5 @@ documents.delete("/deleteAll/", (request, response) => {
     });
 });
 //--------------Final rutas mongoDB--------//
-
-//--------------Rutas para la generación de documentos--------//
-
-const pdf = require('html-pdf')
-const pdfTemplate = require(`${process.cwd()}/documents/requisitos/template.js`)
-
-documents.post('/requisitos/crear-documento/:projectID', (req, res) => {
-    //Primero se obtienen todos los requisitos de usuario, y se almacenan en result1
-    mongoDBcollection.find({"projectID": req.params.projectID, tipo: "req"}).toArray((error1, result1) => {
-        if(error1) {
-            return response.status(500).send(error1)
-        }
-        //Luego se obtiene la entrada con la información general del documento, y se almacena en result2
-        mongoDBcollection.find({"projectID": req.params.projectID, tipo: "desc"}).toArray((error2, result2) => {
-            if(error2) {
-                return response.status(500).send(error2)
-            }
-            //Se pasan los parámetros al template. Éste devuelve el codigo html para ser escrito en el documento pdf
-            pdf.create(pdfTemplate(result1, result2), {}).toFile(`${process.cwd()}/documents/requisitos/Documento-Requisitos.pdf`, (err) => {
-                if(err) {
-                    res.send(Promise.reject());
-                }
-                res.send("Documento de requisitos creado exitosamente")
-                //res.send(Promise.resolve());
-            });
-        });
-    });
-});
-
-documents.get('/documento-requisitos', (req, res) => { //Ruta para obtener el documento de requisitos
-    res.sendFile(`${process.cwd()}/documents/requisitos/Documento-Requisitos.pdf`)
-})
 
 module.exports = documents;
