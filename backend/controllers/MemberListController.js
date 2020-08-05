@@ -637,7 +637,7 @@ exports.uploadFile = async (req, res) => {
             let file = req.files.file;
 
             //Use the mv() method to place the file in upload directory (i.e. "upload")
-            file.mv('./upload/' + file.name);
+            await file.mv('./upload/' + file.name);
 
             //send response
             res.send({
@@ -654,27 +654,49 @@ exports.uploadFile = async (req, res) => {
     }
 }
 
+
+
 exports.testMassiveCreate = async (req, res) => {
 
 		try{
+			if(await uploadFile(req))
 			//console.log(memberListArray)
-			res.json({memberListArray: await cargaArchivo(req)})
+				res.json({memberListArray: await cargaArchivo(req)})
 	}
 	catch(e){
 		res.json("There was an error on the file. " + e)
 	}
 }
 
+var uploadFile = async (req) => {
+	try {
+        if(!req.files) {
+            return false
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let file = req.files.file;
+
+            //Use the mv() method to place the file in upload directory (i.e. "upload")
+            await file.mv('./upload/' + file.name);
+
+            //send response
+            return true
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 var  cargaArchivo = async (req) =>{
 
 			var usuariosAceptados = []
 			var XLSX = require('xlsx');
-			var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
+			var workbook = await XLSX.readFile("./upload/" + req.params.xlsx_name);
 			var sheetNames = workbook.SheetNames;
 
 			var sheetIndex = 1;
 
-			var memberListArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+			var memberListArray = await XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
 
 
 
@@ -697,9 +719,9 @@ var  cargaArchivo = async (req) =>{
 		//Metodo para eliminar el archivo subido y cargado.
 		try{
 			const path = "./upload/" + req.params.xlsx_name
-			//fs.unlink( path, (err) =>{
+			fs.unlink( path, (err) =>{
 
-			//})
+			})
 		}
 		catch(err){
 			console.error(err)

@@ -82,7 +82,7 @@ memberList.put('/disableTeam/:id', memberListController.disableTeam)
 
 memberList.put('/modificarRolCurso/:user_email/:course_id', memberListController.modificarRolCurso)
 
-memberList.post('/uploadFile', memberListController.uploadFile)
+//memberList.post('/uploadFile', memberListController.uploadFile)
 
 memberList.post('/massiveCreate/:xlsx_name/:course_id', memberListController.testMassiveCreate)
 

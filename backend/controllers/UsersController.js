@@ -275,37 +275,7 @@ exports.readUser = (req, res) => {
 }
 
 
-//Funcion obtenida para subir un archivo.
-//Deberia de mover este metodo para otro controlador, dado a que se puede usar para otras cosas.
-//Aunque si lo usamos para las imagenes, debería de ser personal para cada proyecto.
-exports.uploadFile = async (req, res) => {
-	try {
-        if(!req.files) {
-            res.send({
-                status: false,
-                message: 'No file uploaded'
-            });
-        } else {
-            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-            let file = req.files.file;
 
-            //Use the mv() method to place the file in upload directory (i.e. "upload")
-            file.mv('./upload/' + file.name);
-
-            //send response
-            res.send({
-                status: true,
-                message: 'File is uploaded',
-                data: {
-                		//nombre necesario para llamar a la funcion de cargar los usuarios.
-                    name: file.name
-                }
-            });
-        }
-    } catch (err) {
-        res.status(500).send(err);
-    }
-}
 
 var uploadFile = async (req) => {
 	try {
@@ -316,7 +286,7 @@ var uploadFile = async (req) => {
             let file = req.files.file;
 
             //Use the mv() method to place the file in upload directory (i.e. "upload")
-            file.mv('./upload/' + file.name);
+            await file.mv('./upload/' + file.name);
 
 			//send response
             return true
@@ -326,88 +296,7 @@ var uploadFile = async (req) => {
     }
 }
 
-//Funcion que carga un archivo .xlsx para luego crear una cantidad n de usuario
-//donde n es la cantidad de usuarios no repetidos.
-exports.massiveCreate = async (req, res) => {
 
-	if(await uploadFile(req)){
-
-		var XLSX = require('xlsx');
-			try{
-				var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
-				var sheetNames = workbook.SheetNames;
-
-				var sheetIndex = 1;
-
-				var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
-
-				for(var i = 0; i < userArray.length; i++){
-					const today = new Date()
-					const dPassword =  "1234"//Math.random().toString(36).substr(2, 5)
-					const dRole = checkRegex(userArray[i]["Dirección de correo"])
-					const userData = {
-						first_name: userArray[i].Nombre,
-						last_name: userArray[i]["Apellido(s)"],
-						email: userArray[i]["Dirección de correo"],
-						role: dRole,
-						password: dPassword,
-						created: today
-					}
-					User.findOne({
-						where: {
-							email: req.body.email
-						}
-					})
-					.then(user =>{
-						if(!user){
-							const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
-								userData.password = hash
-								User.create(userData)
-								.then(user => {
-									/*Llama a la funcino encargada de enviar el correo con la nueva contraseña
-									*No se esta haciendo tratamiento para los correos enviados con email invalido,
-									*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
-									*/
-									//sendPasswordEmail(dPassword, userData.email, userData.first_name);
-								})
-								.catch(err => {
-									console.log('error' + err)
-								})
-							})
-						}else{
-							console.log("User already exist")
-						}
-					})
-					.catch(err => {
-						console.log('error: ' + err)
-					})
-				}
-
-			//Metodo para eliminar el archivo subido y cargado.
-			try{
-				const path = "./upload/" + req.params.xlsx_name
-				fs.unlink( path, (err) =>{
-
-				})
-			}
-			catch(err){
-				console.error(err)
-			}
-
-			res.json("All Users registered")
-
-
-		}
-		catch(e){
-			res.json("There was an error on the file.")
-		}
-	}
-	else{
-		res.json({
-			f: "F"
-		})
-	}
-}
 
 exports.tMassive = async(req, res) => {
 	try{
@@ -433,45 +322,43 @@ exports.tMassive = async(req, res) => {
 //dicha funcion se encarga de crear usuarios de test, los cuales no reciben correo
 //y tienen contraseña fija "1234"
 var testMassiveCreate = async (req, res) => {
-
 		var XLSX = require('xlsx');
 			try{
-				if(!req.files) {
-					//ERROR
-				} else {
-					//Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-					let file = req.files.file;
-		
-					//Use the mv() method to place the file in upload directory (i.e. "upload")
-					var x = await file.mv('./upload/' + file.name);
-		
-					//send response			
+				var workbook = await XLSX.readFile("./upload/" + req.params.xlsx_name);
+				console.log(workbook)
+				var sheetNames = workbook.SheetNames;
 
 					var workbook = await XLSX.readFile("./upload/" + req.params.xlsx_name);
 					var sheetNames = workbook.SheetNames;
 
 					var sheetIndex = 1;
 
-					var usuariosAceptados = []
-
-					var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
-					console.log(userArray)
-					for(var i = 0; i < userArray.length; i++){
-						const today = new Date()
-						const dPassword =  "1234"
-						const dRole = checkRegex(userArray[i]["Dirección de correo"])
-						const userData = {
-							first_name: userArray[i].Nombre,
-							last_name: userArray[i]["Apellido(s)"],
-							email: userArray[i]["Dirección de correo"],
-							role: dRole,
-							password: dPassword,
-							created: today
-						}
-						console.log(userData)
-						usuariosAceptados.push(await almacenarUsuario(userData))
+				var userArray = await XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+				console.log(userArray)
+				for(var i = 0; i < userArray.length; i++){
+					const today = new Date()
+					const dPassword =  "1234"
+					const dRole = checkRegex(userArray[i]["Dirección de correo"])
+					const userData = {
+						first_name: userArray[i].Nombre,
+						last_name: userArray[i]["Apellido(s)"],
+						email: userArray[i]["Dirección de correo"],
+						role: dRole,
+						password: dPassword,
+						created: today
 					}
 				}
+
+			//Metodo para eliminar el archivo subido y cargado.
+			try{
+				const path = "./upload/" + req.params.xlsx_name
+				fs.unlink( path, (err) =>{
+
+				})
+			}
+			catch(err){
+				console.error(err)
+			}
 			return usuariosAceptados
 		}
 		catch(e){
@@ -621,4 +508,116 @@ var sendPasswordEmail = (password, email, first_name) =>{
 	  }
 	  res.json({error: error})
 	  });
-  }
+ }
+
+
+//Funcion obtenida para subir un archivo.
+//Deberia de mover este metodo para otro controlador, dado a que se puede usar para otras cosas.
+//Aunque si lo usamos para las imagenes, debería de ser personal para cada proyecto.
+/*exports.uploadFile = async (req, res) => {
+	try {
+        if(!req.files) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let file = req.files.file;
+
+            //Use the mv() method to place the file in upload directory (i.e. "upload")
+            file.mv('./upload/' + file.name);
+
+            //send response
+            res.send({
+                status: true,
+                message: 'File is uploaded',
+                data: {
+                		//nombre necesario para llamar a la funcion de cargar los usuarios.
+                    name: file.name
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}*/
+
+//Funcion que carga un archivo .xlsx para luego crear una cantidad n de usuario
+//donde n es la cantidad de usuarios no repetidos.
+/*exports.massiveCreate = async (req, res) => {
+
+	if(await uploadFile(req)){
+
+		var XLSX = require('xlsx');
+			try{
+				var workbook = XLSX.readFile("./upload/" + req.params.xlsx_name);
+				var sheetNames = workbook.SheetNames;
+
+				var sheetIndex = 1;
+
+				var userArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[sheetIndex-1]]);
+
+				for(var i = 0; i < userArray.length; i++){
+					const today = new Date()
+					const dPassword =  "1234"//Math.random().toString(36).substr(2, 5)
+					const dRole = checkRegex(userArray[i]["Dirección de correo"])
+					const userData = {
+						first_name: userArray[i].Nombre,
+						last_name: userArray[i]["Apellido(s)"],
+						email: userArray[i]["Dirección de correo"],
+						role: dRole,
+						password: dPassword,
+						created: today
+					}
+					User.findOne({
+						where: {
+							email: req.body.email
+						}
+					})
+					.then(user =>{
+						if(!user){
+							const hash = bcrypt.hash(dPassword, 10, (err, hash) => {
+								userData.password = hash
+								User.create(userData)
+								.then(user => {
+									//sendPasswordEmail(dPassword, userData.email, userData.first_name);
+								})
+								.catch(err => {
+									console.log('error' + err)
+								})
+							})
+						}else{
+							console.log("User already exist")
+						}
+					})
+					.catch(err => {
+						console.log('error: ' + err)
+					})
+				}
+
+			//Metodo para eliminar el archivo subido y cargado.
+			try{
+				const path = "./upload/" + req.params.xlsx_name
+				fs.unlink( path, (err) =>{
+
+				})
+			}
+			catch(err){
+				console.error(err)
+			}
+
+			res.json("All Users registered")
+
+
+		}
+		catch(e){
+			res.json("There was an error on the file.")
+		}
+	}
+	else{
+		res.json({
+			f: "F"
+		})
+	}
+}*/
