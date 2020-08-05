@@ -75,8 +75,8 @@ exports.createTeam = (req, res) => {
 	})
 }
 
-exports.create = (req, res) => {
-
+exports.create = async (req, res) => {
+	await crearUsuarioSingular(req)
 	const memberListData = {
 		user_email: req.body.user_email,
 		course_id: req.body.course_id,
@@ -101,7 +101,7 @@ exports.create = (req, res) => {
 				})
 				.catch(err => {
 					res.status(400).json({
-						error: "Ha ocurrido un error al momento de ingresar el memberList a la base de datos."
+						error: "Ha ocurrido un error al momento de ingresar el memberList a la base de datosZ."
 					})
 				})
 			})
@@ -122,6 +122,47 @@ exports.create = (req, res) => {
 		res.status(400).json({
 			error: "Ha ocurrido un error en el ingreso del usuario: " + err
 		})
+	})
+}
+
+var crearUsuarioSingular = async (req) => {
+	const today = new Date()
+	const dPassword =  "1234" //Math.random().toString(36).substr(2, 5)
+	const dRole = checkRegex(req.body.user_email)
+	const userData = {
+		first_name: req.body.first_name,
+		last_name: req.body.last_name,
+		email: req.body.user_email,
+		role: dRole,
+		password: dPassword,
+		created: today
+	}
+	User.findOne({
+		where: {
+			email: req.body.user_email
+		}
+	})
+	.then(user =>{
+		if(!user){
+			const hash = bcrypt.hashSync(userData.password, 10)
+				User.create(userData)
+				.then(user => {
+					/*Llama a la funcino encargada de enviar el correo con la nueva contraseña
+					*No se esta haciendo tratamiento para los correos enviados con email invalido,
+					*Falta agregar el asunto a la plantilla. Dicha plantilla se encuentra en la pagina de SendGrid.
+					*/
+					//sendPasswordEmail(dPassword, userData.email, userData.first_name);
+					return true
+				})
+				.catch(err => {
+					return false
+				})
+		}else{
+			return false
+		}
+	})
+	.catch(err => {
+		return false
 	})
 }
 
