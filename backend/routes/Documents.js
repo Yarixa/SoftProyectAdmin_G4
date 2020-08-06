@@ -19,6 +19,46 @@ MongoClient.connect(mongoDBURL,{ useUnifiedTopology: true }, { useNewUrlParser: 
     mongoDBcollection = mongoDBdatabase.collection("documents")
     console.log("Conectado a `" + mongoDBDatabaseName + "`!")
 });
+
+//----------------Gestor de Imágenes------------//
+
+const util = require("util");
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+
+var storage = new GridFsStorage({
+  url: "mongodb://localhost:27017/mongoDB",
+  options: { useNewUrlParser: true, useUnifiedTopology: true },
+  file: (req, file) => {
+    const match = ["image/png", "image/jpeg"];
+
+    if (match.indexOf(file.mimetype) === -1) {
+      const filename = `${Date.now()}-bezkoder-${file.originalname}`;
+      return filename;
+    }
+
+    return {
+      bucketName: "photos",
+      filename: `${Date.now()}-bezkoder-${file.originalname}`
+    };
+  }
+});
+
+documents.post("/upload", (req, res) => {
+    try {
+        
+        console.log(req.file)
+        if (req.file == undefined) {
+          return res.send(`You must select a file.`);
+        }
+        return res.send(`File has been uploaded.`);
+      } catch (error) {
+        console.log(error);
+        return res.send(`Error when trying upload image: ${error}`);
+      }
+})
+
+
 //----------------Rutas mongoDB-----------------//
 
 //Agregar documento
@@ -160,6 +200,7 @@ documents.delete("/deleteAll/", (request, response) => {
 
 //--------------Rutas para la generación de documentos--------//
 const pdf = require('html-pdf')
+const { response } = require("express")
 
 //--------------Documento Requisitos-----------------//
 const reqTemplate = require(`${process.cwd()}/documents/requisitos/template.js`)
