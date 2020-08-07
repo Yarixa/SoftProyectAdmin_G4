@@ -22,42 +22,11 @@ MongoClient.connect(mongoDBURL,{ useUnifiedTopology: true }, { useNewUrlParser: 
 
 //----------------Gestor de Imágenes------------//
 
-const util = require("util");
-const multer = require("multer");
-const GridFsStorage = require("multer-gridfs-storage");
-
-var storage = new GridFsStorage({
-  url: "mongodb://localhost:27017/mongoDB",
-  options: { useNewUrlParser: true, useUnifiedTopology: true },
-  file: (req, file) => {
-    const match = ["image/png", "image/jpeg"];
-
-    if (match.indexOf(file.mimetype) === -1) {
-      const filename = `${Date.now()}-bezkoder-${file.originalname}`;
-      return filename;
-    }
-
-    return {
-      bucketName: "photos",
-      filename: `${Date.now()}-bezkoder-${file.originalname}`
-    };
-  }
-});
-
-documents.post("/upload", (req, res) => {
-    try {
-        
-        console.log(req.file)
-        if (req.file == undefined) {
-          return res.send(`You must select a file.`);
-        }
-        return res.send(`File has been uploaded.`);
-      } catch (error) {
-        console.log(error);
-        return res.send(`Error when trying upload image: ${error}`);
-      }
+const multiparty = require('connect-multiparty')
+const MultipartyMiddleware = multiparty({uploadDir:`${process.cwd()}/documents/images`})
+documents.post("/upload", MultipartyMiddleware, (req, res) => {
+    console.log(req.files.upload)
 })
-
 
 //----------------Rutas mongoDB-----------------//
 
